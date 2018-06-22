@@ -1,0 +1,66 @@
+﻿@model IEnumerable<OrderModel>
+@{
+    ViewData["Title"] = "OrderManagement";
+    Layout = "~/Views/Manage/_Layout.cshtml";
+    ViewData.AddActivePage(ManageNavPages.OrderManagement);
+}
+
+<style>
+    ul.servicelst {
+        padding: 0px;
+        margin: 0px;
+    }
+        ul.servicelst li {
+            font-size: 13px;
+            line-height: 35px;
+            list-style: none;
+            border-bottom: dashed 1px #d0d0d0;
+            padding-left: 5px;
+        }
+
+    div.servicelstfooter a {
+        margin-right: 20px;
+        font-size: 13px;
+        cursor: pointer;
+        line-height: 40px;
+    }
+</style>
+<h2 style="font-size:18px; font-weight:bold; line-height:40px; margin-top:0px;">订单列表</h2>
+<ul class="servicelst">
+    @{
+        var lastPage = ViewBag.CurrentPageIndex <= 1 ? 1 : ViewBag.CurrentPageIndex - 1;
+        var nextPage = ViewBag.CurrentPageIndex + 1;
+        if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                var statusDesc = "";
+                switch ((int)item.Status)
+                {
+                    case 1: statusDesc = "待支付"; break;
+                    case 2: statusDesc = "已支付"; break;
+                    case 3: statusDesc = "已发货"; break;
+                    case 4: statusDesc = "已取消"; break;
+                    case 5: statusDesc = "已退款"; break;
+                    case 6: statusDesc = "已完成"; break;
+                    case 7: statusDesc = "订单失败"; break;
+                    default: statusDesc = ""; break;
+                }
+
+                <li><a href="/Manage/orderdetail?id=@item.Id">@item.OrderNo</a>  @item.Mark  @item.CustomerName  @item.PayAmount  <b>@statusDesc</b></li>
+            }
+        }
+        else
+        {
+            <li>没有数据了，返回 <a href="/Manage/OrderManagement?pageindex=@ViewBag.CurrentPageIndex">上一页</a></li>
+        }
+    }
+</ul>
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="servicelstfooter">
+        <a href="/Manage/OrderManagement?pageindex=@lastPage">上一页</a>
+        <a href="javascript:return void(0);">@ViewBag.CurrentPageIndex</a>
+        <a href="/Manage/OrderManagement?pageindex=@nextPage">下一页</a>
+    </div>
+}

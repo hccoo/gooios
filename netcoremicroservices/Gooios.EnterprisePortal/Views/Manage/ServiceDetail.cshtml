@@ -1,0 +1,442 @@
+﻿@model ServiceModel
+@{
+    ViewData["Title"] = "ServiceDetail";
+    Layout = "~/Views/Manage/_Layout.cshtml";
+    var operation = ViewBag.Operation;
+    var serviceCategories = (List<CategoryModel>)(ViewBag.Categories);
+}
+
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script src="~/lib/plugins/wangeditor/release/wangEditor.js"></script>
+<link href="~/lib/plugins/diyUpload/css/globle.css" rel="stylesheet" />
+<script src="~/lib/plugins/diyUpload/js/webuploader.min.js"></script>
+<script src="~/lib/plugins/diyUpload/js/diyUpload.js"></script>
+<script>
+    var categories = eval(@Html.Raw(ViewBag.CategoriesJson.ToString()));
+</script>
+<style>
+    table.goodsdetail {
+        font-size: 13px;
+        width: 100%;
+    }
+
+        table.goodsdetail tr td table {
+            width: 100%;
+        }
+
+        table.goodsdetail tr td {
+            padding: 10px 5px 10px 5px;
+            border-bottom: dashed 1px #dbdbdb;
+        }
+</style>
+
+@if (operation == "add")
+{
+    <h2 style="font-size:18px; font-weight:bold; line-height:40px; margin-top:0px;">发布服务</h2>
+}
+else
+{
+    <h2 style="font-size:18px; font-weight:bold; line-height:40px; margin-top:0px;">服务详情</h2>
+}
+
+<table class="goodsdetail">
+    <tr>
+        <td style="width:180px;">服务名称：</td>
+        <td><input id="title" type="text" placeholder="服务名称" value='@(Model?.Title??"")' style="width:300px;" /></td>
+    </tr>
+    <tr>
+        <td>服务分类：</td>
+        <td>
+            <select id="firstLayerCategories" onchange="onFirstLayerCategoriesChange(this)">
+                <option value="">请选择</option>
+                @{
+                    foreach (var item in serviceCategories)
+                    {
+                        var currCategory = Model?.Category ?? "";
+                        if (currCategory == item.Name)
+                        {
+                            <option value="@item.Id" selected>@item.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                }
+            </select>
+            <select id="secondLayerCategories">
+                <option value="">请选择</option>
+                @{
+                    if (!string.IsNullOrEmpty(Model?.SubCategory))
+                    {
+                        var cgs = serviceCategories.FirstOrDefault(o => o.Name == Model.Category)?.Children ?? new List<CategoryModel>();
+                        foreach (var c in cgs)
+                        {
+                            var currSubCategory = Model?.SubCategory ?? "";
+                            if (currSubCategory == c.Name)
+                            {
+                                <option value="@c.Id" selected>@c.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@c.Id">@c.Name</option>
+                            }
+                        }
+                    }
+                }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>诚意金：</td>
+        <td><input id="sinceritygold" type="text" placeholder="诚意金" value="@(Model?.SincerityGold??0)" /> 元</td>
+    </tr>
+    <tr>
+        <td>服务范围：</td>
+        <td><input id="servicescope" type="text" placeholder="服务范围" value='@(Model?.ServeScope??0)' style="width:80px;" /> 公里（填写0表示不限制）</td>
+    </tr>
+    <tr style="display:none;">
+        <td>所在区域：</td>
+        <td>
+            <select id="province">
+                <option>上海</option>
+            </select>省
+            <select id="city">
+                <option>上海</option>
+            </select>市
+            <select id="area">
+                <option>请选择</option>
+                <option>黄浦区</option>
+                <option>徐汇区</option>
+                <option>长宁区</option>
+                <option>静安区</option>
+                <option>普陀区</option>
+                <option>虹口区</option>
+                <option>杨浦区</option>
+                <option>闵行区</option>
+                <option>宝山区</option>
+                <option>嘉定区</option>
+                <option>浦东新区</option>
+                <option>金山区</option>
+                <option>松江区</option>
+                <option>青浦区</option>
+                <option>奉贤区</option>
+                <option>崇明区</option>
+            </select>
+        </td>
+    </tr>
+    <tr style="display:none;">
+        <td>详细地址：</td>
+        <td><input id="streetaddress" type="text" placeholder="详细地址" value='@(Model?.Station?.StreetAddress??"")' style="width:500px;" /></td>
+    </tr>
+    <tr style="display:none;">
+        <td>邮编：</td>
+        <td><input id="postcode" type="text" placeholder="邮编" value='@(Model?.Station?.Postcode??"")' /></td>
+    </tr>
+    <tr>
+        <td>服务展示：</td>
+        <td id="imageUploadContainer">
+            <ul class="upload-ul clearfix">
+                <li class="upload-pick">
+                    <div class="webuploader-container clearfix" id="goodsUpload"></div>
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>服务详情：</td>
+        <td>
+            <div id="detaileditor"></div>
+        </td>
+    </tr>
+    <tr><td></td><td><input onclick="onSubmit()" type="button" value="保 存" /> <input type="button" value="删 除" onclick="onDelete()" /></td></tr>
+</table>
+<script>
+    var imgArr = new Array();
+    var service = {
+        Id: "@(string.IsNullOrEmpty(Model?.Id)?"" : Model.Id)",
+        Title: "@Model?.Title",
+        SincerityGold: @(Model?.SincerityGold??0),
+        ServeScope:@(Model?.ServeScope??3),
+        Category: "@Model?.Category",
+        SubCategory: "@Model?.SubCategory",
+        Introduction:"@Model?.Introduction",
+        Station: {
+            Province: "@Model?.Station?.Province",
+            City: "@Model?.Station?.City",
+            Area: "@(Html.Raw(Model?.Station?.Area))",
+            StreetAddress: "@Model?.Station?.StreetAddress",
+            Postcode: "@Model?.Station?.Postcode",
+            Latitude: @(Model?.Station?.Latitude??0),
+            Longitude: @(Model?.Station?.Longitude??0)
+        },
+        Images: [],
+    };
+
+    function initEditor() {
+        editor = new window.wangEditor('#detaileditor');
+        editor.customConfig.uploadImgServer = '/image/upload';
+        editor.customConfig.uploadImgTimeout = 30000;
+        editor.create();
+        editor.$textElem.html(htmlUtil.htmlDecode(service.Introduction));
+    }
+    function initDiyUpload() {
+        jQuery('#goodsUpload').diyUpload({
+            auto: true,
+            url: '/image/diyupload',
+            success: function (res) {
+                console.log(res.data[0]);
+
+                $.each(res.data, function (index, item) {
+                    imgArr.push({
+                        imageid: item.id,
+                        httppath: item.httpPath,
+                        title: item.title,
+                        filename: item.clientFileName
+                    });
+                });
+
+            },
+            error: function (err) { },
+            buttonText: '',
+            accept: {
+                title: "Images",
+                extensions: 'gif,jpg,jpeg,bmp,png'
+            },
+            thumb: {
+                width: 120,
+                height: 90,
+                quality: 100,
+                allowMagnify: true,
+                crop: true,
+                type: "image/jpeg"
+            },
+            startUpload: function (f) {
+
+                alert(f);
+
+            }
+        });
+    }
+    function removeEvt(thisObj) {
+        var fName = $(thisObj).attr("filename");
+        var idx = -1;
+        for (var i = 0; i < imgArr.length; i++) {
+            var fileName = imgArr[i].filename; //getFileName(imgArr[i].httppath);
+            if (fileName == fName) {
+                idx = i;
+                break;
+            }
+        }
+
+        if (idx > -1) {
+            imgArr.splice(idx, 1);
+        }
+    }
+
+    function loadImage() {
+        var getFileBlob = function (url, cb) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.responseType = "blob";
+            xhr.addEventListener('load', function () {
+                cb(xhr.response);
+            });
+            xhr.send();
+        };
+
+        var blobToFile = function (blob, name) {
+            blob.lastModifiedDate = new Date();
+            blob.name = name;
+            return blob;
+        };
+
+        var getFileObject = function (filePathOrUrl, cb) {
+            getFileBlob(filePathOrUrl, function (blob) {
+                cb(blobToFile(blob, getFileName(filePathOrUrl) + '.jpg'));
+            });
+        };
+        var generateNewGuid = function () {
+            var guid = "";
+            for (var i = 1; i <= 32; i++) {
+                var n = Math.floor(Math.random() * 16.0).toString(16);
+                guid += n;
+                if ((i == 8) || (i == 12) || (i == 16) || (i == 20))
+                    guid += "-";
+            }
+            return guid;
+        }
+
+        var picList = eval('@(Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.Images)))');
+        $.each(picList, function (index, item) {
+            getFileObject(item.HttpPath, function (fileObject) {
+                var wuFile = new WebUploader.Lib.File(WebUploader.guid('rt_'), fileObject);
+                var file = new WebUploader.File(wuFile);
+                file.setStatus("complete");
+                uploader.addFiles(file);
+                imgArr.push({
+                    imageid: item.ImageId,
+                    httppath: item.HttpPath,
+                    title: item.Title,
+                    filename: file.name.split(".")[0]
+                });
+            })
+        });
+    }
+    function onFirstLayerCategoriesChange(thisObj) {
+
+        var categoryId = $(thisObj).val();
+        $("#secondLayerCategories").empty();
+        $("#secondLayerCategories").append("<option>请选择</option>");
+
+        for (var i = 0; i < categories.length; i++) {
+
+            if (categories[i].Id == categoryId) {
+                for (var j = 0; j < categories[i].Children.length; j++) {
+                    $("#secondLayerCategories").append("<option value='" + categories[i].Children[j].Id + "'>" + categories[i].Children[j].Name + "</option>");
+                }
+                break;
+            }
+        }
+
+    }
+    function getFileName(url) {
+        var arr = url.split("/");
+        return arr[arr.length - 1].split(".")[0];
+    }
+
+    function onSubmit() {
+        service.Title = $("#title").val();
+        service.Introduction = editor.$textElem.html();
+        service.Category = $("#firstLayerCategories option:selected").text();
+        service.SubCategory = $("#secondLayerCategories option:selected").text() == "请选择" ? "" : $("#secondLayerCategories option:selected").text();
+        //service.SincerityGold = $("#sinceritygold").val();
+        //service.ServeScope = $("#servicescope").val();
+        service.Station = {
+            Province: $("#province option:selected").text(),
+            City: $("#city option:selected").text(),
+            Area: $("#area option:selected").text(),
+            StreetAddress: $("#streetaddress").val(),
+            postcode: $("#postcode").val(),
+            latitude: 0,
+            longitude: 0
+        };
+
+        if (imgArr.length > 9) {
+            alert("上传图片不能超过9张!");
+            return;
+        }
+
+        service.Images = imgArr;
+
+        if (service.Title.trim() == "")
+        {
+            alert("服务名称不能为空!");
+            return;
+        }
+        if ($("#sinceritygold").val().trim() == "") {
+            alert("商品诚意金不能为空!");
+            return;
+        }
+
+        var cyj = 0;
+        try {
+            if (!/^\d+(\.\d+)?$/.test($("#sinceritygold").val().trim())) {
+                alert("诚意金必须为非负数值!");
+                return;
+            }
+            cyj = parseFloat($("#sinceritygold").val());
+            service.SincerityGold = cyj;
+        }
+        catch (e) {
+            alert("诚意金必须为数值，如：100");
+            return;
+        }
+        var scope = 0;
+        try {
+            if (!/^\d+$/.test($("#servicescope").val().trim())) {
+                alert("服务范围必须为非负整数!");
+                return;
+            }
+            scope = parseInt($("#servicescope").val());
+            service.ServeScope = scope;
+        } catch (e) {
+            alert("服务范围必须为整数，如：3");
+            return;
+        }
+
+        if (service.Category.trim() == "") {
+            alert("分类不能为空!");
+            return;
+        }
+        if ($("#servicescope").val().trim() == "") {
+            alert("服务范围不能为空!");
+            return;
+        }
+        //if (service.Station.Area.trim() == "" || service.Station.Area.trim() == "请选择") {
+        //    alert("请选择区县!");
+        //    return;
+        //}
+        //if (service.Station.StreetAddress.trim() == "") {
+        //    alert("请填写详细地址!");
+        //    return;
+        //}
+
+        $.ajax({
+            url: "/Manage/ServiceDetail",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: service,
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+    }
+
+    function onDelete()
+    {
+        $.ajax({
+            url: "/Manage/ServiceDelete",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: { Id: service.Id },
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+
+    }
+    
+    $(function () {
+        initEditor();
+        initDiyUpload();
+        loadImage();
+        $("#area").val(service.Station.Area);
+    });
+
+    var htmlUtil = {
+        htmlEncode: function (html) {
+            var temp = document.createElement("div");
+            (temp.textContent != undefined) ? (temp.textContent = html) : (temp.innerText = html);
+            var output = temp.innerHTML;
+            temp = null;
+            return output;
+        },
+        htmlDecode: function (text) {
+            var temp = document.createElement("div");
+            temp.innerHTML = text;
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        }
+    };
+</script>
+

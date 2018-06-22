@@ -1,0 +1,11 @@
+/netcoremicroservices/.vs/Gooios/v15/.suo
+/netcoremicroservices/.vs/Gooios/v15/sqlite3/storage.ide
+*.dll
+*.pdb
+/netcoremicroservices/Gooios.ActivityService/obj/
+/netcoremicroservices/Gooios.ActivityService/bin/
+*.user
+*.pubxml
+/netcoremicroservices/Gooios.ApiGateway/bin/*
+/netcoremicroservices/*/obj/*
+/netcoremicroservices/*/bin/*

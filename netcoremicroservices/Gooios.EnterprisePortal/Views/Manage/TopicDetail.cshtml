@@ -1,0 +1,410 @@
+﻿@model TopicModel
+@{
+    ViewData["Title"] = "TopicDetail";
+    Layout = "~/Views/Manage/_Layout.cshtml";
+    var operation = ViewBag.Operation;
+}
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script src="~/lib/plugins/wangeditor/release/wangEditor.js"></script>
+<link href="~/lib/plugins/diyUpload/css/globle.css" rel="stylesheet" />
+<script src="~/lib/plugins/diyUpload/js/webuploader.min.js"></script>
+<script src="~/lib/plugins/diyUpload/js/diyUpload.js"></script>
+<script src="~/js/ajaxfileupload.js"></script>
+<script src="~/lib/My97DatePicker/WdatePicker.js"></script>
+@*<script>
+        var categories = eval(@Html.Raw(ViewBag.CategoriesJson.ToString()));
+    </script>*@
+<style>
+    table.goodsdetail {
+        font-size: 13px;
+        width: 100%;
+    }
+
+        table.goodsdetail tr td table {
+            width: 100%;
+        }
+
+        table.goodsdetail tr td {
+            padding: 10px 5px 10px 5px;
+            border-bottom: dashed 1px #dbdbdb;
+        }
+</style>
+
+@if (operation == "add")
+{
+    <h2 style="font-size:18px; font-weight:bold; line-height:40px; margin-top:0px;">发布主题</h2>
+}
+else
+{
+    <h2 style="font-size:18px; font-weight:bold; line-height:40px; margin-top:0px;">主题详情</h2>
+}
+
+<table class="goodsdetail">
+    <tr>
+        <td style="width:180px;">主题图像：<br/>(330*240px)</td>
+        <td><div><img id="faceimageurl" src="@(string.IsNullOrEmpty(Model?.FaceImageUrl) ? "/images/uploadwat.png" : Model.FaceImageUrl)" imgid="" style="width:268px; height:180px;" /></div><div style="margin-top:10px;"><input type="file" id="fileUpload" name="file" onchange="uploadFile()" /></div></td>
+    </tr>
+    <tr>
+        <td>标题：</td>
+        <td><input id="title" type="text" placeholder="请填写标题（主体名称或活动名称）" value='@(Model?.Title ?? "")' style="width:600px;" /></td>
+    </tr>
+    <tr>
+        <td>活动时间：</td>
+        <td>
+            <input class="Wdate" type="text" id="starttime" value="@Model?.StartDate" onclick="WdatePicker({isShowClear:false,readOnly:true})" /> 至
+            <input class="Wdate" type="text" id="endtime" value="@Model?.EndDate" onclick="WdatePicker({isShowClear:false,readOnly:true})" />
+        </td>
+    </tr>
+    <tr>
+        <td>所在区域：</td>
+        <td>
+            <select id="province">
+                <option>上海</option>
+            </select>省
+            <select id="city">
+                <option>上海</option>
+            </select>市
+            <select id="area">
+                <option value="">请选择</option>
+                <option>黄浦区</option>
+                <option>徐汇区</option>
+                <option>长宁区</option>
+                <option>静安区</option>
+                <option>普陀区</option>
+                <option>虹口区</option>
+                <option>杨浦区</option>
+                <option>闵行区</option>
+                <option>宝山区</option>
+                <option>嘉定区</option>
+                <option>浦东新区</option>
+                <option>金山区</option>
+                <option>松江区</option>
+                <option>青浦区</option>
+                <option>奉贤区</option>
+                <option>崇明区</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>场所地址：</td>
+        <td><input id="streetaddress" type="text" placeholder="详细地址" value='@(Model?.Address?.StreetAddress ?? "")' style="width:500px;" /></td>
+    </tr>
+
+    <tr>
+        <td>是否自定义页面：</td>
+        <td>
+            <select id="selectiscustom">
+                @if (operation == "add")
+                {
+                    <option value="false">否</option>
+                    <option value="true">是</option>
+                }
+                else
+                {
+                    @if (!Model.IsCustom)
+                {
+                        <option value="false" selected>否</option>
+                    }
+                    else
+                    {
+                        <option value="false">否</option>
+                    }
+
+                    @if (Model.IsCustom)
+                {
+                        <option value="true" selected>是</option>
+                    }
+                    else
+                    {
+                        <option value="true">是</option>
+                    }
+                }
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td>自定义页面url：</td>
+        <td><input id="customurl" type="text" placeholder="自定义页面url" value='@(Model?.CustomTopicUrl??"")' style="width:500px;" /></td>
+    </tr>
+
+    <tr>
+        <td>主题展示：</td>
+        <td id="imageUploadContainer">
+            <ul class="upload-ul clearfix">
+                <li class="upload-pick">
+                    <div class="webuploader-container clearfix" id="goodsUpload"></div>
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>主题介绍：</td>
+        <td>
+            <div id="detaileditor"></div>
+        </td>
+    </tr>
+    <tr><td></td><td><input onclick="onSubmit()" type="button" value="提 交" /></td></tr>
+</table>
+<script>
+    var imgArr = new Array();
+    var isc = "@((Model?.IsCustom ?? false).ToString().ToLower())" == "true" ? true : false;
+    var topic = {
+        Id: "@(string.IsNullOrEmpty(Model?.Id)?"" : Model.Id)",
+        Title: "@(Model?.Title ?? "")",
+        StartDate: "@(Model?.StartDate)",
+        EndDate: "@(Model?.EndDate)",
+        FaceImageUrl: "@(Model?.FaceImageUrl ?? "")",
+        Introduction: "@(Model?.Introduction ?? "")",
+        IsCustom: isc,
+        Category: null,
+        CustomTopicUrl: "@(Model?.CustomTopicUrl ?? "")",
+        Address: {
+            Province: "@Model?.Address?.Province",
+            City: "@Model?.Address?.City",
+            Area: "@(Html.Raw(Model?.Address?.Area))",
+            StreetAddress: "@Model?.Address?.StreetAddress",
+            Postcode: "@Model?.Address?.Postcode",
+            Latitude: @(Model?.Address?.Latitude??0),
+            Longitude: @(Model?.Address?.Longitude??0)
+        },
+        Images: [],
+    };
+
+    function initEditor() {
+        editor = new window.wangEditor('#detaileditor');
+        editor.customConfig.uploadImgServer = '/image/upload';
+        editor.customConfig.uploadImgTimeout = 30000;
+        editor.create();
+        editor.$textElem.html(htmlUtil.htmlDecode(topic.Introduction));
+    }
+    function initDiyUpload() {
+        jQuery('#goodsUpload').diyUpload({
+            auto: true,
+            url: '/image/diyupload',
+            success: function (res) {
+                console.log(res.data[0]);
+
+                $.each(res.data, function (index, item) {
+                    imgArr.push({
+                        imageid: item.id,
+                        imageurl: item.httpPath,
+                        title: item.title,
+                        filename: item.clientFileName
+                    });
+                });
+
+            },
+            error: function (err) { },
+            buttonText: '',
+            accept: {
+                title: "Images",
+                extensions: 'gif,jpg,jpeg,bmp,png'
+            },
+            thumb: {
+                width: 120,
+                height: 90,
+                quality: 100,
+                allowMagnify: true,
+                crop: true,
+                type: "image/jpeg"
+            },
+            startUpload: function (f) {
+
+                alert(f);
+
+            }
+        });
+    }
+    function removeEvt(thisObj) {
+        var fName = $(thisObj).attr("filename");
+        var idx = -1;
+        for (var i = 0; i < imgArr.length; i++) {
+            var fileName = imgArr[i].filename; //getFileName(imgArr[i].httppath);
+            if (fileName == fName) {
+                idx = i;
+                break;
+            }
+        }
+
+        if (idx > -1) {
+            imgArr.splice(idx, 1);
+        }
+    }
+
+    function loadImage() {
+        var getFileBlob = function (url, cb) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.responseType = "blob";
+            xhr.addEventListener('load', function () {
+                cb(xhr.response);
+            });
+            xhr.send();
+        };
+
+        var blobToFile = function (blob, name) {
+            blob.lastModifiedDate = new Date();
+            blob.name = name;
+            return blob;
+        };
+
+        var getFileObject = function (filePathOrUrl, cb) {
+            getFileBlob(filePathOrUrl, function (blob) {
+                cb(blobToFile(blob, getFileName(filePathOrUrl) + '.jpg'));
+            });
+        };
+        var generateNewGuid = function () {
+            var guid = "";
+            for (var i = 1; i <= 32; i++) {
+                var n = Math.floor(Math.random() * 16.0).toString(16);
+                guid += n;
+                if ((i == 8) || (i == 12) || (i == 16) || (i == 20))
+                    guid += "-";
+            }
+            return guid;
+        }
+
+        var picList = eval('@(Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.ContentImages)))');
+        $.each(picList, function (index, item) {
+            getFileObject(item.ImageUrl, function (fileObject) {
+                var wuFile = new WebUploader.Lib.File(WebUploader.guid('rt_'), fileObject);
+                var file = new WebUploader.File(wuFile);
+                file.setStatus("complete");
+                uploader.addFiles(file);
+                imgArr.push({
+                    imageid: item.ImageId,
+                    imageurl: item.ImageUrl,
+                    title: "",
+                    filename: file.name.split(".")[0]
+                });
+            })
+        });
+    }
+    function onFirstLayerCategoriesChange(thisObj) {
+
+        var categoryId = $(thisObj).val();
+        $("#secondLayerCategories").empty();
+        $("#secondLayerCategories").append("<option>请选择</option>");
+
+        for (var i = 0; i < categories.length; i++) {
+
+            if (categories[i].Id == categoryId) {
+                for (var j = 0; j < categories[i].Children.length; j++) {
+                    $("#secondLayerCategories").append("<option value='" + categories[i].Children[j].Id + "'>" + categories[i].Children[j].Name + "</option>");
+                }
+                break;
+            }
+        }
+
+    }
+    function getFileName(url) {
+        var arr = url.split("/");
+        return arr[arr.length - 1].split(".")[0];
+    }
+
+    function onSubmit() {
+        topic.Title = $("#title").val();
+        topic.StartDate = $("#starttime").val();
+        topic.EndDate = $("#endtime").val();
+        topic.FaceImageUrl = $("#faceimageurl").attr("src");
+        topic.IsCustom = ($("#selectiscustom option:selected").val()=="true"?true:false);
+        topic.Introduction = editor.$textElem.html();
+        topic.CustomTopicUrl = $("#customurl").val();
+        topic.Address = {
+            Province: $("#province option:selected").text(),
+            City: $("#city option:selected").text(),
+            Area: $("#area option:selected").text(),
+            StreetAddress: $("#streetaddress").val(),
+            postcode: $("#postcode").val(),
+            latitude: 0,
+            longitude: 0
+        };
+        topic.ContentImages = imgArr;
+
+        if (topic.Title.trim() == "") {
+            alert("标题不能为空!");
+            return;
+        }
+        if (topic.StartDate.trim() == "") {
+            alert("开始时间不能为空!");
+            return;
+        }
+        if (topic.EndDate.trim() == "") {
+            alert("结束时间不能为空!");
+            return;
+        }
+        if (topic.FaceImageUrl.trim() == "") {
+            alert("主题图像不能为空!");
+            return;
+        }
+
+        if (topic.Address.Area.trim() == "" || topic.Address.Area.trim() == "请选择") {
+            alert("请选择区县!");
+            return;
+        }
+        if (topic.Address.StreetAddress.trim() == "") {
+            alert("请填写详细地址!");
+            return;
+        }
+
+        $.ajax({
+            url: "/Manage/TopicDetail",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: topic,
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+    }
+
+    $(function () {
+        initEditor();
+        initDiyUpload();
+        loadImage();
+        $("#area").val(topic.Address.Area);
+    });
+
+
+    var htmlUtil = {
+        htmlEncode: function (html) {
+            var temp = document.createElement("div");
+            (temp.textContent != undefined) ? (temp.textContent = html) : (temp.innerText = html);
+            var output = temp.innerHTML;
+            temp = null;
+            return output;
+        },
+        htmlDecode: function (text) {
+            var temp = document.createElement("div");
+            temp.innerHTML = text;
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        }
+    };
+
+    function uploadFile() {
+        var formData = new FormData();
+        formData.append('image', $("#fileUpload")[0].files[0]);  /*获取上传的图片对象*/
+        $.ajax({
+            url: '/image/diyupload',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (args) {
+                $("#faceimageurl").attr("src", args.data[0].httpPath);
+                $("#faceimageurl").attr("imgid", args.data[0].id)
+            }
+        });
+        return false;
+    }
+
+</script>
+
+

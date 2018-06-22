@@ -1,0 +1,56 @@
+﻿@model IEnumerable<TopicModel>
+@{
+    ViewData["Title"] = "TopicManagement";
+    Layout = "~/Views/Manage/_Layout.cshtml";
+    ViewData.AddActivePage(ManageNavPages.TopicManagement);
+}
+
+<style>
+    ul.servicelst {
+        padding: 0px;
+        margin: 0px;
+    }
+
+        ul.servicelst li {
+            font-size: 13px;
+            line-height: 35px;
+            list-style: none;
+            border-bottom: dashed 1px #d0d0d0;
+            padding-left: 5px;
+        }
+
+    div.servicelstfooter a {
+        margin-right: 20px;
+        font-size: 13px;
+        cursor: pointer;
+        line-height: 40px;
+    }
+</style>
+<h2 style="font-size:18px; font-weight:bold; line-height:40px; margin-top:0px;">主题列表</h2>
+<ul class="servicelst">
+    <li style="line-height:30px; height:30px; padding-left:5px;"><a href="/manage/TopicDetail"> + 添加主题</a></li>
+    @{
+        var lastPage = ViewBag.CurrentPageIndex <= 1 ? 1 : ViewBag.CurrentPageIndex - 1;
+        var nextPage = ViewBag.CurrentPageIndex + 1;
+        if (Model != null && Model.Count() > 0)
+        {
+            foreach (var topic in Model)
+            {
+                <li><a href="/Manage/TopicDetail?id=@topic.Id">@topic.Title</a></li>
+            }
+        }
+        else
+        {
+            <li>没有数据了，返回 <a href="/Manage/TopicManagement?pageindex=@ViewBag.CurrentPageIndex">上一页</a></li>
+        }
+    }
+</ul>
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="servicelstfooter">
+        <a href="/Manage/TopicManagement?pageindex=@lastPage">上一页</a>
+        <a href="javascript:return void(0);">@ViewBag.CurrentPageIndex</a>
+        <a href="/Manage/TopicManagement?pageindex=@nextPage">下一页</a>
+    </div>
+}
+

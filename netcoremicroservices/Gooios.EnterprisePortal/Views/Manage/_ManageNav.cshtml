@@ -1,0 +1,25 @@
+﻿@using Gooios.EnterprisePortal.Views.Manage
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<ul class="nav nav-pills nav-stacked">
+    <li class="@ManageNavPages.IndexNavClass(ViewContext)"><a asp-action="Index">账户信息</a></li>
+    <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext)"><a asp-action="ChangePassword">修改密码</a></li>
+    <li class="@ManageNavPages.TopicManagementNavClass(ViewContext)"><a asp-action="TopicManagement">主题管理</a></li>
+    <li class="@ManageNavPages.GoodsManagementNavClass(ViewContext)"><a asp-action="GoodsManagement">商品管理</a></li>
+    @*<li class="@ManageNavPages.GoodsCommentsManagementNavClass(ViewContext)"><a asp-action="GoodsCommentsManagement">商品评价管理</a></li>*@
+    <li class="@ManageNavPages.ServiceManagementNavClass(ViewContext)"><a asp-action="ServiceManagement">服务管理</a></li>
+    @*<li class="@ManageNavPages.ServiceCommentsManagementNavClass(ViewContext)"><a asp-action="ServiceCommentsManagement">服务评价管理</a></li>*@
+    <li class="@ManageNavPages.ServicerManagementNavClass(ViewContext)"><a asp-action="ServicerManagement">服务人员管理</a></li>
+    @*<li class="@ManageNavPages.ServicerCommentsManagementNavClass(ViewContext)"><a asp-action="ServicerCommentsManagement">服务人员评价管理</a></li>*@
+    @*<li class="@ManageNavPages.ReservationManagementNavClass(ViewContext)"><a asp-action="ReservationManagement">预约单管理</a></li>*@
+    <li class="@ManageNavPages.OrderManagementNavClass(ViewContext)"><a asp-action="OrderManagement">订单管理</a></li>
+    @*@if (hasExternalLogins)
+    {
+        <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)"><a asp-action="ExternalLogins">External logins</a></li>
+    }*@
+    @*<li class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)"><a asp-action="TwoFactorAuthentication">Two-factor authentication</a></li>*@
+</ul>
+

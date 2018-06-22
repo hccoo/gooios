@@ -1,0 +1,266 @@
+﻿@model OrderModel
+@{
+    ViewData["Title"] = "OrderDetail";
+    Layout = "~/Views/Manage/_Layout.cshtml";
+}
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<style>
+    .tborderdetail {
+        width: 100%;
+    }
+
+        .tborderdetail tr td table {
+            width: 100%;
+        }
+
+        .tborderdetail tr td {
+            font-size: 12px;
+            line-height: 30px;
+            border-bottom: dashed 1px #cccccc;
+            padding: 5px;
+        }
+</style>
+@{
+    var invoiceType = "";
+    var orderStatus = "";
+
+    switch (Model.InvoiceType)
+    {
+        case InvoiceType.Common:
+            invoiceType = "普通发票";
+            break;
+        case InvoiceType.VAT:
+            invoiceType = "增值税发票";
+            break;
+        default:
+            invoiceType = "不开发票";
+            break;
+    }
+
+    switch (Model.Status)
+    {
+        case OrderStatus.Cancelled:
+            orderStatus = "订单已取消";
+            break;
+        case OrderStatus.Completed:
+            orderStatus = "订单已完成";
+            break;
+        case OrderStatus.Failed:
+            orderStatus = "订单失效";
+            break;
+        case OrderStatus.Paid:
+            orderStatus = "已支付";
+            break;
+        case OrderStatus.Refunded:
+            orderStatus = "已退款";
+            break;
+        case OrderStatus.Shipped:
+            orderStatus = "已发货";
+            break;
+        case OrderStatus.Submitted:
+            orderStatus = "已提交";
+            break;
+        default:
+            orderStatus = "已提交";
+            break;
+
+    }
+
+}
+<input type="hidden" id="orderid" value="@Model?.Id" />
+<table class="tborderdetail">
+    <tr><td style="width:120px;">订单号：</td><td>@Model?.OrderNo</td></tr>
+    <tr><td>客户姓名：</td><td>@Model?.CustomerName</td></tr>
+    <tr><td>客户手机号码：</td><td>@Model?.CustomerMobile</td></tr>
+    <tr><td>客户地址：</td><td>@Model?.CustomerAddress?.StreetAddress</td></tr>
+    <tr><td>订单总金额：</td><td>@Model?.TotalAmount 元</td></tr>
+    <tr>
+        <td>支付金额：</td>
+        <td>
+            @if (Model.Status == OrderStatus.Submitted)
+            {
+                <input type="text" id="payamount" value="@(Model?.PayAmount ?? 0)" /><span>元</span> <input type="button" onclick="onModifyPayAmount()" value="提 交" />
+            }
+            else
+            {
+                <span>@(Model?.PayAmount ?? 0) 元</span>
+            }
+        </td>
+    </tr>
+    <tr><td>运费：</td><td>@Model?.ShippingCost 元</td></tr>
+    <tr><td>优惠金额：</td><td>@Model?.PreferentialAmount 元</td></tr>
+    <tr><td>发票类型：</td><td>@invoiceType</td></tr>
+    <tr><td>开票备注：</td><td>@Model.InvoiceRemark</td></tr>
+    <tr><td>状态：</td><td>@orderStatus</td></tr>
+    <tr><td>订单条目：</td><td></td></tr>
+    <tr>
+        <td colspan="2">
+
+            <table>
+                <thead>
+                    <tr><td><b>预览图片</b></td><td><b>条目名称</b></td><td><b>数量</b></td><td><b>金额(￥)</b></td></tr>
+                </thead>
+                <tbody>
+                    @if (Model?.OrderItems != null)
+                    {
+                        foreach (var item in Model?.OrderItems)
+                        {
+                            var properties = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(item.SelectedProperties)??new List<dynamic>();
+                            <tr><td style="border-top:solid 2px #2a2929;"><img src="@item.PreviewPictureUrl" style="width:100px; height:100px;" /></td><td style="border-top:solid 2px #2a2929;">@item.Title</td><td style="border-top:solid 2px #2a2929;">@item.Count</td><td style="border-top:solid 2px #2a2929;">@item.TradeUnitPrice</td></tr>
+                            <tr>
+                                <td colspan="4" style="border-bottom:solid 2px #2a2929;">
+                                    @foreach (var p in properties)
+                                    {
+                                        <div>
+                                            <b>@p.Name</b><span>:</span><span>@p.Value</span>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+        </td>
+    </tr>
+    <tr>
+        <td>备注：</td>
+        <td>
+            @if (Model.Status == OrderStatus.Submitted)
+            {
+                <textarea id="remark" style="width:100%" rows="5">@Model?.Remark</textarea>
+            }
+            else
+            {
+                <span>@Model?.Remark</span>
+            }
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            @if (Model.Status == OrderStatus.Submitted)
+            {
+                <input type="button" onclick="onModifyRemark()" value="保存备注" />
+                <input type="button" onclick="onOrderCancel()" value="取消订单" />
+            }
+            @if (Model.Status == OrderStatus.Paid)
+            {
+                <input type="button" onclick="onOrderShip()" value="发 货" />
+            }
+        </td>
+    </tr>
+</table>
+<script>
+    function onModifyPayAmount() {
+        var orderId = $("#orderid").val();
+        var amount = 0;
+
+        if ($("#payamount").val().trim() == "")
+        {
+            alert("请输入支付金额！");
+            return;
+        }
+
+        try {
+            if (!/^\d+(\.\d+)?$/.test($("#payamount").val().trim())) {
+                alert("订单金额必须为非负数值!");
+                return;
+            }
+            var astr = $("#payamount").val();
+            amount = parseFloat(astr);
+
+        } catch (ex) {
+            alert("订单金额必须为数值，如：20.5");
+            return;
+        }
+
+        if (orderId == "")
+        {
+            alert("订单异常！请稍后重试！");
+            return;
+        }
+
+        if (amount <= 0) {
+            alert("订单金额必须为大于0的数！");
+            return;
+        }
+
+
+        $.ajax({
+            url: "/Manage/ModifyPrice",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: { OrderId: orderId, Amount: amount },
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+
+    }
+
+    function onModifyRemark() {
+        var orderId = $("#orderid").val();
+        var remark = $("#remark").val();
+        
+        if (orderId == "") {
+            alert("订单异常！请稍后重试！");
+            return;
+        }
+        
+        $.ajax({
+            url: "/Manage/ModifyRemark",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: { OrderId: orderId, Remark: remark },
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+ }
+
+    function onOrderShip() {
+        var orderId = $("#orderid").val();
+
+        $.ajax({
+            url: "/Manage/OrderShip?orderId=" + orderId,
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: {},
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+    }
+
+    function onOrderCancel() {
+        var orderId = $("#orderid").val();
+
+        $.ajax({
+            url: "/Manage/OrderCancel?orderId=" + orderId,
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: {},
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+    }
+</script>

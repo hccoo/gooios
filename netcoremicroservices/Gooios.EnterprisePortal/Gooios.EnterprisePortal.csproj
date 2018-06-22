@@ -1,0 +1,191 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <UserSecretsId>aspnet-Gooios.EnterprisePortal-45724861-5632-4988-B70F-F6B944766AD7</UserSecretsId>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" PrivateAssets="All" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
+    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\plugins\wangeditor\.eslintignore" />
+    <None Include="wwwroot\lib\plugins\wangeditor\.gitattributes" />
+    <None Include="wwwroot\lib\plugins\wangeditor\.gitignore" />
+    <None Include="wwwroot\lib\plugins\wangeditor\.npmignore" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\dev\README.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\01-getstart\01-demo.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\01-getstart\02-use-module.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\01-getstart\03-sperate.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\01-getstart\04-multi.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\02-content\01-set-content.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\02-content\02-get-content.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\02-content\03-use-textarea.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\02-content\04-get-json.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\01-menu.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\02-debug.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\03-onchange.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\04-z-index.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\05-lang.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\06-paste.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\07-linkImgCallback.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\08-linkCheck.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\09-onfocus.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\10-onblur.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\11-linkImgCheck.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\12-colors.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\13-emot.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\03-config\14-font-name.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\04-uploadimg\01-show-tab.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\04-uploadimg\02-base64.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\04-uploadimg\03-upload-config.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\04-uploadimg\04-qiniu.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\05-other\01-全屏-预览-查看源码.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\05-other\02-上传附件.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\05-other\03-markdown.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\05-other\04-xss.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\05-other\05-react.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\05-other\06-vue.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\05-other\07-ng.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\05-other\08-api.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\docs\usage\README.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-react\public\favicon.ico" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-react\public\index.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-react\src\App.css" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-react\src\App.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-react\src\App.test.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-react\src\index.css" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-react\src\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-react\src\logo.svg" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-react\src\registerServiceWorker.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\.babelrc" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\.editorconfig" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\.postcssrc.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\build\build.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\build\check-versions.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\build\dev-client.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\build\dev-server.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\build\utils.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\build\vue-loader.conf.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\build\webpack.base.conf.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\build\webpack.dev.conf.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\build\webpack.prod.conf.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\config\dev.env.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\config\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\config\prod.env.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\index.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\src\App.vue" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\src\assets\logo.png" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\src\components\Editor.vue" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\src\components\Hello.vue" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\src\main.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\in-vue\static\.gitkeep" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-amd-main.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-amd.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-css-reset.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-emot.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-fullscreen.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-get-content.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-getJSON.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-lang.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-menus.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-mult.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-onblur.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-onchange.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-onfocus.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-paste.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-set-content.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-sperate.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-textarea.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\demo\test-uploadimg.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\favicon.ico" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\icomoon\demo-files\demo.css" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\icomoon\demo-files\demo.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\icomoon\demo.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\icomoon\fonts\icomoon.eot" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\icomoon\fonts\icomoon.svg" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\icomoon\fonts\icomoon.ttf" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\icomoon\fonts\icomoon.woff" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\icomoon\Read Me.txt" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\icomoon\style.css" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\index.html" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\pay.png" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\README.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\server\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\example\server\util.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\gulpfile.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\ISSUE.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\LICENSE" />
+    <None Include="wwwroot\lib\plugins\wangeditor\README.md" />
+    <None Include="wwwroot\lib\plugins\wangeditor\release\fonts\w-e-icon.woff" />
+    <None Include="wwwroot\lib\plugins\wangeditor\release\wangEditor.css" />
+    <None Include="wwwroot\lib\plugins\wangeditor\release\wangEditor.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\release\wangEditor.min.css" />
+    <None Include="wwwroot\lib\plugins\wangeditor\release\wangEditor.min.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\release\wangEditor.min.js.map" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\fonts\w-e-icon.woff" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\.babelrc" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\command\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\config.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\editor\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\editor\upload\progress.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\editor\upload\upload-img.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\backColor\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\bold\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\code\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\droplist.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\emoticon\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\fontName\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\fontSize\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\foreColor\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\head\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\img\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\italic\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\justify\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\link\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\list\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\menu-list.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\panel.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\quote\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\redo\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\strikethrough\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\table\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\underline\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\undo\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\menus\video\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\selection\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\text\index.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\util\dom-core.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\util\paste-handle.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\util\poly-fill.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\util\replace-lang.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\js\util\util.js" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\less\common.less" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\less\droplist.less" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\less\icon.less" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\less\menus.less" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\less\panel.less" />
+    <None Include="wwwroot\lib\plugins\wangeditor\src\less\text.less" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gooios.Infrastructure\Gooios.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

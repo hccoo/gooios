@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!--<script src="wwwroot/js/jquery-3.3.1.min.js"></script>-->
+    <script src="wwwroot/lib/plugins/diyUpload/js/jquery-1.11.0.min.js"></script>
+    <link href="wwwroot/lib/plugins/diyUpload/css/globle.css" rel="stylesheet" />
+    <script src="wwwroot/lib/plugins/diyUpload/js/webuploader.min.js"></script>
+    <script src="wwwroot/lib/plugins/diyUpload/js/diyUpload.js"></script>
+</head>
+<body>
+    <ul class="upload-ul clearfix">
+        <li class="upload-pick">
+            <div class="webuploader-container clearfix" id="goodsUpload"></div>
+        </li>
+    </ul>
+    <script>
+        $(function () {
+            $('#goodsUpload').diyUpload({
+                url: '/image/upload',
+                success: function (data) {
+                    alert(data);
+                },
+                error: function (err) { },
+                buttonText: '',
+                accept: {
+                    title: "Images",
+                    extensions: 'gif,jpg,jpeg,bmp,png'
+                },
+                thumb: {
+                    width: 120,
+                    height: 90,
+                    quality: 100,
+                    allowMagnify: true,
+                    crop: true,
+                    type: "image/jpeg"
+                }
+            });
+        });
+    </script>
+</body>
+</html>

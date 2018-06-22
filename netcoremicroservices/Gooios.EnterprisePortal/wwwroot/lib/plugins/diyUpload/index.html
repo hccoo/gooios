@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--优先使用 IE 最新版本和 Chrome-->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title></title>
+
+    <!--全局公用样式-->
+    <link rel="stylesheet" type="text/css" href="css/globle.css" />
+
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+</head>
+<body class="">
+
+<div style="padding: 100px;">
+    <ul class="upload-ul clearfix">
+        <li class="upload-pick">
+            <div class="webuploader-container clearfix" id="goodsUpload"></div>
+        </li>
+    </ul>
+
+    <p><a class="upload-btn" href="javascript:;">提交</a></p>
+
+</div>
+
+
+
+
+<script src="js/webuploader.min.js"></script>
+<script src="js/diyUpload.js"></script>
+<script>
+    $(function(){
+
+        //上传图片
+        var $tgaUpload = $('#goodsUpload').diyUpload({
+            url:'/uploadFilePath',
+            success:function( data ) { },
+            error:function( err ) { },
+            buttonText : '',
+            accept: {
+                title: "Images",
+                extensions: 'gif,jpg,jpeg,bmp,png'
+            },
+            thumb:{
+                width:120,
+                height:90,
+                quality:100,
+                allowMagnify:true,
+                crop:true,
+                type:"image/jpeg"
+            }
+        });
+
+
+    });
+</script>
+</body>
+</html>

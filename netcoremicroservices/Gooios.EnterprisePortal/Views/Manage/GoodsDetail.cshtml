@@ -1,0 +1,648 @@
+﻿@model GoodsModel
+@{
+    ViewData["Title"] = "GoodsDetail";
+    Layout = "~/Views/Manage/_Layout.cshtml";
+    var operation = ViewBag.Operation;
+    var goodsCategories = (List<GoodsCategoryModel>)(ViewBag.Categories);
+}
+
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script src="~/lib/plugins/wangeditor/release/wangEditor.js"></script>
+<link href="~/lib/plugins/diyUpload/css/globle.css" rel="stylesheet" />
+<script src="~/lib/plugins/diyUpload/js/webuploader.min.js"></script>
+<script src="~/lib/plugins/diyUpload/js/diyUpload.js"></script>
+<script>
+    var categories = eval(@Html.Raw(ViewBag.CategoriesJson.ToString()));
+</script>
+<style>
+    table.goodsdetail {
+        font-size: 13px;
+        width: 100%;
+    }
+
+        table.goodsdetail tr td table {
+            width: 100%;
+        }
+
+        table.goodsdetail tr td {
+            padding: 10px 5px 10px 5px;
+            border-bottom: dashed 1px #dbdbdb;
+        }
+</style>
+
+@if (operation == "add")
+{
+    <h2 style="font-size:18px; font-weight:bold; line-height:40px; margin-top:0px;">发布商品</h2>
+}
+else
+{
+    <h2 style="font-size:18px; font-weight:bold; line-height:40px; margin-top:0px;">商品详情</h2>
+}
+
+<table class="goodsdetail">
+    <tr>
+        <td style="width:160px;">商品编号：</td>
+        <td><input id="itemnumber" type="text" placeholder="如：CLR0025698" value='@(Model?.ItemNumber??"")' /></td>
+    </tr>
+    <tr>
+        <td>商品名称：</td>
+        <td><input id="title" type="text" placeholder="商品名称" value='@(Model?.Title??"")' style="width:300px;" /></td>
+    </tr>
+    <tr>
+        <td>商品分类：</td>
+        <td>
+            <select id="firstLayerCategories" onchange="onFirstLayerCategoriesChange(this)">
+                <option value="">请选择</option>
+                @{
+                    foreach (var item in goodsCategories)
+                    {
+                        var currCategory = Model?.Category ?? "";
+                        if (currCategory == item.Name)
+                        {
+                            <option value="@item.Id" selected>@item.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                }
+            </select>
+            <select id="secondLayerCategories">
+                <option value="">请选择</option>
+                @{
+                    if (!string.IsNullOrEmpty(Model?.SubCategory))
+                    {
+                        var cgs = goodsCategories.FirstOrDefault(o => o.Name == Model.Category)?.Children ?? new List<GoodsCategoryModel>();
+                        foreach (var c in cgs)
+                        {
+                            var currSubCategory = Model?.SubCategory ?? "";
+                            if (currSubCategory == c.Name)
+                            {
+                                <option value="@c.Id" selected>@c.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@c.Id">@c.Name</option>
+                            }
+                        }
+                    }
+                }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>商品单价：</td>
+        <td><input id="unitprice" type="text" placeholder="商品单独购买价格" value="@(Model?.UnitPrice??0)" /></td>
+    </tr>
+    <tr>
+        <td>商品市场价：</td>
+        <td><input id="marketprice" type="text" placeholder="商品市场价" value='@(Model?.MarketPrice??0)' /></td>
+    </tr>
+    <tr>
+        <td>商品出售单位：</td>
+        <td><input id="unit" type="text" placeholder="出售单位，如：箱、个、份等等" value='@(Model?.Unit??"")' /></td>
+    </tr>
+    <tr>
+        <td>商品库存：</td>
+        <td><input id="stock" type="text" placeholder="商品库存" value='@(Model?.Stock??0)' /></td>
+    </tr>
+    <tr>
+        <td>配送范围：</td>
+        <td><input id="distributionscope" type="text" placeholder="配送范围，如：3， 表示3公里" value='@(Model?.DistributionScope??0)' /> 公里（填写0表示不限制）</td>
+    </tr>
+    <tr>
+        <td>商品可选属性：</td>
+        <td>
+            <table>
+                <thead><tr><td>属性名称</td><td>属性值</td><td>-</td></tr></thead>
+                <tbody id="tbdProperties">
+                    @{
+                        if (!string.IsNullOrEmpty(Model?.OptionalPropertyJsonObject))
+                        {
+                            var objs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(Model.OptionalPropertyJsonObject);
+                            foreach (var obj in objs)
+                            {
+                                var vals = string.Join(",", obj.Values);
+
+                                <tr><td style="width:160px;"><input type="text" placeholder="如：颜色、尺寸" value='@obj.Name' /></td><td><input value='@vals' type="text" placeholder="如：红色,黄色，各个值用英文逗号','隔开" style="width:100%;" /></td><td> <a style="cursor:pointer;" href="javascript:void(0);" onclick="onRemovePropertyEvt(this)">- 删除</a> </td></tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td style="width:160px;"><input type="text" placeholder="如：颜色、尺寸" /></td><td><input type="text" placeholder="如：红色,黄色，各个值用英文逗号','隔开" style="width:100%;" /></td><td> <a style="cursor:pointer;" href="javascript:void(0);" onclick="onRemovePropertyEvt(this)">- 删除</a> </td></tr>
+                        }
+                    }
+
+                </tbody>
+                <tfoot><tr><td colspan="3"><a style="cursor:pointer;" href="javascript:void(0);" onclick="onAddPropertyEvt()">+新增可选属性</a></td></tr></tfoot>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>商品团购条件：</td>
+        <td>
+            <table>
+                <thead><tr><td>数量条件</td><td>满足条件后的售价</td></tr></thead>
+                <tbody id="tbdConditions">
+                    @{
+                        if (Model?.GrouponConditions != null && Model.GrouponConditions.Count() > 0)
+                        {
+                            foreach (var item in Model.GrouponConditions)
+                            {
+                                <tr><td style="width:160px;"><input type="text" placeholder="条件数量，如：5" value='@item.MoreThanNumber' /></td><td><input type="text" placeholder="如：30，表示满5单位数量售价为30元" style="width:100%;" value='@item.Price' /></td><td> <a style="cursor:pointer;" href="javascript:void(0);" onclick="onRemoveConditionEvt(this)">- 删除</a> </td></tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td style="width:160px;"><input type="text" placeholder="条件数量，如：5" /></td><td><input type="text" placeholder="如：30，表示满5单位数量售价为30元" style="width:100%;" /></td><td> <a style="cursor:pointer;" href="javascript:void(0);" onclick="onRemoveConditionEvt(this)">- 删除</a> </td></tr>
+                        }
+                    }
+                </tbody>
+                <tfoot><tr><td colspan="3"><a style="cursor:pointer;" href="javascript:void(0);" onclick="onAddConditionEvt()">+新增团购条件</a></td></tr></tfoot>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>商品简述：</td>
+        <td><textarea id="description" rows="10" placeholder="商品简述" style="width:100%;">@(Model?.Description??"")</textarea></td>
+    </tr>
+    <tr>
+        <td>商品图片：</td>
+        <td id="imageUploadContainer">
+            <ul class="upload-ul clearfix">
+                <li class="upload-pick">
+                    <div class="webuploader-container clearfix" id="goodsUpload"></div>
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>商品详情：</td>
+        <td>
+            <div id="detaileditor"></div>
+        </td>
+    </tr>
+    <tr><td></td><td><input onclick="onSubmit()" type="button" value="保 存" /> <input type="button" value="上 架" onclick="onShelve()" /> <input type="button" value="下 架" onclick="onUnShelve()"/></td></tr>
+</table>
+<script>
+    var imgArr = new Array();
+    var propertyArr = new Array();
+    var conditionArr = new Array();
+    var goods = {
+        Id: "@(string.IsNullOrEmpty(Model?.Id)?"" : Model.Id)",
+        ItemNumber: "@Model?.ItemNumber",
+        Title: "@Model?.Title",
+        Description: "@Model?.Description",
+        Detail: "@Model?.Detail",
+        Category: "@Model?.Category",
+        SubCategory: "@Model?.SubCategory",
+        UnitPrice: @(Model?.UnitPrice??0),
+        MarketPrice: @(Model?.MarketPrice??0),
+        Unit: "@Model?.Unit",
+        Status: @((int)(Model?.Status??GoodsStatus.Draft)),
+        Stock: @(Model?.Stock??0),
+        StoreId: "@Model?.StoreId",
+        GrouponConditions: [],
+        GoodsImages: [],
+        OptionalPropertyJsonObject: "",
+        DistributionScope:0
+    };
+
+    function initEditor() {
+        editor = new window.wangEditor('#detaileditor');
+        //editor.customConfig.uploadImgShowBase64 = true   // 使用 base64 保存图片
+        editor.customConfig.uploadImgServer = '/image/upload';
+        editor.customConfig.uploadImgTimeout = 30000;
+        editor.create();
+        editor.$textElem.html(htmlUtil.htmlDecode(goods.Detail));
+    }
+    function initDiyUpload() {
+        jQuery('#goodsUpload').diyUpload({
+            auto: true,
+            url: '/image/diyupload',
+            success: function (res) {
+                console.log(res.data[0]);
+
+                $.each(res.data, function (index, item) {
+                    imgArr.push({
+                        imageid: item.id,
+                        httppath: item.httpPath,
+                        title: item.title,
+                        filename: item.clientFileName
+                    });
+                });
+
+            },
+            error: function (err) { },
+            buttonText: '',
+            accept: {
+                title: "Images",
+                extensions: 'gif,jpg,jpeg,bmp,png'
+            },
+            thumb: {
+                width: 120,
+                height: 90,
+                quality: 100,
+                allowMagnify: true,
+                crop: true,
+                type: "image/jpeg"
+            },
+            startUpload: function (f) {
+
+                alert(f);
+
+            }
+        });
+    }
+    function removeEvt(thisObj) {
+        var fName = $(thisObj).attr("filename");
+        var idx = -1;
+        for (var i = 0; i < imgArr.length; i++) {
+            var fileName = imgArr[i].filename; //getFileName(imgArr[i].httppath);
+            if (fileName == fName) {
+                idx = i;
+                break;
+            }
+        }
+
+        if (idx > -1) {
+            imgArr.splice(idx, 1);
+        }
+    }
+
+    function loadImage() {
+        var getFileBlob = function (url, cb) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.responseType = "blob";
+            xhr.addEventListener('load', function () {
+                cb(xhr.response);
+            });
+            xhr.send();
+        };
+
+        var blobToFile = function (blob, name) {
+            blob.lastModifiedDate = new Date();
+            blob.name = name;
+            return blob;
+        };
+
+        var getFileObject = function (filePathOrUrl, cb) {
+            getFileBlob(filePathOrUrl, function (blob) {
+                cb(blobToFile(blob, getFileName(filePathOrUrl) + '.jpg'));
+            });
+        };
+        var generateNewGuid = function () {
+            var guid = "";
+            for (var i = 1; i <= 32; i++) {
+                var n = Math.floor(Math.random() * 16.0).toString(16);
+                guid += n;
+                if ((i == 8) || (i == 12) || (i == 16) || (i == 20))
+                    guid += "-";
+            }
+            return guid;
+        }
+
+        var picList = eval('@(Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.GoodsImages)))');
+        $.each(picList, function (index, item) {
+            getFileObject(item.HttpPath, function (fileObject) {
+                var wuFile = new WebUploader.Lib.File(WebUploader.guid('rt_'), fileObject);
+                var file = new WebUploader.File(wuFile);
+                file.setStatus("complete");
+                uploader.addFiles(file);
+                //createImageItem(fi, file, uploader);
+                imgArr.push({
+                    imageid: item.ImageId,
+                    httppath: item.HttpPath,
+                    title: item.Title,
+                    filename: file.name.split(".")[0]
+                });
+            })
+        });
+    }
+    function onAddPropertyEvt() {
+        $("#tbdProperties").append("<tr><td style='width:160px;'><input type='text' placeholder='如：颜色、尺寸' /></td><td><input type='text' placeholder='如：红色,黄色，各个值用英文逗号','隔开' style='width:100%;' /></td><td> <a href='javascript:void(0);' onclick='onRemovePropertyEvt(this)'>- 删除</a> </td></tr>");
+    }
+    function onRemovePropertyEvt(thisObj) {
+        $(thisObj).parent().parent().remove();
+    }
+    function onAddConditionEvt() {
+        $("#tbdConditions").append("<tr><td style='width:160px;'><input type='text' placeholder='条件数量，如：5' /></td><td><input type='text' placeholder='如：30，表示满5单位数量售价为30元' style='width:100%;' /></td><td> <a style='cursor:pointer;' href='javascript:void(0);' onclick='onRemoveConditionEvt(this)'>- 删除</a> </td></tr>");
+    }
+    function onRemoveConditionEvt(thisObj) {
+        $(thisObj).parent().parent().remove();
+    }
+    function onFirstLayerCategoriesChange(thisObj) {
+
+        var categoryId = $(thisObj).val();
+        $("#secondLayerCategories").empty();
+        $("#secondLayerCategories").append("<option>请选择</option>");
+
+        for (var i = 0; i < categories.length; i++) {
+
+            if (categories[i].Id == categoryId) {
+                for (var j = 0; j < categories[i].Children.length; j++) {
+                    $("#secondLayerCategories").append("<option value='" + categories[i].Children[j].Id + "'>" + categories[i].Children[j].Name + "</option>");
+                }
+                break;
+            }
+        }
+
+    }
+    function getFileName(url) {
+        var arr = url.split("/");
+        return arr[arr.length - 1].split(".")[0];
+    }
+
+    function onSubmit() {
+
+        var isValidatePassed = false;
+
+        $("#tbdProperties tr").each(function (idx, elem) {
+            var name = $(elem).children("td").children("input").get(0).value;
+            var vals = $(elem).children("td").children("input").get(1).value.split(",");
+
+            if (name == "" && vals == "") return;
+
+            if (name.trim() == "") {
+                alert("商品可选属性名称不能为空!");
+                isValidatePassed = false;
+                return;
+            }
+
+            isValidatePassed = true;
+
+            if ($(elem).children("td").children("input").get(1).value.trim() == "") {
+                alert("商品可选属性值不能为空!");
+                isValidatePassed = false;
+                return;
+            }
+            isValidatePassed = true;
+
+            propertyArr.push({
+                Name: name,
+                Values: vals
+            });
+        });
+
+        $("#tbdConditions tr").each(function (idx, elem) {
+            var num = $(elem).children("td").children("input").get(0).value;
+            var price = $(elem).children("td").children("input").get(1).value;
+            var prc = 0;
+            var n = 0;
+            try {
+                if (num.trim() == "")
+                {
+                    alert("条件数量不能为空!");
+                    isValidatePassed = false;
+                    return;
+                }
+
+                isValidatePassed = true;
+                if (!/^\d+$/.test(num))
+                {
+                    alert("条件数量必须为非负整数!" + num);
+                    isValidatePassed = false;
+                    return;
+                }
+
+                isValidatePassed = true;
+                n = parseInt(num);
+            }
+            catch (e) {
+                alert("团购条件数量必须为整数，如：10");
+                isValidatePassed = false;
+                return;
+            }
+            isValidatePassed = true;
+            try {
+                if (price.trim() == "") {
+                    alert("团购价格不能为空!");
+                    isValidatePassed = false;
+                    return;
+                }
+                isValidatePassed = true;
+                if (!/^\d+(\.\d+)?$/.test(price)) {
+                    alert("团购价格必须为非负数值!");
+                    isValidatePassed = false;
+                    return;
+                }
+                isValidatePassed = true;
+                prc = parseFloat(price);
+            }
+            catch (e) {
+                alert("团购条件价格必须为数值，如：100.2");
+                isValidatePassed = false;
+                return;
+            }
+            isValidatePassed = true;
+            conditionArr.push({
+                MoreThanNumber: n,
+                Price: prc
+            });
+        });
+
+        goods.OptionalPropertyJsonObject = JSON.stringify(propertyArr);
+
+        goods.Title = $("#title").val();
+        goods.ItemNumber = $("#itemnumber").val();
+        goods.Category = $("#firstLayerCategories option:selected").text();
+        goods.SubCategory = $("#secondLayerCategories option:selected").text();
+        goods.Description = $("#description").val();
+        goods.Detail = editor.$textElem.html();
+        try
+        {
+
+            if (!/^\d+(\.\d+)?$/.test($("#unitprice").val().trim())) {
+                alert("单价必须为非负数值!");
+                isValidatePassed = false;
+                return;
+            }
+            isValidatePassed = true;
+            goods.UnitPrice = parseFloat($("#unitprice").val());
+        } catch (e)
+        {
+            alert("请检查商品单价，价格为数值，如：100.00");
+            isValidatePassed = false;
+            return;
+        }
+        isValidatePassed = true;
+        try
+        {
+            if (!/^\d+(\.\d+)?$/.test($("#marketprice").val().trim())) {
+                alert("市场价必须为非负数值!");
+                isValidatePassed = false;
+                return;
+            }
+            isValidatePassed = true;
+        goods.MarketPrice = parseFloat($("#marketprice").val());
+        } catch (e)
+        {
+            alert("请检查商品单价，价格为数值，如：100.00");
+            isValidatePassed = false;
+            return;
+        }
+        isValidatePassed = true;
+        goods.Unit = $("#unit").val();
+        try
+        {
+            if (!/^\d+$/.test($("#stock").val().trim())) {
+                alert("库存必须为非负整数!");
+                isValidatePassed = false;
+                return;
+            }
+            isValidatePassed = true;
+            goods.Stock = parseInt($("#stock").val());
+
+        } catch(e){ 
+            alert("请检查商品库存，价格为整数，如：100");
+            isValidatePassed = false;
+            return;
+        }
+        isValidatePassed = true;
+
+        goods.DistributionScope = $("#distributionscope").val();
+        try {
+            if (!/^\d+$/.test($("#distributionscope").val().trim())) {
+                alert("配送范围必须为非负整数!");
+                isValidatePassed = false;
+                return;
+            }
+            isValidatePassed = true;
+            goods.DistributionScope = parseInt($("#distributionscope").val());
+
+        }
+        catch (e) {
+            alert("配送范围必须为非负整数！");
+            isValidatePassed = false;
+            return;
+        }
+
+        goods.GoodsImages = imgArr;
+        goods.GrouponConditions = conditionArr;
+
+        if (goods.Title.trim() == "")
+        {
+            alert("商品名称不能为空!");
+            isValidatePassed = false;
+            return;
+        }
+        isValidatePassed = true;
+        if (goods.ItemNumber.trim() == "") {
+            alert("商品编号不能为空!");
+            isValidatePassed = false;
+            return;
+        }
+        isValidatePassed = true;
+        if (goods.Category.trim() == "") {
+            alert("商品分类不能为空!");
+            isValidatePassed = false;
+            return;
+        }
+        isValidatePassed = true;
+        if ($("#unitprice").val().trim() == "") {
+            alert("请填写商品单价!");
+            isValidatePassed = false;
+            return;
+        }
+        isValidatePassed = true;
+        if ($("#marketprice").val().trim() == "") {
+            alert("请填写商品市场价!");
+            isValidatePassed = false;
+            return;
+        }
+        isValidatePassed = true;
+        if (goods.Unit.trim() == "") {
+            alert("请填写商品单位!");
+            isValidatePassed = false;
+            return;
+        }
+        isValidatePassed = true;
+        if ($("#stock").val().trim() == "") {
+            alert("请填写商品库存!");
+            isValidatePassed = false;
+            return;
+        }
+        isValidatePassed = true;
+
+        if (isValidatePassed == false)
+        {
+            return;
+        }
+
+        $.ajax({
+            url: "/Manage/GoodsDetail",
+            type: "POST",
+            dataType: "json",
+            contentType:"application/x-www-form-urlencoded",
+            data:goods,
+            success: function (ret) {
+                conditionArr.length = 0;
+                propertyArr.length = 0; 
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+    }
+
+    function onShelve()
+    {
+        $.ajax({
+            url: "/Manage/GoodsShelve",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: { Id: goods.Id },
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+
+    }
+
+    function onUnShelve() {
+        $.ajax({
+            url: "/Manage/GoodsUnShelve",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: { Id: goods.Id },
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+
+    }
+
+    $(function () {
+        initEditor();
+        initDiyUpload();
+        loadImage();
+    });
+
+    var htmlUtil = {
+        htmlEncode: function (html) {
+            var temp = document.createElement("div");
+            (temp.textContent != undefined) ? (temp.textContent = html) : (temp.innerText = html);
+            var output = temp.innerHTML;
+            temp = null;
+            return output;
+        },
+        htmlDecode: function (text) {
+            var temp = document.createElement("div");
+            temp.innerHTML = text;
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        }
+    };
+</script>

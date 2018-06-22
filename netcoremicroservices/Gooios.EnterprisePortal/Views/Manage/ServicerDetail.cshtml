@@ -1,0 +1,591 @@
+﻿@model ServicerModel
+@{
+    ViewData["Title"] = "ServicerDetail";
+    Layout = "~/Views/Manage/_Layout.cshtml";
+    var operation = ViewBag.Operation;
+    var serviceCategories = (List<CategoryModel>)(ViewBag.Categories);
+}
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script src="~/lib/plugins/wangeditor/release/wangEditor.js"></script>
+<link href="~/lib/plugins/diyUpload/css/globle.css" rel="stylesheet" />
+<script src="~/lib/plugins/diyUpload/js/webuploader.min.js"></script>
+<script src="~/lib/plugins/diyUpload/js/diyUpload.js"></script>
+<script src="~/js/ajaxfileupload.js"></script>
+<script src="~/lib/My97DatePicker/WdatePicker.js"></script>
+<script>
+    var categories = eval(@Html.Raw(ViewBag.CategoriesJson.ToString()));
+</script>
+<style>
+    table.goodsdetail {
+        font-size: 13px;
+        width: 100%;
+    }
+
+        table.goodsdetail tr td table {
+            width: 100%;
+        }
+
+        table.goodsdetail tr td {
+            padding: 10px 5px 10px 5px;
+            border-bottom: dashed 1px #dbdbdb;
+        }
+</style>
+
+@if (operation == "add")
+{
+    <h2 style="font-size:18px; font-weight:bold; line-height:40px; margin-top:0px;">发布服务人员</h2>
+}
+else
+{
+    <h2 style="font-size:18px; font-weight:bold; line-height:40px; margin-top:0px;">服务人员详情</h2>
+}
+
+<table class="goodsdetail">
+    <tr>
+        <td>头像(80*80px)：</td>
+        <td><div><img id="imgportrail" src="@(string.IsNullOrEmpty(Model?.PortraitImageUrl)?"/images/portrait.png":Model.PortraitImageUrl)" imgid="@(Model?.PortraitImageId??"")" style="width:80px; height:80px;" /></div><div style="margin-top:10px;"><input type="file" id="fileUpload" name="file" onchange="uploadFile()" /></div></td>
+    </tr>
+    <tr>
+        <td>工号：</td>
+        <td><input id="jobnumber" type="text" placeholder="服务者工号" value='@(Model?.JobNumber??"")' style="width:300px;" /></td>
+    </tr>
+    <tr>
+        <td>服务人员姓名：</td>
+        <td><input id="name" type="text" placeholder="服务人员名称" value='@(Model?.Name??"")' style="width:300px;" /></td>
+    </tr>
+    <tr>
+        <td>服务人员职称：</td>
+        <td><input id="technicaltitle" type="text" placeholder="服务人员职称" value='@(Model?.TechnicalTitle??"")' style="width:300px;" /></td>
+    </tr>
+    <tr>
+        <td>服务人员等级：</td>
+        <td>
+            <select id="technicalgrade">
+                <option value="">请选择</option>
+                <option value="1">初级</option>
+                <option value="2">中级</option>
+                <option value="3">高级</option>
+                <option value="4">资深</option>
+                <option value="5">专家</option>
+                <option value="6">大师</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>性别：</td>
+        <td>
+            <select id="gender">
+                <option value="">请选择</option>
+                <option value="1">男</option>
+                <option value="2">女</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>开始从业时间：</td>
+        <td>
+            <input class="Wdate" type="text" id="startrelevantworktime" value="@Model?.StartRelevantWorkTime" onclick="WdatePicker({isShowClear:false,readOnly:true})" /></td>
+    </tr>
+    <tr>
+        <td>生日：</td>
+        <td><input class="Wdate" type="text" id="birthday" value="@Model?.BirthDay" onclick="WdatePicker({isShowClear:false,readOnly:true})" /></td>
+    </tr>
+    <tr>
+        <td>诚意金：</td>
+        <td><input id="sinceritygold" type="text" placeholder="诚意金" value="@(Model?.SincerityGold??0)" /> 元</td>
+    </tr>
+    <tr>
+        <td>诚意金比例：</td>
+        <td><input id="sinceritygoldrate" type="text" placeholder="诚意金" value="@(Model?.SincerityGoldRate??0)" /> 元</td>
+    </tr>
+
+    <tr>
+        <td>服务者分类：</td>
+        <td>
+            <select id="firstLayerCategories" onchange="onFirstLayerCategoriesChange(this)">
+                <option value="">请选择</option>
+                @{
+                    foreach (var item in serviceCategories)
+                    {
+                        var currCategory = Model?.Category ?? "";
+                        if (currCategory == item.Name)
+                        {
+                            <option value="@item.Id" selected>@item.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                }
+            </select>
+            <select id="secondLayerCategories">
+                <option value="">请选择</option>
+                @{
+                    if (!string.IsNullOrEmpty(Model?.SubCategory))
+                    {
+                        var cgs = serviceCategories.FirstOrDefault(o => o.Name == Model.Category)?.Children ?? new List<CategoryModel>();
+                        foreach (var c in cgs)
+                        {
+                            var currSubCategory = Model?.SubCategory ?? "";
+                            if (currSubCategory == c.Name)
+                            {
+                                <option value="@c.Id" selected>@c.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@c.Id">@c.Name</option>
+                            }
+                        }
+                    }
+                }
+            </select>
+        </td>
+    </tr>
+    @*<tr>
+        <td>服务范围：</td>
+        <td><input id="servicescope" type="text" placeholder="服务范围" value='@(Model?.ServeScope??0)' style="width:80px;" /> 公里</td>
+    </tr>*@
+    <tr>
+        <td>所在区域：</td>
+        <td>
+            <select id="province">
+                <option>上海</option>
+            </select>省
+            <select id="city">
+                <option>上海</option>
+            </select>市
+            <select id="area">
+                <option value="">请选择</option>
+                <option>黄浦区</option>
+                <option>徐汇区</option>
+                <option>长宁区</option>
+                <option>静安区</option>
+                <option>普陀区</option>
+                <option>虹口区</option>
+                <option>杨浦区</option>
+                <option>闵行区</option>
+                <option>宝山区</option>
+                <option>嘉定区</option>
+                <option>浦东新区</option>
+                <option>金山区</option>
+                <option>松江区</option>
+                <option>青浦区</option>
+                <option>奉贤区</option>
+                <option>崇明区</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>详细地址：</td>
+        <td><input id="streetaddress" type="text" placeholder="详细地址" value='@(Model?.Address?.StreetAddress??"")' style="width:500px;" /></td>
+    </tr>
+    <tr>
+        <td>邮编：</td>
+        <td><input id="postcode" type="text" placeholder="邮编" value='@(Model?.Address?.Postcode??"")' /></td>
+    </tr>
+    <tr>
+        <td>服务者展示：</td>
+        <td id="imageUploadContainer">
+            <ul class="upload-ul clearfix">
+                <li class="upload-pick">
+                    <div class="webuploader-container clearfix" id="goodsUpload"></div>
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>服务者详情：</td>
+        <td>
+            <div id="detaileditor"></div>
+        </td>
+    </tr>
+    <tr><td></td><td><input onclick="onSubmit()" type="button" value="保 存" /> <input type="button" value="删 除" onclick="onDelete()" /></td></tr>
+</table>
+<script>
+    var imgArr = new Array();
+    var servicer = {
+        Id: "@(string.IsNullOrEmpty(Model?.Id)?"" : Model.Id)",
+        JobNumber: "@(Model?.JobNumber??"")",
+        TechnicalTitle: "@(Model?.TechnicalTitle ?? "")",
+        TechnicalGrade: "@(Model?.TechnicalGrade ?? Grade.Primary)",
+        Gender: "@(Model?.Gender ?? Gender.UnKnow)",
+        StartRelevantWorkTime: "@(Model?.StartRelevantWorkTime)",
+        BirthDay: "@(Model?.BirthDay)",
+        PersonalIntroduction: "@(Model?.PersonalIntroduction ?? "")",
+        Name: "@(Model?.Name??"")",
+        SincerityGold: @(Model?.SincerityGold??0),
+        SincerityGoldRate: @(Model?.SincerityGoldRate??0),
+        PortraitImageId:"@(Model?.PortraitImageId??"")",
+        Category: "@Model?.Category",
+        SubCategory: "@Model?.SubCategory",
+        Address: {
+            Province: "@Model?.Address?.Province",
+            City: "@Model?.Address?.City",
+            Area: "@(Html.Raw(Model?.Address?.Area))",
+            StreetAddress: "@Model?.Address?.StreetAddress",
+            Postcode: "@Model?.Address?.Postcode",
+            Latitude: @(Model?.Address?.Latitude??0),
+            Longitude: @(Model?.Address?.Longitude??0)
+        },
+        Images: [],
+    };
+
+    function initEditor() {
+        editor = new window.wangEditor('#detaileditor');
+        editor.customConfig.uploadImgServer = '/image/upload';
+        editor.customConfig.uploadImgTimeout = 30000;
+        editor.create();
+        editor.$textElem.html(htmlUtil.htmlDecode(servicer.PersonalIntroduction));
+    }
+    function initDiyUpload() {
+        jQuery('#goodsUpload').diyUpload({
+            auto: true,
+            url: '/image/diyupload',
+            success: function (res) {
+                console.log(res.data[0]);
+
+                $.each(res.data, function (index, item) {
+                    imgArr.push({
+                        imageid: item.id,
+                        httppath: item.httpPath,
+                        title: item.title,
+                        filename: item.clientFileName
+                    });
+                });
+
+            },
+            error: function (err) { },
+            buttonText: '',
+            accept: {
+                title: "Images",
+                extensions: 'gif,jpg,jpeg,bmp,png'
+            },
+            thumb: {
+                width: 120,
+                height: 90,
+                quality: 100,
+                allowMagnify: true,
+                crop: true,
+                type: "image/jpeg"
+            },
+            startUpload: function (f) {
+
+                alert(f);
+
+            }
+        });
+    }
+    function removeEvt(thisObj) {
+        var fName = $(thisObj).attr("filename");
+        var idx = -1;
+        for (var i = 0; i < imgArr.length; i++) {
+            var fileName = imgArr[i].filename; //getFileName(imgArr[i].httppath);
+            if (fileName == fName) {
+                idx = i;
+                break;
+            }
+        }
+
+        if (idx > -1) {
+            imgArr.splice(idx, 1);
+        }
+    }
+
+    function loadImage() {
+        var getFileBlob = function (url, cb) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.responseType = "blob";
+            xhr.addEventListener('load', function () {
+                cb(xhr.response);
+            });
+            xhr.send();
+        };
+
+        var blobToFile = function (blob, name) {
+            blob.lastModifiedDate = new Date();
+            blob.name = name;
+            return blob;
+        };
+
+        var getFileObject = function (filePathOrUrl, cb) {
+            getFileBlob(filePathOrUrl, function (blob) {
+                cb(blobToFile(blob, getFileName(filePathOrUrl) + '.jpg'));
+            });
+        };
+        var generateNewGuid = function () {
+            var guid = "";
+            for (var i = 1; i <= 32; i++) {
+                var n = Math.floor(Math.random() * 16.0).toString(16);
+                guid += n;
+                if ((i == 8) || (i == 12) || (i == 16) || (i == 20))
+                    guid += "-";
+            }
+            return guid;
+        }
+
+        var picList = eval('@(Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.Images)))');
+        $.each(picList, function (index, item) {
+            getFileObject(item.HttpPath, function (fileObject) {
+                var wuFile = new WebUploader.Lib.File(WebUploader.guid('rt_'), fileObject);
+                var file = new WebUploader.File(wuFile);
+                file.setStatus("complete");
+                uploader.addFiles(file);
+                imgArr.push({
+                    imageid: item.ImageId,
+                    httppath: item.HttpPath,
+                    title: item.Title,
+                    filename: file.name.split(".")[0]
+                });
+            })
+        });
+    }
+    function onFirstLayerCategoriesChange(thisObj) {
+
+        var categoryId = $(thisObj).val();
+        $("#secondLayerCategories").empty();
+        $("#secondLayerCategories").append("<option>请选择</option>");
+
+        for (var i = 0; i < categories.length; i++) {
+
+            if (categories[i].Id == categoryId) {
+                for (var j = 0; j < categories[i].Children.length; j++) {
+                    $("#secondLayerCategories").append("<option value='" + categories[i].Children[j].Id + "'>" + categories[i].Children[j].Name + "</option>");
+                }
+                break;
+            }
+        }
+
+    }
+    function getFileName(url) {
+        var arr = url.split("/");
+        return arr[arr.length - 1].split(".")[0];
+    }
+
+    function onSubmit() {
+        servicer.JobNumber = $("#jobnumber").val();
+        servicer.Name = $("#name").val();
+        servicer.TechnicalTitle = $("#technicaltitle").val();
+        //servicer.TechnicalGrade = $("#technicalgrade option:selected").val();
+        //servicer.Gender = $("#gender option:selected").val();
+        servicer.StartRelevantWorkTime = $("#startrelevantworktime").val();
+        servicer.BirthDay = $("#birthday").val();
+        servicer.SincerityGoldRate = $("#sinceritygoldrate").val();
+        servicer.SincerityGold = $("#sinceritygold").val();
+        servicer.PortraitImageId = $("#imgportrail").attr("imgid");
+        servicer.PersonalIntroduction = editor.$textElem.html();
+        servicer.Category = $("#firstLayerCategories option:selected").text();
+        servicer.SubCategory = $("#secondLayerCategories option:selected").text() == "请选择" ? "" : $("#secondLayerCategories option:selected").text();
+        //service.SincerityGold = $("#sinceritygold").val();
+        //service.ServeScope = $("#servicescope").val();
+        servicer.Address = {
+            Province: $("#province option:selected").text(),
+            City: $("#city option:selected").text(),
+            Area: $("#area option:selected").text(),
+            StreetAddress: $("#streetaddress").val(),
+            postcode: $("#postcode").val(),
+            latitude: 0,
+            longitude: 0
+        };
+        servicer.Images = imgArr;
+
+        if (servicer.JobNumber.trim() == "") {
+            alert("工号不能为空!");
+            return;
+        }
+        if (servicer.Name.trim() == "") {
+            alert("姓名不能为空!");
+            return;
+        }
+        if (servicer.TechnicalTitle.trim() == "") {
+            alert("职称不能为空!");
+            return;
+        }
+       
+        if (servicer.StartRelevantWorkTime.trim() == "") {
+            alert("从业开始时间不能为空!");
+            return;
+        }
+        if (servicer.BirthDay.trim() == "") {
+            alert("服务人员生日不能为空!");
+            return;
+        }
+       
+        if (servicer.PortraitImageId.trim() == "") {
+            alert("头像不能为空!");
+            return;
+        }
+
+        var cyj = 0;
+        try {
+            if (!/^\d+(\.\d+)?$/.test($("#sinceritygold").val().trim())) {
+                alert("诚意金必须为非负数值!");
+                return;
+            }
+            cyj = parseFloat($("#sinceritygold").val());
+            servicer.SincerityGold = cyj;
+        }
+        catch (e) {
+            alert("诚意金必须为数值，如：100");
+            return;
+        }
+        var cyjrate = 0;
+        try {
+            if (!/^\d+(\.\d+)?$/.test($("#sinceritygoldrate").val().trim())) {
+                alert("诚意金必须为非负数值!");
+                return;
+            }
+            cyjrate = parseFloat($("#sinceritygoldrate").val());
+            servicer.SincerityGoldRate = cyjrate;
+        }
+        catch (e) {
+            alert("诚意金比例必须为数值，如：1.3");
+            return;
+        }
+
+        if (servicer.Category.trim() == "") {
+            alert("分类不能为空!");
+            return;
+        }
+        if (servicer.Address.Area.trim() == "" || servicer.Address.Area.trim() == "请选择") {
+            alert("请选择区县!");
+            return;
+        }
+        if (servicer.Address.StreetAddress.trim() == "") {
+            alert("请填写详细地址!");
+            return;
+        }
+
+        if ($("#technicalgrade").val().trim() == "") {
+            alert("请选择职称等级!");
+            return;
+        }
+        if ($("#gender").val().trim() == "") {
+            alert("请选择性别!");
+            return;
+        }
+
+        servicer.TechnicalGrade = parseInt($("#technicalgrade").val().trim());
+        servicer.Gender = parseInt($("#gender").val().trim());
+
+        if (servicer.PersonalIntroduction.trim() == "") {
+            alert("服务者详情不能为空！");
+            return;
+        }
+        
+        $.ajax({
+            url: "/Manage/ServicerDetail",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: servicer,
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+    }
+
+    function onDelete()
+    {
+        $.ajax({
+            url: "/Manage/ServicerDelete",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            data: { Id: servicer.Id },
+            success: function (ret) {
+                alert(ret.message);
+            },
+            error: function (err) {
+                alert("保存信息出错，请稍后再试.");
+            }
+        });
+
+    }
+
+    $(function () {
+        initEditor();
+        initDiyUpload();
+        loadImage();
+        $("#area").val(servicer.Address.Area);
+        $("#technicalgrade").val(getStatusValue(servicer.TechnicalGrade));
+        $("#gender").val(getGenderValues(servicer.Gender));
+    });
+
+    function getStatusValue(s) {
+        switch (s)
+        {
+            case "Primary":
+                return 1;
+            case "Middle":
+                return 2;
+            case "Advanced":
+                return 3;
+            case "Senior":
+                return 4;
+            case "Expert":
+                return 5;
+            case "Master":
+                return 6;
+            default:
+                return s;
+        }
+
+    }
+    function getGenderValues(s) {
+        switch (s)
+        {
+            case "UnKnow":
+                return 0;
+            case "Male":
+                return 1;
+            case "Woman":
+                return 2;
+            default:
+                return s;
+
+        }
+
+    }
+
+    var htmlUtil = {
+        htmlEncode: function (html) {
+            var temp = document.createElement("div");
+            (temp.textContent != undefined) ? (temp.textContent = html) : (temp.innerText = html);
+            var output = temp.innerHTML;
+            temp = null;
+            return output;
+        },
+        htmlDecode: function (text) {
+            var temp = document.createElement("div");
+            temp.innerHTML = text;
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        }
+    };
+
+    function uploadFile() {
+        var formData = new FormData();
+        formData.append('image', $("#fileUpload")[0].files[0]);  /*获取上传的图片对象*/
+        $.ajax({
+            url: '/image/diyupload',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (args) {
+                $("#imgportrail").attr("src", args.data[0].httpPath);
+                $("#imgportrail").attr("imgid", args.data[0].id)
+            }
+        });
+        return false;
+    }  
+    
+</script>
+
+
