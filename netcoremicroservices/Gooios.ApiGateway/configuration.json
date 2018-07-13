@@ -1697,7 +1697,38 @@
         "AuthenticationProviderKey": "ID4",
         "AllowedScopes": []
       }
+    },
+    {
+      "UseServiceDiscovery": true,
+      "DownstreamPathTemplate": "/api/log/v1",
+      "DownstreamScheme": "http",
+      "ServiceName": "LogService",
+      "ServiceId": "",
+      //"LoadBalancerOptions": {
+      //  "Type": "RoundRobin"
+      //},
+      "UpstreamPathTemplate": "/LogService/log/v1",
+      "UpstreamHttpMethod": [ "Post" ],
+      "ReRoutesCaseSensitive": false,
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 63e960bff18111e799168926c7e9f005"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      }
     }
   ],
-  "GlobalConfiguration": {}
+  "GlobalConfiguration": {
+    "RequestIdKey": "OcRequestId",
+    "AdministrationPath": "/administration",
+    "ServiceDiscoveryProvider": {
+      "Host": "localhost",
+      "Port": 8500,
+      "Type": "Consul",
+      "Token": null,
+      "ConfigurationKey": null
+    }
+  }
 }

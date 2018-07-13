@@ -23,9 +23,12 @@ using Gooios.Infrastructure;
 using Gooios.VerificationService.Filters;
 using Microsoft.EntityFrameworkCore;
 using Gooios.VerificationService.Proxies;
+using Steeltoe.Discovery.Eureka;
 
 namespace Gooios.VerificationService
 {
+    using Steeltoe.Discovery.Client;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -38,6 +41,8 @@ namespace Gooios.VerificationService
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddDiscoveryClient(Configuration);
+
             services.AddMvc(options =>
             {
                 options.Filters.Add<ApiKeyFilter>();
@@ -73,7 +78,7 @@ namespace Gooios.VerificationService
             {
                 config.Interceptors.AddTyped<ExceptionInterceptor>(m => m.DeclaringType.Name.EndsWith("AppService"));
             });
-
+            
             return IocProvider.Container = container.Build();
         }
 
@@ -86,7 +91,8 @@ namespace Gooios.VerificationService
             }
 
             InitializeDatabase(app);
-
+            
+            app.UseDiscoveryClient();
             app.UseMvc();
         }
 
