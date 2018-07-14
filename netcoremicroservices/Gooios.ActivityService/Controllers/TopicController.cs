@@ -41,9 +41,9 @@ namespace Gooios.ActivityService.Controllers
 
         [HttpGet]
         [Route("nearby")]
-        public async Task<IEnumerable<TopicDTO>> Get(double longitude, double latitude, int pageIndex, int pageSize, string key = "", string appId)
+        public async Task<IEnumerable<TopicDTO>> Get(double longitude, double latitude, int pageIndex, int pageSize, string key = "", string appId = "")
         {
-            return await _topicAppService.GetNearbyTopics(longitude, latitude, pageIndex, pageSize, key,appId);
+            return await _topicAppService.GetNearbyTopics(longitude, latitude, pageIndex, pageSize, key, appId);
         }
 
         [HttpGet]
