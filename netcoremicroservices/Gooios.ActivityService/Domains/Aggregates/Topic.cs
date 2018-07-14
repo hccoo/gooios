@@ -32,6 +32,8 @@ namespace Gooios.ActivityService.Domains.Aggregates
         /// </summary>
         public string OrganizationId { get; set; }
 
+        public string ApplicationId { get; set; }
+
         /// <summary>
         /// 后期用于支持个人发布
         /// </summary>

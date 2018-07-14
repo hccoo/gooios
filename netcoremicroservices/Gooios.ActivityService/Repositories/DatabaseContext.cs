@@ -97,6 +97,7 @@ namespace Gooios.ActivityService.Repositories
             builder.Property(c => c.StartDate).HasColumnName("start_date");
             builder.Property(c => c.Title).HasColumnName("title").HasMaxLength(80);
             builder.Property(c => c.OrganizationId).HasColumnName("organization_id").HasMaxLength(80);
+            builder.Property(c => c.ApplicationId).HasColumnName("application_id").HasMaxLength(80);
             builder.Property(c => c.Postcode).HasColumnName("postcode").HasMaxLength(80);
             builder.Property(c => c.CreatorName).HasColumnName("creator_name").HasMaxLength(80);
             builder.Property(c => c.CreatorPortraitUrl).HasColumnName("creator_portrait_url").HasMaxLength(500);

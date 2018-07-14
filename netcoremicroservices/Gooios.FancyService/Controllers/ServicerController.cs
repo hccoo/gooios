@@ -29,7 +29,7 @@ namespace Gooios.FancyService.Controllers
         {
             _servicerAppService.UpdateServicer(model, UserId);
         }
-        
+
         [HttpPut]
         [Route("suspend")]
         public void Suspend(string id)
@@ -53,9 +53,9 @@ namespace Gooios.FancyService.Controllers
 
         [HttpGet]
         [Route("getnearbyservicers")]
-        public async Task<IEnumerable<ServicerDTO>> GetNearbyServicers(double longitude, double latitude, int pageIndex, string key, string category, string subCategory, int pageSize=20)
+        public async Task<IEnumerable<ServicerDTO>> GetNearbyServicers(double longitude, double latitude, int pageIndex, string key, string category, string subCategory, int pageSize = 20, string appId = "")
         {
-            return await _servicerAppService.GetNearbyServicers(longitude, latitude, pageIndex, pageSize, key, category, subCategory);
+            return await _servicerAppService.GetNearbyServicers(longitude, latitude, pageIndex, pageSize, key, category, subCategory, appId);
         }
     }
 }

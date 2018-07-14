@@ -18,7 +18,7 @@ namespace Gooios.ActivityService.Applications.Services
 
         Task<IEnumerable<TopicDTO>> GetTopicsByOrganizationId(int pageIndex, int pageSize, string organizationId, string key = "");
 
-        Task<IEnumerable<TopicDTO>> GetNearbyTopics(double longitude, double latitude, int pageIndex, int pageSize, string key = "");
+        Task<IEnumerable<TopicDTO>> GetNearbyTopics(double longitude, double latitude, int pageIndex, int pageSize, string key = "", string appId = "");
 
         Task<TopicDTO> GetById(string topicId, double? longitude = null, double? latitude = null);
     }
@@ -159,13 +159,13 @@ namespace Gooios.ActivityService.Applications.Services
 
         }
 
-        public async Task<IEnumerable<TopicDTO>> GetNearbyTopics(double longitude, double latitude, int pageIndex, int pageSize, string key = "")
+        public async Task<IEnumerable<TopicDTO>> GetNearbyTopics(double longitude, double latitude, int pageIndex, int pageSize, string key = "", string appId = "")
         {
             var topics = new List<TopicDTO>();
             var skipCount = (pageIndex - 1) * pageSize;
 
             var result = _topicRepository.GetPaged(pageIndex, pageSize,
-                o => (o.Title.Contains(key) || string.IsNullOrEmpty(key)) && (o.IsSuspend == false),
+                o => (o.Title.Contains(key) || string.IsNullOrEmpty(key)) && (o.ApplicationId == appId || string.IsNullOrEmpty(appId)) && (o.IsSuspend == false),
                 o => GetDistance(longitude, latitude, o.Longitude, o.Latitude), true);
 
             foreach (var o in result)

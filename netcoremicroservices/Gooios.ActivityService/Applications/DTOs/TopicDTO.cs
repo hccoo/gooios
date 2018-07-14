@@ -33,6 +33,8 @@ namespace Gooios.ActivityService.Applications.DTOs
         /// </summary>
         public string OrganizationId { get; set; }
 
+        public string ApplicationId { get; set; }
+
         public string OrganizationName { get; set; }
 
         public string OrganizationLogoUrl { get; set; }

@@ -28,9 +28,9 @@ namespace Gooios.GoodsService.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<GoodsCategoryDTO> Get()
+        public IEnumerable<GoodsCategoryDTO> Get(string appId = "")
         {
-            return _goodsCategoryAppService.GetAllGoodsCategories();
+            return _goodsCategoryAppService.GetAllGoodsCategories(appId);
         }
     }
 }

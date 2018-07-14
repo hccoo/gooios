@@ -22,14 +22,19 @@ namespace Gooios.FancyService.Controllers
         [HttpPost]
         public void Post([FromBody]CategoryDTO model)
         {
-            _categoryAppService.AddServiceCategory(model, UserId??"");
+            _categoryAppService.AddServiceCategory(model, UserId ?? "");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mark">Service or Servicer</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("getbymark")]
-        public IEnumerable<CategoryDTO> GetByMark(string mark)
+        public IEnumerable<CategoryDTO> GetByMark(string mark, string appId = "")
         {
-            return _categoryAppService.GetCategoriesByMark(mark);
+            return _categoryAppService.GetCategoriesByMark(mark, appId);
         }
 
         [HttpGet]

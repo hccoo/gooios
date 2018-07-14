@@ -12,7 +12,7 @@ namespace Gooios.FancyService.Applications.Services
     {
         void AddServiceCategory(CategoryDTO categoryDTO, string operatorId);
 
-        IEnumerable<CategoryDTO> GetCategoriesByMark(string mark);
+        IEnumerable<CategoryDTO> GetCategoriesByMark(string mark, string appId = "");
 
         IEnumerable<CategoryDTO> GetCategoriesByParentId(string id);
     }
@@ -57,16 +57,20 @@ namespace Gooios.FancyService.Applications.Services
             _dbUnitOfWork.Commit();
         }
 
-        public IEnumerable<CategoryDTO> GetCategoriesByMark(string mark)
+        public IEnumerable<CategoryDTO> GetCategoriesByMark(string mark, string appId = "")
         {
-            var categories = _serviceCategoryRepository.GetFiltered(o => o.Mark == mark).OrderBy(g=>g.Order);
-            return categories.Select(item => new CategoryDTO { Id = item.Id, Name = item.Name, ParentId = item.ParentId, Mark = item.Mark, AppId=item.ApplicationId, Order=item.Order }).ToList();
+            var categories = _serviceCategoryRepository.GetFiltered(o => o.Mark == mark).OrderBy(g => g.Order);
+
+            if (!string.IsNullOrEmpty(appId))
+                categories = categories.Where(o=>o.ApplicationId==appId).OrderBy(g => g.Order);
+
+            return categories.Select(item => new CategoryDTO { Id = item.Id, Name = item.Name, ParentId = item.ParentId, Mark = item.Mark, AppId = item.ApplicationId, Order = item.Order }).ToList();
         }
 
         public IEnumerable<CategoryDTO> GetCategoriesByParentId(string id)
         {
             var categories = _serviceCategoryRepository.GetFiltered(o => o.ParentId == id).OrderBy(g => g.Order);
-            return categories.Select(item => new CategoryDTO { Id = item.Id, Name = item.Name, ParentId = item.ParentId, Mark = item.Mark, AppId = item.ApplicationId,Order = item.Order }).ToList();
+            return categories.Select(item => new CategoryDTO { Id = item.Id, Name = item.Name, ParentId = item.ParentId, Mark = item.Mark, AppId = item.ApplicationId, Order = item.Order }).ToList();
         }
     }
 }

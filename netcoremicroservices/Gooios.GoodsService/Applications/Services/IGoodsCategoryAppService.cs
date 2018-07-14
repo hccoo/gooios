@@ -13,7 +13,7 @@ namespace Gooios.GoodsService.Applications.Services
     {
         void AddGoodsCategory(GoodsCategoryDTO goodsCategoryDTO, string operatorId);
 
-        IEnumerable<GoodsCategoryDTO> GetAllGoodsCategories();
+        IEnumerable<GoodsCategoryDTO> GetAllGoodsCategories(string appId = "");
     }
 
     public class GoodsCategoryAppService : ApplicationServiceContract, IGoodsCategoryAppService
@@ -55,10 +55,16 @@ namespace Gooios.GoodsService.Applications.Services
             _dbUnitOfWork.Commit();
         }
 
-        public IEnumerable<GoodsCategoryDTO> GetAllGoodsCategories()
+        public IEnumerable<GoodsCategoryDTO> GetAllGoodsCategories(string appId = "")
         {
-            var categories = _goodsCategoryRepository.GetAll();
-            return categories.Select(item => new GoodsCategoryDTO { Id = item.Id, Name = item.Name, ParentId = item.ParentId, Order = item.Order }).OrderBy(o => o.Order).ToList();
+            IEnumerable<GoodsCategoryDTO> result;
+
+            if(!string.IsNullOrEmpty(appId))
+                result = _goodsCategoryRepository.GetFiltered(o => o.ApplicationId == appId).Select(item => new GoodsCategoryDTO { Id = item.Id, Name = item.Name, ParentId = item.ParentId, Order = item.Order }).OrderBy(o => o.Order).ToList();
+            else
+                result = _goodsCategoryRepository.GetAll().Select(item => new GoodsCategoryDTO { Id = item.Id, Name = item.Name, ParentId = item.ParentId, Order = item.Order }).OrderBy(o => o.Order).ToList();
+            
+            return result;
         }
     }
 }

@@ -53,9 +53,9 @@ namespace Gooios.FancyService.Controllers
 
         [HttpGet]
         [Route("getnearbyservices")]
-        public async Task<IEnumerable<ServiceDTO>> GetNearbyServices(double longitude, double latitude, int pageIndex, string key, string category, string subCategory, int pageSize = 20)
+        public async Task<IEnumerable<ServiceDTO>> GetNearbyServices(double longitude, double latitude, int pageIndex, string key, string category, string subCategory, int pageSize = 20, string appId = "")
         {
-            return await _serviceAppService.GetNearbyServices(longitude, latitude, pageIndex, pageSize, key, category, subCategory);
+            return await _serviceAppService.GetNearbyServices(longitude, latitude, pageIndex, pageSize, key, category, subCategory,appId);
         }
 
         [HttpGet]
