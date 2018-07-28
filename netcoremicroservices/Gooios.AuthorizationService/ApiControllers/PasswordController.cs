@@ -37,7 +37,8 @@ namespace Gooios.AuthorizationService.ApiControllers
         public async Task<IActionResult> Patch([FromBody]ChangePasswordModel model)
         {
             if (model.ConfirmPassword != model.NewPassword) return new BadRequestObjectResult("密码与确认密码不匹配.");
-
+            var id = this.User.FindFirst("id");
+            var usid = this.User.FindFirst("userid");
             Request.Headers.TryGetValue("userid", out StringValues vals);
             var userId = vals.ToArray().GetValue(0)?.ToString();
             

@@ -28,6 +28,7 @@ namespace Gooios.ApiGateway
                 .AddIdentityServerAuthentication(authenticationProviderKey, options => {
                     options.RequireHttpsMetadata = false;
                     options.Authority = "https://authservice.gooios.com";
+                    //options.Authority = "http://localhost:5080";
                     options.ApiName = "gooiosapi";
                     options.ApiSecret = "secret";
                     options.SupportedTokens = SupportedTokens.Both;

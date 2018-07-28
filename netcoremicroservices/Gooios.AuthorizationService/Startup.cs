@@ -16,6 +16,7 @@ using System.Security.Cryptography.X509Certificates;
 using Gooios.AuthorizationService.Configurations;
 using IdentityServer4.EntityFramework.Mappers;
 using Gooios.AuthorizationService.Proxies;
+using Gooios.AuthorizationService.Core;
 
 namespace Gooios.AuthorizationService
 {
@@ -34,9 +35,10 @@ namespace Gooios.AuthorizationService
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-            
+
             services.AddSingleton<IServiceConfigurationProxy, ServiceConfigurationProxy>();
             services.AddTransient<IVerificationProxy, VerificationProxy>();
+            services.AddTransient<IAppletUserService, AppletUserService>();
 
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.AddOptions();
@@ -82,9 +84,11 @@ namespace Gooios.AuthorizationService
                         builder.UseMySql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
 
                     options.EnableTokenCleanup = true;
-                    options.TokenCleanupInterval = 3600*24*7;
+                    options.TokenCleanupInterval = 3600 * 24 * 7;
                 })
-                .AddAspNetIdentity<ApplicationUser>();
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddResourceOwnerValidator<SessionKeyValidator>()
+                .AddProfileService<ProfileService>();
 
 
             services.AddMvc();
@@ -105,7 +109,7 @@ namespace Gooios.AuthorizationService
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            
+
             app.UseStaticFiles();
 
             app.UseAuthentication();
@@ -127,7 +131,7 @@ namespace Gooios.AuthorizationService
                 serviceScope.ServiceProvider.GetRequiredService<PersistedGrantCustomDbContext>().Database.Migrate();
 
                 var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationCustomDbContext>();
-                var appDbContext= serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var appDbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 context.Database.Migrate();
                 appDbContext.Database.Migrate();

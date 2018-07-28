@@ -13,6 +13,8 @@ namespace Gooios.AuthorizationService.Data
         {
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<AppletUser> AppletUsers { get; set; }
+        public DbSet<AppletUserSession> AppletUserSessions { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -27,6 +29,8 @@ namespace Gooios.AuthorizationService.Data
             builder.ApplyConfiguration(new IdentityUserConfiguration());
             builder.ApplyConfiguration(new IdentityRoleConfiguration());
             builder.ApplyConfiguration(new IdentityRoleClaimConfiguration());
+            builder.ApplyConfiguration(new AppletUserConfiguration());
+            builder.ApplyConfiguration(new AppletUserSessionConfiguration());
         }
     }
 
@@ -130,6 +134,43 @@ namespace Gooios.AuthorizationService.Data
             builder.Property(c => c.ClaimValue).HasColumnName("claim_value");
             builder.Property(c => c.Id).HasColumnName("id");
             builder.Property(c => c.RoleId).HasColumnName("role_id");
+        }
+    }
+
+    public class AppletUserConfiguration : IEntityTypeConfiguration<AppletUser>
+    {
+        public void Configure(EntityTypeBuilder<AppletUser> builder)
+        {
+            builder.ToTable("applet_users");
+            builder.HasKey(c => new { c.Id });
+
+            builder.Property(c => c.Id).HasColumnName("id");
+            builder.Property(c => c.ApplicationId).HasColumnName("application_id").HasMaxLength(200).IsRequired();
+            builder.Property(c => c.Channel).HasColumnName("channel").IsRequired();
+            builder.Property(c => c.CreatedOn).HasColumnName("created_on").IsRequired();
+            builder.Property(c => c.NickName).HasColumnName("nickname").HasMaxLength(200).IsRequired();
+            builder.Property(c => c.LastUpdOn).HasColumnName("updated_on");
+            builder.Property(c => c.OpenId).HasColumnName("open_id").HasMaxLength(500);
+            builder.Property(c => c.OrganizationId).HasColumnName("organization_id").IsRequired().HasMaxLength(80);
+            builder.Property(c => c.UserId).HasColumnName("user_id").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.UserPortrait).HasColumnName("user_portrait").HasMaxLength(1000);
+        }
+    }
+
+    public class AppletUserSessionConfiguration : IEntityTypeConfiguration<AppletUserSession>
+    {
+        public void Configure(EntityTypeBuilder<AppletUserSession> builder)
+        {
+            builder.ToTable("applet_user_sessions");
+            builder.HasKey(c => new { c.Id });
+
+            builder.Property(c => c.Id).HasColumnName("id");
+            builder.Property(c => c.CreatedOn).HasColumnName("created_on").IsRequired();
+            builder.Property(c => c.ExpiredOn).HasColumnName("expired_on").IsRequired();
+            builder.Property(c => c.GooiosSessionKey).HasColumnName("gooios_session_key").IsRequired().HasMaxLength(1000);
+            builder.Property(c => c.OpenId).HasColumnName("open_id").HasMaxLength(500);
+            builder.Property(c => c.SessionKey).HasColumnName("session_key").IsRequired().HasMaxLength(1000);
+            builder.Property(c => c.UserId).HasColumnName("user_id").HasMaxLength(80).IsRequired();
         }
     }
 

@@ -44,7 +44,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -71,7 +71,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -98,7 +98,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -125,7 +125,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -152,7 +152,7 @@
         "TimeoutValue": 30000
       } //,
       //"AddHeadersToRequest": {
-      //  "userid": "Claims[sub] > value[0] > |"
+      //  "userid": "Claims[UserId] > value[0] > |"
       //},
       //"AuthenticationOptions": {
       //  "AuthenticationProviderKey": "ID4",
@@ -179,7 +179,7 @@
         "TimeoutValue": 30000
       } //,
       //"AddHeadersToRequest": {
-      //  "userid": "Claims[sub] > value[0] > |"
+      //  "userid": "Claims[UserId] > value[0] > |"
       //},
       //"AuthenticationOptions": {
       //  "AuthenticationProviderKey": "ID4",
@@ -206,7 +206,7 @@
         "TimeoutValue": 30000
       } //,
       //"AddHeadersToRequest": {
-      //  "userid": "Claims[sub] > value[0] > |"
+      //  "userid": "Claims[UserId] > value[0] > |"
       //},
       //"AuthenticationOptions": {
       //  "AuthenticationProviderKey": "ID4",
@@ -233,7 +233,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -260,7 +260,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -287,7 +287,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -314,7 +314,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -341,7 +341,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -368,7 +368,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -395,7 +395,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -422,7 +422,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -449,7 +449,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -476,7 +476,7 @@
         "TimeoutValue": 60000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -503,7 +503,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -530,7 +530,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -557,7 +557,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -584,7 +584,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -611,7 +611,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -638,7 +638,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -665,7 +665,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -692,7 +692,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -719,7 +719,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -746,7 +746,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -773,7 +773,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -800,7 +800,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -827,7 +827,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -854,7 +854,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -881,7 +881,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -908,7 +908,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -935,7 +935,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -962,7 +962,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -989,7 +989,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1016,7 +1016,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1043,7 +1043,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1070,7 +1070,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1097,7 +1097,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1124,7 +1124,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1151,7 +1151,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1178,7 +1178,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1205,7 +1205,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1232,7 +1232,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1259,7 +1259,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1286,7 +1286,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1313,7 +1313,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1340,7 +1340,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1367,7 +1367,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1394,7 +1394,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1421,7 +1421,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1448,7 +1448,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1475,7 +1475,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1502,7 +1502,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1529,7 +1529,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1556,7 +1556,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1583,7 +1583,7 @@
         "TimeoutValue": 30000
       } /*,
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       } ,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1593,10 +1593,13 @@
     {
       "DownstreamPathTemplate": "/api/password/change",
       "DownstreamScheme": "https",
+      //"DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "authservice.gooios.com",
           "Port": 443
+          //"Host": "127.0.0.1",
+          //"Port": 5080
         }
       ],
       "UpstreamPathTemplate": "/authservice/password/change",
@@ -1610,7 +1613,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1637,7 +1640,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1664,7 +1667,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
@@ -1691,7 +1694,7 @@
         "TimeoutValue": 30000
       },
       "AddHeadersToRequest": {
-        "userid": "Claims[sub] > value[0] > |"
+        "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",

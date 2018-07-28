@@ -31,12 +31,17 @@
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Views\Consent\Index.cshtml" />
     <None Include="Views\Consent\_ScopeListItem.cshtml" />
     <None Include="Views\Grants\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gooios.Infrastructure\Gooios.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
