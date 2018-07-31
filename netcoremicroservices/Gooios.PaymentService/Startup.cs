@@ -89,6 +89,7 @@ namespace Gooios.PaymentService
             services.AddTransient<IWeChatPaymentAppService, WeChatPaymentAppService>();
             services.AddTransient<IOrderServiceProxy, OrderServiceProxy>();
             services.AddTransient<IWeChatApiProxy, WeChatApiProxy>();
+            services.AddTransient<IAuthServiceProxy, AuthServiceProxy>();
 
             //services.AddTransient<IImageAppService, ImageAppService>();
             //services.AddTransient<IImageRepository, ImageRepository>();

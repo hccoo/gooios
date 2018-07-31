@@ -39,14 +39,16 @@ namespace Gooios.PaymentService.Applications.Services
         readonly IWeChatApiProxy _wechatApiProxy;
         readonly IOrderServiceProxy _orderServiceProxy;
         readonly IWeChatAppConfigurationRepository _wechatAppConfigurationRepository;
+        readonly IAuthServiceProxy _authServiceProxy;
 
-        public WeChatPaymentAppService(IGateways gateways, IServiceConfigurationProxy configuration, IWeChatApiProxy wechatApiProxy, IOrderServiceProxy orderServiceProxy, IWeChatAppConfigurationRepository wechatAppConfigurationRepository)
+        public WeChatPaymentAppService(IGateways gateways, IServiceConfigurationProxy configuration, IWeChatApiProxy wechatApiProxy, IOrderServiceProxy orderServiceProxy, IWeChatAppConfigurationRepository wechatAppConfigurationRepository, IAuthServiceProxy authServiceProxy)
         {
             _gateways = gateways;
             _configuration = configuration;
             _wechatApiProxy = wechatApiProxy;
             _orderServiceProxy = orderServiceProxy;
             _wechatAppConfigurationRepository = wechatAppConfigurationRepository;
+            _authServiceProxy = authServiceProxy;
         }
 
         public async Task<string> GetOpenId(string code, string organizationId = null)
@@ -92,6 +94,71 @@ namespace Gooios.PaymentService.Applications.Services
             return result?.OpenId ?? string.Empty;
         }
 
+        public async Task<OpenIDSessionKeyDTO> GetSessionKey(string code, string organizationId = null, string applicationId = null)
+        {
+            WeChatOpenIdResponseDTO result = null;
+
+            BaseGateway gateway = null;
+
+            if (string.IsNullOrEmpty(organizationId))
+            {
+                gateway = _gateways.Get<WechatpayGateway>();
+            }
+            else
+            {
+                WeChatAppConfiguration appConfig = _wechatAppConfigurationRepository.GetFiltered(o => o.OrganizationId == organizationId).FirstOrDefault();
+                if (appConfig != null)
+                {
+                    var wechatpayMerchant = new PaySharp.Wechatpay.Merchant
+                    {
+                        AppId = appConfig.AppId,
+                        MchId = appConfig.MchId,
+                        Key = appConfig.Key,
+                        AppSecret = appConfig.AppSecret,
+                        SslCertPath = appConfig.SslCertPath,
+                        SslCertPassword = appConfig.SslCertPassword,
+                        NotifyUrl = appConfig.NotifyUrl
+                    };
+
+                    gateway = new WechatpayGateway(wechatpayMerchant);
+                }
+                else
+                {
+                    gateway = _gateways.Get<WechatpayGateway>();
+                }
+            }
+
+            var reqModel = new WeChatOpenIdRequestDTO { AppId = gateway.Merchant.AppId, Code = code, Secret = _configuration.WeChatAppSecret };
+
+            result = await _wechatApiProxy.CheckAuthCode(reqModel);
+
+            //TODO:验签
+
+            AppletUserSessionDTO dto = null;
+            if (result != null)
+            {
+                await _authServiceProxy.AddOrUpdateAppletUser(new AppletUserDTO
+                {
+                    ApplicationId = applicationId,
+                    Channel = UserChannel.WeChat,
+                    NickName = "",
+                    OpenId = result.OpenId,
+                    OrganizationId = organizationId,
+                    UserId = "",
+                    UserPortrait = ""
+                });
+
+                dto = await _authServiceProxy.AddOrUpdateAppletUserSession(new AppletUserSessionDTO
+                {
+                    UserId = "",
+                    OpenId = result.OpenId,
+                    SessionKey = result.SessionKey
+                });
+            }
+
+            return new OpenIDSessionKeyDTO { GooiosSessionKey = dto.GooiosSessionKey, OpenId = dto.OpenId };
+        }
+
         public async Task<RequestPaymentResponseDTO> RequestPayment(RequestPaymentRequestDTO model)
         {
             var orderDTO = await _orderServiceProxy.GetById(model.OrderId);
@@ -118,7 +185,7 @@ namespace Gooios.PaymentService.Applications.Services
             IGateway gateway = null;
 
             var organizationId = "";
-            
+
             organizationId = orderDTO.OrganizationId ?? "";
             WeChatAppConfiguration appConfig = null;
             if (!string.IsNullOrEmpty(organizationId))
@@ -218,8 +285,8 @@ namespace Gooios.PaymentService.Applications.Services
             });
 
             var response = gateway.Execute(request);
-            
-            if(response.ReturnCode== "SUCCESS")
+
+            if (response.ReturnCode == "SUCCESS")
             {
                 if (response.ResultCode == "SUCCESS")
                 {

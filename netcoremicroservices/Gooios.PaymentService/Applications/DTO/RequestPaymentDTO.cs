@@ -39,4 +39,11 @@ namespace Gooios.PaymentService.Applications.DTO
 
         public string PaySign { get; set; }
     }
+
+    public class OpenIDSessionKeyDTO
+    {
+        public string OpenId { get; set; }
+
+        public string GooiosSessionKey { get; set; }
+    }
 }

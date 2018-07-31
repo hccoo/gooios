@@ -32,6 +32,7 @@ namespace Gooios.AuthorizationService.ApiControllers
         private readonly IVerificationProxy _verificationProxy;
         private readonly ApplicationDbContext _dbContext;
         private readonly IServiceConfigurationProxy _config;
+        private readonly IAppletUserService _appletUserService;
 
         public UserController(
             UserManager<ApplicationUser> userManager,
@@ -41,7 +42,8 @@ namespace Gooios.AuthorizationService.ApiControllers
             ILogger<UserController> logger,
             IVerificationProxy verificationProxy,
             ApplicationDbContext dbContext,
-            IServiceConfigurationProxy config)
+            IServiceConfigurationProxy config,
+            IAppletUserService appletUserService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -51,6 +53,7 @@ namespace Gooios.AuthorizationService.ApiControllers
             _verificationProxy = verificationProxy;
             _dbContext = dbContext;
             _config = config;
+            _appletUserService = appletUserService;
         }
         [TempData]
         public string ErrorMessage { get; set; }
@@ -106,12 +109,21 @@ namespace Gooios.AuthorizationService.ApiControllers
             model.UserId = Request.Headers["userId"].FirstOrDefault();
 
             var u = _dbContext.ApplicationUsers.FirstOrDefault(o => o.Id == model.UserId);
+            var au = _appletUserService.GetAppletUser(model.UserId);
 
             if (u != null)
             {
                 u.NickName = model.NickName;
                 u.PortraitUrl = model.PortraitUrl;
                 await _userManager.UpdateAsync(u);
+                _dbContext.SaveChanges();
+                return new OkResult();
+            }
+            if (au != null)
+            {
+                au.NickName = model.NickName;
+                au.UserPortrait = model.PortraitUrl;
+                _appletUserService.AddOrUpdateAppletUser(au);
                 _dbContext.SaveChanges();
                 return new OkResult();
             }
@@ -132,6 +144,30 @@ namespace Gooios.AuthorizationService.ApiControllers
         {
             var userId = Request.Headers["userId"].FirstOrDefault();
             return _dbContext.ApplicationUsers.FirstOrDefault(o => o.Id == userId);
+        }
+
+        [ApiKey]
+        [HttpGet]
+        [Route("appletuser")]
+        public async Task<AppletUser> GetAppletUserByOpenId(string openId)
+        {
+            return _appletUserService.GetAppletUser(openId);
+        }
+
+        [ApiKey]
+        [HttpPost]
+        [Route("appletusersession")]
+        public AppletUserSession AddAppletUserSession([FromBody]AppletUserSession model)
+        {
+            return _appletUserService.AddOrUpdateAppletUserSession(model);
+        }
+
+        [ApiKey]
+        [HttpPost]
+        [Route("appletuser")]
+        public void AddAppletUser([FromBody]AppletUser model)
+        {
+            _appletUserService.AddOrUpdateAppletUser(model);
         }
 
     }

@@ -17,9 +17,9 @@ namespace Gooios.AuthorizationService.Models
 
         public string UserPortrait { get; set; } = string.Empty;
 
-        public string OrganizationId { get; set; }
+        public string OrganizationId { get; set; } = string.Empty;
 
-        public string ApplicationId { get; set; }
+        public string ApplicationId { get; set; } = string.Empty;
 
         /// <summary>
         /// AuthService下的用户ID
