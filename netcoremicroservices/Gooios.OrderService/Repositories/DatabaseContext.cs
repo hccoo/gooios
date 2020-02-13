@@ -71,6 +71,7 @@ namespace Gooios.OrderService.Repositories
             builder.Property(c => c.CustomerName).HasColumnName("customer_name").IsRequired().HasMaxLength(80);
             builder.Property(c => c.InvoiceType).HasColumnName("invoice_type").IsRequired();
             builder.Property(c => c.OrderNo).HasColumnName("order_no").IsRequired().HasMaxLength(80);
+            builder.Property(c => c.Title).HasColumnName("title").HasMaxLength(200);
             builder.Property(c => c.PayAmount).HasColumnName("pay_amount").IsRequired();
             builder.Property(c => c.PreferentialAmount).HasColumnName("preferential_amount").IsRequired();
             builder.Property(c => c.ShippingCost).HasColumnName("shipping_cost").IsRequired();

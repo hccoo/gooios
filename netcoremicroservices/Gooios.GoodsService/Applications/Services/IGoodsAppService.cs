@@ -119,7 +119,8 @@ namespace Gooios.GoodsService.Applications.Services
                 grouponConditions,
                 goodsImages,
                 goodsDTO.Address,
-                goodsDTO.DistributionScope);
+                goodsDTO.DistributionScope,
+                goodsDTO.VideoPath);
 
             _goodsRepository.Add(obj);
 
@@ -168,6 +169,7 @@ namespace Gooios.GoodsService.Applications.Services
             goods.OptionalPropertyJsonObject = goodsDTO.OptionalPropertyJsonObject;
             goods.Address = goodsDTO.Address;
             goods.DistributionScope = goodsDTO.DistributionScope;
+            goods.VideoPath = goodsDTO.VideoPath;
 
             goods.InitAddress();
             goods.InitStatus();
@@ -246,7 +248,8 @@ namespace Gooios.GoodsService.Applications.Services
                     UnitPrice = obj.UnitPrice,
                     GoodsImages = goodsImages,
                     GrouponConditions = grouponCondition,
-                    DistributionScope = obj.DistributionScope
+                    DistributionScope = obj.DistributionScope,
+                    VideoPath = obj.VideoPath
                 };
             }
             return null;
@@ -291,7 +294,8 @@ namespace Gooios.GoodsService.Applications.Services
                     UnitPrice = obj.UnitPrice,
                     GoodsImages = goodsImages,
                     GrouponConditions = grouponCondition,
-                    DistributionScope = obj.DistributionScope
+                    DistributionScope = obj.DistributionScope,
+                    VideoPath = obj.VideoPath
                 };
             }
             return null;
@@ -326,7 +330,8 @@ namespace Gooios.GoodsService.Applications.Services
                     Title = item.Title,
                     Unit = item.Unit,
                     UnitPrice = item.UnitPrice,
-                    DistributionScope = item.DistributionScope
+                    DistributionScope = item.DistributionScope,
+                    VideoPath = item.VideoPath
                 }).ToList();
 
             if (goods != null && goods.Count() > 0)
@@ -379,7 +384,8 @@ namespace Gooios.GoodsService.Applications.Services
                     Title = item.Title,
                     Unit = item.Unit,
                     UnitPrice = item.UnitPrice,
-                    DistributionScope = item.DistributionScope
+                    DistributionScope = item.DistributionScope,
+                    VideoPath = item.VideoPath
                 }).ToList();
 
             if (goods != null && goods.Count() > 0)
@@ -449,6 +455,7 @@ namespace Gooios.GoodsService.Applications.Services
                     ApplicationId = item.ApplicationId,
                     OrganizationId = organization?.Id,
                     OrganizationLogoUrl = logoImgUrl,
+                    VideoPath = item.VideoPath,
                     OrganizationName = organization?.ShortName,
                     GrouponConditions = conditions?.Select(obj => new GrouponConditionDTO
                     {

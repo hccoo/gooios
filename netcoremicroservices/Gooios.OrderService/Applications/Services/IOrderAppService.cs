@@ -114,7 +114,7 @@ namespace Gooios.OrderService.Applications.Services
 
             return result;
         }
-        
+
         public IEnumerable<OrderDTO> Get(string userId, int pageIndex, int pageSize)
         {
             return _orderRepository.GetFiltered(o => o.CreatedBy == userId).Skip((pageIndex - 1) * pageSize).Take(pageSize).Select(obj =>
@@ -166,6 +166,7 @@ namespace Gooios.OrderService.Applications.Services
         {
             return _orderRepository.GetFiltered(o => o.OrganizationId == organizationId).Skip((pageIndex - 1) * pageSize).Take(pageSize).Select(obj =>
             {
+                var orderItems = _orderItemRepository.GetFiltered(o => o.OrderId == obj.Id).ToList();
                 obj.ResolveAddress();
                 var result = new OrderDTO
                 {
@@ -189,9 +190,9 @@ namespace Gooios.OrderService.Applications.Services
                     Mark = obj.Mark,
                     InvoiceRemark = obj.InvoiceRemark,
                     Remark = obj.Remark,
-                    ActivityId = obj.ActivityId
+                    ActivityId = obj.ActivityId,
+                    Title = string.IsNullOrEmpty(obj.Title) ? orderItems.FirstOrDefault()?.Title : ""
                 };
-                var orderItems = _orderItemRepository.GetFiltered(o => o.OrderId == obj.Id).ToList();
                 result.OrderItems = orderItems.Select(item => new OrderItemDTO
                 {
                     Count = item.Count,
@@ -421,7 +422,8 @@ namespace Gooios.OrderService.Applications.Services
                     model.OrganizationId,
                     model.InvoiceRemark,
                     model.Remark,
-                    model.ActivityId);
+                    model.ActivityId,
+                    model.Title);
 
                 _orderRepository.Add(obj);
 
@@ -464,6 +466,7 @@ namespace Gooios.OrderService.Applications.Services
             obj.Postcode = model.CustomerAddress?.Postcode ?? obj.Postcode;
             obj.InvoiceRemark = model.InvoiceRemark;
             obj.Remark = model.Remark;
+            obj.Title = model.Title;
 
             _orderRepository.Update(obj);
             _dbUnitOfWork.Commit();

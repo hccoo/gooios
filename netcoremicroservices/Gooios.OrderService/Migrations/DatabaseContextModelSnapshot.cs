@@ -175,6 +175,10 @@ namespace Gooios.OrderService.Migrations
                     b.Property<decimal>("Tax")
                         .HasColumnName("tax");
 
+                    b.Property<string>("Title")
+                        .HasColumnName("title")
+                        .HasMaxLength(200);
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnName("total_amount");
 

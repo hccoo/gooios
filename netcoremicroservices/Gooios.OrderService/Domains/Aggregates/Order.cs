@@ -12,6 +12,8 @@ namespace Gooios.OrderService.Domains.Aggregates
     {
         public string OrderNo { get; set; }
 
+        public string Title { get; set; }
+
         /// <summary>
         /// 订单总金额
         /// </summary>

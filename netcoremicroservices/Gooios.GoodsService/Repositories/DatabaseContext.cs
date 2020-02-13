@@ -63,6 +63,7 @@ namespace Gooios.GoodsService.Repositories
             builder.Property(c => c.LastUpdBy).HasColumnName("updated_by").HasMaxLength(80).IsRequired();
             builder.Property(c => c.LastUpdOn).HasColumnName("updated_on").IsRequired();
             builder.Property(c => c.Description).HasColumnName("description").HasMaxLength(4000);
+            builder.Property(c => c.VideoPath).HasColumnName("video_path").HasMaxLength(4000);
             builder.Property(c => c.Detail).HasColumnName("detail");
             builder.Property(c => c.ItemNumber).HasColumnName("item_number").HasMaxLength(80).IsRequired();
             builder.Property(c => c.MarketPrice).HasColumnName("market_price");
@@ -129,6 +130,7 @@ namespace Gooios.GoodsService.Repositories
             builder.Property(c => c.LastUpdBy).HasColumnName("updated_by").HasMaxLength(80).IsRequired();
             builder.Property(c => c.LastUpdOn).HasColumnName("updated_on").IsRequired();
             builder.Property(c => c.Description).HasColumnName("description").HasMaxLength(4000);
+            builder.Property(c => c.VideoPath).HasColumnName("video_path").HasMaxLength(4000);
             builder.Property(c => c.Detail).HasColumnName("detail");
             builder.Property(c => c.ItemNumber).HasColumnName("item_number").HasMaxLength(80).IsRequired();
             builder.Property(c => c.MarketPrice).HasColumnName("market_price");

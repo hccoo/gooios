@@ -17,9 +17,9 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
-    <PackageReference Include="PaySharp.Alipay" Version="1.0.0" />
-    <PackageReference Include="PaySharp.Core" Version="1.0.0" />
-    <PackageReference Include="PaySharp.Wechatpay" Version="1.0.0" />
+    <PackageReference Include="PaySharp.Alipay" Version="1.0.7" />
+    <PackageReference Include="PaySharp.Core" Version="1.0.7" />
+    <PackageReference Include="PaySharp.Wechatpay" Version="1.0.7" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
   </ItemGroup>

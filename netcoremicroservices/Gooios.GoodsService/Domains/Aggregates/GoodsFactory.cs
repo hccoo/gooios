@@ -23,7 +23,8 @@ namespace Gooios.GoodsService.Domains.Aggregates
             IEnumerable<GrouponCondition> grouponConditions,
             IEnumerable<GoodsImage> goodsImages, //, GoodsNumber goodsNumber
             Address address,
-            int distributionScope
+            int distributionScope,
+            string videoPath=""
             )
         {
             var result = new Goods
@@ -47,7 +48,8 @@ namespace Gooios.GoodsService.Domains.Aggregates
                 LastUpdBy = operatorId,
                 LastUpdOn = DateTime.Now,
                 Address = address,
-                DistributionScope = distributionScope
+                DistributionScope = distributionScope,
+                VideoPath= videoPath
             };
 
             result.GenerateId();

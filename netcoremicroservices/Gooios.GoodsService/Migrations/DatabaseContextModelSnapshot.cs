@@ -220,6 +220,10 @@ namespace Gooios.GoodsService.Migrations
                     b.Property<decimal>("UnitPrice")
                         .HasColumnName("unit_price");
 
+                    b.Property<string>("VideoPath")
+                        .HasColumnName("video_path")
+                        .HasMaxLength(4000);
+
                     b.HasKey("Id");
 
                     b.ToTable("goods");
@@ -406,6 +410,10 @@ namespace Gooios.GoodsService.Migrations
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnName("unit_price");
+
+                    b.Property<string>("VideoPath")
+                        .HasColumnName("video_path")
+                        .HasMaxLength(4000);
 
                     b.HasKey("Id");
 
