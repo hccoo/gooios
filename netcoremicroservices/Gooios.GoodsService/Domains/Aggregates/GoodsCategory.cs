@@ -10,6 +10,8 @@ namespace Gooios.GoodsService.Domains.Aggregates
     {
         public string Name { get; set; }
 
+        public string Icon { get; set; }
+
         public string ParentId { get; set; }
 
         public string ApplicationId { get; set; }

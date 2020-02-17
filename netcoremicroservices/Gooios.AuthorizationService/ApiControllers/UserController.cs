@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Gooios.AuthorizationService.Data;
 using Gooios.AuthorizationService.Attributes;
 using Gooios.AuthorizationService.Configurations;
+using Gooios.PaymentService.Applications.DTO;
 
 namespace Gooios.AuthorizationService.ApiControllers
 {
@@ -33,6 +34,7 @@ namespace Gooios.AuthorizationService.ApiControllers
         private readonly ApplicationDbContext _dbContext;
         private readonly IServiceConfigurationProxy _config;
         private readonly IAppletUserService _appletUserService;
+        private readonly IPaymentServiceProxy _paymentServiceProxy;
 
         public UserController(
             UserManager<ApplicationUser> userManager,
@@ -43,7 +45,8 @@ namespace Gooios.AuthorizationService.ApiControllers
             IVerificationProxy verificationProxy,
             ApplicationDbContext dbContext,
             IServiceConfigurationProxy config,
-            IAppletUserService appletUserService)
+            IAppletUserService appletUserService,
+            IPaymentServiceProxy paymentServiceProxy)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -54,6 +57,7 @@ namespace Gooios.AuthorizationService.ApiControllers
             _dbContext = dbContext;
             _config = config;
             _appletUserService = appletUserService;
+            _paymentServiceProxy = paymentServiceProxy;
         }
         [TempData]
         public string ErrorMessage { get; set; }
@@ -102,6 +106,7 @@ namespace Gooios.AuthorizationService.ApiControllers
             }
         }
 
+
         [ApiKey]
         [HttpPut]
         public async Task<IActionResult> Put([FromBody]ModifyUserRequestModel model)
@@ -134,7 +139,13 @@ namespace Gooios.AuthorizationService.ApiControllers
         [HttpGet]
         public async Task<ApplicationUser> Get(string userId)
         {
-            return _dbContext.ApplicationUsers.FirstOrDefault(o => o.Id == userId);
+            var result = _dbContext.ApplicationUsers.FirstOrDefault(o => o.Id == userId);
+            if (result == null)
+            {
+                var usr = _dbContext.AppletUsers.FirstOrDefault(o=>o.OpenId==userId);
+                result = new ApplicationUser { NickName=usr.NickName, PortraitUrl =usr.UserPortrait, UserName=usr.NickName };
+            }
+            return result;
         }
 
         [ApiKey]
@@ -170,5 +181,22 @@ namespace Gooios.AuthorizationService.ApiControllers
             _appletUserService.AddOrUpdateAppletUser(model);
         }
 
+        [ApiKey]
+        [HttpGet]
+        [Route("session")]
+        public async Task<OpenIDSessionKeyDTO> InitSession([FromBody]InitSessionModel model)
+        {
+            return await _paymentServiceProxy.InitSession(model);
+        }
+
+    }
+
+    public class LoginModel
+    {
+        public string NickName { get; set; }
+
+        public string PortraitUrl { get; set; }
+
+        public string Code { get; set; }
     }
 }

@@ -52,7 +52,7 @@ namespace Gooios.GoodsService.Applications.Services
                 _commentTagRepository.Add(item);
             });
 
-            obj.ImageIds.ToList().ForEach(item =>
+            obj.ImageIds?.ToList().ForEach(item =>
             {
                 _commentImageRepository.Add(new CommentImage { CommentId = obj.Id, ImageId = item });
             });

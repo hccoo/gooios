@@ -29,4 +29,12 @@ namespace Gooios.AuthorizationService.Models.UserModels
         
         public string RoleName { get; set; }
     }
+    public class AddUserRequestModel
+    {
+        public string UserName { get; set; }
+
+        public string Password { get; set; }
+
+        public string RoleName { get; set; }
+    }
 }

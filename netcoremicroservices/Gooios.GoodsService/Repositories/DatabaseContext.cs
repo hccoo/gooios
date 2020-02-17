@@ -125,6 +125,8 @@ namespace Gooios.GoodsService.Repositories
 
             builder.Property(c => c.Id).HasColumnName("id");
             builder.Property(c => c.Title).HasColumnName("title").HasMaxLength(200).IsRequired();
+            builder.Property(c => c.RecommendLevel).HasColumnName("recommend_level").HasDefaultValue(0);
+            builder.Property(c => c.Order).HasColumnName("order").HasDefaultValue(0);
             builder.Property(c => c.CreatedBy).HasColumnName("created_by").HasMaxLength(80).IsRequired();
             builder.Property(c => c.CreatedOn).HasColumnName("created_on").IsRequired();
             builder.Property(c => c.LastUpdBy).HasColumnName("updated_by").HasMaxLength(80).IsRequired();
@@ -190,6 +192,7 @@ namespace Gooios.GoodsService.Repositories
 
             builder.Property(c => c.Id).HasColumnName("id");
             builder.Property(c => c.Name).HasColumnName("name").IsRequired().HasMaxLength(80);
+            builder.Property(c => c.Icon).HasColumnName("icon").HasMaxLength(800);
             builder.Property(c => c.ParentId).HasColumnName("parent_id").HasMaxLength(80);
             builder.Property(c => c.ApplicationId).HasColumnName("application_id").HasMaxLength(80).IsRequired();
             builder.Property(c => c.Order).HasColumnName("order").IsRequired();

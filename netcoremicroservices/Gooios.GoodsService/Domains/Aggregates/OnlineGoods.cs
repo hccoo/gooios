@@ -13,6 +13,16 @@ namespace Gooios.GoodsService.Domains.Aggregates
 
         //public GoodsNumber GoodsNumber { get; set; }
 
+        /// <summary>
+        /// 推荐商品排序 6，5，4，3，2，1
+        /// </summary>
+        public int RecommendLevel { get; set; } = 0;
+
+        /// <summary>
+        /// 热门排序 
+        /// </summary>
+        public int Order { get; set; } = 0;
+
         public string ItemNumber { get; set; }
 
         public string Title { get; set; }

@@ -11,6 +11,15 @@ namespace Gooios.GoodsService.Applications.DTOs
         public string Id { get; set; }
 
         /// <summary>
+        /// 推荐商品排序 6，5，4，3，2，1
+        /// </summary>
+        public int RecommendLevel { get; set; } = 0;
+
+        /// <summary>
+        /// 热门排序 
+        /// </summary>
+        public int Order { get; set; } = 0;
+        /// <summary>
         /// 货号
         /// </summary>
         public string ItemNumber { get; set; }

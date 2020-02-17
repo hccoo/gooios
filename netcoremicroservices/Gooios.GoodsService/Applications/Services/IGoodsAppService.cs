@@ -32,6 +32,8 @@ namespace Gooios.GoodsService.Applications.Services
 
         Task<GoodsDTO> GetGoods(string id);
 
+        Task<IEnumerable<GoodsDTO>> GetRecommendGoods();
+
         Task<GoodsDTO> GetOnlineGoods(string id);
 
         Task<IEnumerable<GoodsDTO>> GetGoods(string key, string category, string subCategory, int pageIndex, int pageSize, string storeId = "");
@@ -367,25 +369,39 @@ namespace Gooios.GoodsService.Applications.Services
 
             if (!string.IsNullOrEmpty(subCategory)) result = result.Where(o => o.SubCategory == subCategory);
 
-            goods = result.Skip((pageIndex - 1) * pageSize).Take(pageSize).Select(
-                item => new GoodsDTO
+            goods = result.OrderByDescending(o => o.CreatedOn).Skip((pageIndex - 1) * pageSize).Take(pageSize).Select(
+                item =>
                 {
-                    Category = item.Category,
-                    Description = item.Description,
-                    Detail = item.Detail,
-                    Id = item.Id,
-                    ItemNumber = item.ItemNumber,
-                    MarketPrice = item.MarketPrice,
-                    OptionalPropertyJsonObject = item.OptionalPropertyJsonObject,
-                    Status = item.Status,
-                    Stock = item.Stock,
-                    StoreId = item.StoreId,
-                    SubCategory = item.SubCategory,
-                    Title = item.Title,
-                    Unit = item.Unit,
-                    UnitPrice = item.UnitPrice,
-                    DistributionScope = item.DistributionScope,
-                    VideoPath = item.VideoPath
+                    var conditions = _grouponConditionRepository.GetFiltered(o => o.GoodsId == item.Id);
+
+                    return new GoodsDTO
+                    {
+                        Category = item.Category,
+                        Description = item.Description,
+                        Detail = item.Detail,
+                        Id = item.Id,
+                        ItemNumber = item.ItemNumber,
+                        MarketPrice = item.MarketPrice,
+                        OptionalPropertyJsonObject = item.OptionalPropertyJsonObject,
+                        Status = item.Status,
+                        Stock = item.Stock,
+                        StoreId = item.StoreId,
+                        SubCategory = item.SubCategory,
+                        Title = item.Title,
+                        Unit = item.Unit,
+                        UnitPrice = item.UnitPrice,
+                        DistributionScope = item.DistributionScope,
+                        VideoPath = item.VideoPath,
+                        Order = item.Order,
+                        RecommendLevel = item.RecommendLevel,
+                        GrouponConditions = conditions?.Select(obj => new GrouponConditionDTO
+                        {
+                            GoodsId = obj.GoodsId,
+                            Id = obj.Id,
+                            MoreThanNumber = obj.MoreThanNumber,
+                            Price = obj.Price
+                        }).OrderBy(g => g.MoreThanNumber).ToList()
+                    };
                 }).ToList();
 
             if (goods != null && goods.Count() > 0)
@@ -409,7 +425,7 @@ namespace Gooios.GoodsService.Applications.Services
             return goods;
         }
 
-        public async Task<IEnumerable<GoodsDTO>> GetNearbyGoods(double longitude, double latitude, string category, string subCategory, int pageIndex, int pageSize, string appId = "GOOIOS001")
+        public async Task<IEnumerable<GoodsDTO>> GetNearbyGoods(double longitude, double latitude, string category, string subCategory, int pageIndex, int pageSize = 10, string appId = "GOOIOS001")
         {
             var goods = new List<GoodsDTO>();
 
@@ -457,6 +473,8 @@ namespace Gooios.GoodsService.Applications.Services
                     OrganizationLogoUrl = logoImgUrl,
                     VideoPath = item.VideoPath,
                     OrganizationName = organization?.ShortName,
+                    Order = item.Order,
+                    RecommendLevel = item.RecommendLevel,
                     GrouponConditions = conditions?.Select(obj => new GrouponConditionDTO
                     {
                         GoodsId = obj.GoodsId,
@@ -467,6 +485,78 @@ namespace Gooios.GoodsService.Applications.Services
                 });
             }
 
+            if (goods != null && goods.Count() > 0)
+            {
+                foreach (var item in goods)
+                {
+                    item.GoodsImages = _onlineGoodsImageRepository.GetFiltered(o => o.GoodsId == item.Id).Select(image => new GoodsImageDTO { ImageId = image.ImageId, GoodsId = image.GoodsId, Id = image.Id }).ToList();
+
+                    var imageIds = item.GoodsImages.Select(o => o.ImageId).ToList();
+                    var images = await _imageServiceProxy.GetImagesByIds(imageIds);
+                    foreach (var img in item.GoodsImages)
+                    {
+                        var pic = images.FirstOrDefault(o => o.Id == img.ImageId);
+
+                        img.HttpPath = pic?.HttpPath;
+                        img.Title = pic?.Title;
+                        img.Description = pic?.Description;
+                    }
+                }
+            }
+            return goods;
+        }
+
+        public async Task<IEnumerable<GoodsDTO>> GetRecommendGoods()
+        {
+            var goods = new List<GoodsDTO>();
+
+            var items = _onlineGoodsRepository.GetFiltered(o => (o.Status == GoodsStatus.Shelved || o.Status == GoodsStatus.SoldOut || o.Status == GoodsStatus.UnShelved) && o.RecommendLevel > 0).OrderByDescending(o => o.RecommendLevel).ToList();
+            foreach (var item in items)
+            {
+                var organization = await _organizationServiceProxy.GetOrganizationById(item.StoreId);
+                var logoImgUrl = "";
+                if (organization != null)
+                {
+                    var logoImg = await _imageServiceProxy.GetImageById(organization.LogoImageId);
+                    logoImgUrl = logoImg?.HttpPath;
+                }
+
+                var conditions = _grouponConditionRepository.GetFiltered(o => o.GoodsId == item.Id);
+
+                goods.Add(new GoodsDTO
+                {
+                    Category = item.Category,
+                    Description = item.Description,
+                    Detail = item.Detail,
+                    Id = item.Id,
+                    ItemNumber = item.ItemNumber,
+                    MarketPrice = item.MarketPrice,
+                    OptionalPropertyJsonObject = item.OptionalPropertyJsonObject,
+                    Status = item.Status,
+                    Stock = item.Stock,
+                    StoreId = item.StoreId,
+                    SubCategory = item.SubCategory,
+                    Title = item.Title,
+                    Unit = item.Unit,
+                    UnitPrice = item.UnitPrice,
+                    Address = item.Address,
+                    DistributionScope = item.DistributionScope,
+                    ApplicationId = item.ApplicationId,
+                    OrganizationId = organization?.Id,
+                    OrganizationLogoUrl = logoImgUrl,
+                    VideoPath = item.VideoPath,
+                    OrganizationName = organization?.ShortName,
+                    Order = item.Order,
+                    RecommendLevel = item.RecommendLevel,
+                    GrouponConditions = conditions?.Select(obj => new GrouponConditionDTO
+                    {
+                        GoodsId = obj.GoodsId,
+                        Id = obj.Id,
+                        MoreThanNumber = obj.MoreThanNumber,
+                        Price = obj.Price
+                    }).OrderBy(g => g.MoreThanNumber).ToList()
+                });
+            }
             if (goods != null && goods.Count() > 0)
             {
                 foreach (var item in goods)

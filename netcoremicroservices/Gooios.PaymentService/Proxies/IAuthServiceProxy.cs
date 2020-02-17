@@ -22,13 +22,13 @@ namespace Gooios.PaymentService.Proxies
         {
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("gooiosapikey", "63e960be918111e799160026c7e9f001");
+                client.DefaultRequestHeaders.Add("gooiosapikey", "6de960be9183367800160026c7e9f3d2");
 
                 var reqUrl = $"http://authservice.gooios.com/api/user/appletuser";
                 var data = JsonConvert.SerializeObject(model);
                 var content = new StringContent(data, Encoding.UTF8, "application/json");
 
-                await client.PostAsync(reqUrl, content);
+                var res = await client.PostAsync(reqUrl, content);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Gooios.PaymentService.Proxies
             AppletUserSessionDTO result = null;
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("gooiosapikey", "63e960be918111e799160026c7e9f001");
+                client.DefaultRequestHeaders.Add("gooiosapikey", "6de960be9183367800160026c7e9f3d2");
 
                 var reqUrl = $"http://authservice.gooios.com/api/user/appletusersession";
                 var data = JsonConvert.SerializeObject(model);

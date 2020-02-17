@@ -1078,6 +1078,33 @@
       }*/
     },
     {
+      "DownstreamPathTemplate": "/api/goods/v1/recommendgoods",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "goodsservice.gooios.com",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/goodsservice/goods/v1/recommendgoods",
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 63e960bff18111e79916012cc8e9f005"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      } /*,
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      } ,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }*/
+    },
+    {
       "DownstreamPathTemplate": "/api/goods/v1/getnearbypaginggoods",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -1402,6 +1429,33 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/wechatpayment/v1/session",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "paymentservice.gooios.com",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/paymentservice/wechatpayment/v1/session",
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 896960bff18111e799160126c7e9f007"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      } //,
+      //"AddHeadersToRequest": {
+      //  "userid": "Claims[UserId] > value[0] > |"
+      //},
+      //"AuthenticationOptions": {
+      //  "AuthenticationProviderKey": "ID4",
+      //  "AllowedScopes": []
+      //}
+    },
+    {
       "DownstreamPathTemplate": "/api/wechatpayment/v1/repuestpayment",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -1673,6 +1727,33 @@
         "AuthenticationProviderKey": "ID4",
         "AllowedScopes": []
       }
+    },
+    {
+      "DownstreamPathTemplate": "/connect/token",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authservice.gooios.com",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/authservice/token",
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 6de960be9183367800160026c7e9f3d2"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      } /*,
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }*/
     },
     {
       "DownstreamPathTemplate": "/api/user",

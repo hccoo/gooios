@@ -240,6 +240,10 @@ namespace Gooios.GoodsService.Migrations
                         .HasColumnName("application_id")
                         .HasMaxLength(80);
 
+                    b.Property<string>("Icon")
+                        .HasColumnName("icon")
+                        .HasMaxLength(800);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("name")
@@ -371,6 +375,11 @@ namespace Gooios.GoodsService.Migrations
                     b.Property<string>("OptionalPropertyJsonObject")
                         .HasColumnName("optional_property_json_object");
 
+                    b.Property<int>("Order")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("order")
+                        .HasDefaultValue(0);
+
                     b.Property<string>("Postcode")
                         .IsRequired()
                         .HasColumnName("post_code")
@@ -380,6 +389,11 @@ namespace Gooios.GoodsService.Migrations
                         .IsRequired()
                         .HasColumnName("province")
                         .HasMaxLength(80);
+
+                    b.Property<int>("RecommendLevel")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("recommend_level")
+                        .HasDefaultValue(0);
 
                     b.Property<int>("Status")
                         .HasColumnName("status");

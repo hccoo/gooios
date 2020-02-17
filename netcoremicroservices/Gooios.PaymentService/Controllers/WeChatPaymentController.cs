@@ -34,6 +34,13 @@ namespace Gooios.PaymentService.Controllers
         }
 
         [HttpPost]
+        [Route("session")]
+        public async Task<OpenIDSessionKeyDTO> InitSession([FromBody]InitSessionModel model)
+        {
+            return await _wechatPaymentAppService.GetSessionKey(model.Code,model.OrganizationId, "wx0a5983b08057acd0",model.NickName,model.PortraitUrl);
+        }
+
+        [HttpPost]
         [Route("repuestpayment")]
         public async Task<RequestPaymentResponseDTO> RequestPayment([FromBody]RequestPaymentRequestDTO model)
         {
@@ -79,5 +86,16 @@ namespace Gooios.PaymentService.Controllers
         {
             await _wechatPaymentAppService.SetPaidFailed(orderId);
         }
+    }
+
+    public class InitSessionModel
+    {
+        public string Code { get; set; }
+
+        public string NickName { get; set; } = "";
+
+        public string PortraitUrl { get; set; } = "";
+
+        public string OrganizationId { get; set; } = "";
     }
 }

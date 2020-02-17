@@ -44,6 +44,8 @@ namespace Gooios.PaymentService.Applications.DTO
     {
         public string OpenId { get; set; }
 
+        public string SessionKey { get; set; }
+
         public string GooiosSessionKey { get; set; }
     }
 }

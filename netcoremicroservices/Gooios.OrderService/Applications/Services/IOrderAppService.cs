@@ -117,7 +117,7 @@ namespace Gooios.OrderService.Applications.Services
 
         public IEnumerable<OrderDTO> Get(string userId, int pageIndex, int pageSize)
         {
-            return _orderRepository.GetFiltered(o => o.CreatedBy == userId).Skip((pageIndex - 1) * pageSize).Take(pageSize).Select(obj =>
+            return _orderRepository.GetFiltered(o => o.CreatedBy == userId).OrderByDescending(g=>g.CreatedOn).Skip((pageIndex - 1) * pageSize).Take(pageSize).Select(obj =>
             {
                 obj.ResolveAddress();
                 var result = new OrderDTO

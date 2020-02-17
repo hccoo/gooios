@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 namespace Gooios.AuthorizationService.Core
 {
     public class SessionKeyValidator : IResourceOwnerPasswordValidator
-    {        
+    {
         private IAppletUserService loginUserService;
-        
+
         public SessionKeyValidator(IAppletUserService _loginUserService)
         {
             this.loginUserService = _loginUserService;
@@ -34,9 +34,9 @@ namespace Gooios.AuthorizationService.Core
                     subject: context.UserName,
                     authenticationMethod: "custom",
                     claims: new Claim[] {
-                        new Claim("UserId", loginUser.UserId.ToString()),
+                        new Claim("UserId", loginUser?.UserId??""),
                         new Claim("Name", context.UserName),
-                        new Claim("NickName", loginUser.NickName)
+                        new Claim("NickName", loginUser?.NickName??"")
                     }
                 );
             }

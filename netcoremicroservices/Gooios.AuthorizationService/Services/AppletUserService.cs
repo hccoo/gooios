@@ -61,7 +61,7 @@ namespace Gooios.AuthorizationService.Services
 
             var appletUserSession = _dbContext.AppletUserSessions.FirstOrDefault(o => o.OpenId == userName && o.GooiosSessionKey == password);
             var appletUser = appletUserSession == null ? null : _dbContext.AppletUsers.FirstOrDefault(o => o.OpenId == appletUserSession.OpenId);
-
+            
             if (appletUser != null)
             {
                 appUser = new AppUser { NickName = appletUser.NickName, PortraitUrl = appletUser.UserPortrait, UserId = appletUser.OpenId };

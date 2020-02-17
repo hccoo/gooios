@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Domains\Services\" />
-    <Folder Include="UploadImages\" />
     <Folder Include="Proxies\" />
     <Folder Include="Events\" />
     <Folder Include="wwwroot\" />

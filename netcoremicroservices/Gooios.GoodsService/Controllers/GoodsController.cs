@@ -91,6 +91,13 @@ namespace Gooios.GoodsService.Controllers
         }
 
         [HttpGet]
+        [Route("recommendgoods")]
+        public async Task<IEnumerable<GoodsDTO>> GetRecommendGoods()
+        {
+            return await _goodsAppService.GetRecommendGoods();
+        }
+
+        [HttpGet]
         [Route("getnearbypaginggoods")]
         public async Task<IEnumerable<GoodsDTO>> GetNearbyGoods(double longitude, double latitude, string category, string subCategory, int pageIndex, int pageSize, string appId = "GOOIOS001")
         {

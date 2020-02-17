@@ -39,6 +39,7 @@ namespace Gooios.AuthorizationService
             services.AddSingleton<IServiceConfigurationProxy, ServiceConfigurationProxy>();
             services.AddTransient<IVerificationProxy, VerificationProxy>();
             services.AddTransient<IAppletUserService, AppletUserService>();
+            services.AddTransient<IPaymentServiceProxy, PaymentServiceProxy>();
 
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.AddOptions();

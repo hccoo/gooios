@@ -36,7 +36,8 @@ namespace Gooios.GoodsService.Applications.Services
             var obj = new Domains.Aggregates.GoodsCategory
             {
                 Name = goodsCategoryDTO.Name,
-                ParentId = goodsCategoryDTO.ParentId
+                ParentId = goodsCategoryDTO.ParentId,
+                Icon = goodsCategoryDTO.Icon
             };
 
             obj.GenerateId();
@@ -59,11 +60,11 @@ namespace Gooios.GoodsService.Applications.Services
         {
             IEnumerable<GoodsCategoryDTO> result;
 
-            if(!string.IsNullOrEmpty(appId))
+            if (!string.IsNullOrEmpty(appId))
                 result = _goodsCategoryRepository.GetFiltered(o => o.ApplicationId == appId).Select(item => new GoodsCategoryDTO { Id = item.Id, Name = item.Name, ParentId = item.ParentId, Order = item.Order }).OrderBy(o => o.Order).ToList();
             else
-                result = _goodsCategoryRepository.GetAll().Select(item => new GoodsCategoryDTO { Id = item.Id, Name = item.Name, ParentId = item.ParentId, Order = item.Order }).OrderBy(o => o.Order).ToList();
-            
+                result = _goodsCategoryRepository.GetAll().Select(item => new GoodsCategoryDTO { Id = item.Id, Name = item.Name, ParentId = item.ParentId, Order = item.Order, Icon = item.Icon }).OrderBy(o => o.Order).ToList();
+
             return result;
         }
     }

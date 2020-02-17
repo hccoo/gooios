@@ -26,6 +26,8 @@ namespace Gooios.PaymentService.Applications.Services
 
         Task<string> GetOpenId(string code, string organizationId = null);
 
+        Task<OpenIDSessionKeyDTO> GetSessionKey(string code, string organizationId = null, string applicationId = null, string nickName = "", string portraitUrl = "");
+
         Task SetPaidSuccessed(string orderId);
 
         Task SetPaidFailed(string orderId);
@@ -94,7 +96,7 @@ namespace Gooios.PaymentService.Applications.Services
             return result?.OpenId ?? string.Empty;
         }
 
-        public async Task<OpenIDSessionKeyDTO> GetSessionKey(string code, string organizationId = null, string applicationId = null)
+        public async Task<OpenIDSessionKeyDTO> GetSessionKey(string code, string organizationId = null, string applicationId = null, string nickName = "", string portraitUrl = "")
         {
             WeChatOpenIdResponseDTO result = null;
 
@@ -134,29 +136,34 @@ namespace Gooios.PaymentService.Applications.Services
 
             //TODO:验签
 
-            AppletUserSessionDTO dto = null;
-            if (result != null)
+            if (result.OpenId != null)
             {
-                await _authServiceProxy.AddOrUpdateAppletUser(new AppletUserDTO
+                AppletUserSessionDTO dto = null;
+                if (result != null)
                 {
-                    ApplicationId = applicationId,
-                    Channel = UserChannel.WeChat,
-                    NickName = "",
-                    OpenId = result.OpenId,
-                    OrganizationId = organizationId,
-                    UserId = "",
-                    UserPortrait = ""
-                });
+                    await _authServiceProxy.AddOrUpdateAppletUser(new AppletUserDTO
+                    {
+                        ApplicationId = applicationId,
+                        Channel = UserChannel.WeChat,
+                        NickName = nickName,
+                        OpenId = result.OpenId,
+                        OrganizationId = organizationId,
+                        UserId = result.OpenId,
+                        UserPortrait = portraitUrl
+                    });
 
-                dto = await _authServiceProxy.AddOrUpdateAppletUserSession(new AppletUserSessionDTO
-                {
-                    UserId = "",
-                    OpenId = result.OpenId,
-                    SessionKey = result.SessionKey
-                });
+                    dto = await _authServiceProxy.AddOrUpdateAppletUserSession(new AppletUserSessionDTO
+                    {
+                        UserId = result.OpenId,
+                        OpenId = result.OpenId,
+                        SessionKey = result.SessionKey
+                    });
+                }
+
+                return new OpenIDSessionKeyDTO { GooiosSessionKey = dto?.GooiosSessionKey ?? "", OpenId = dto?.OpenId ?? "", SessionKey = result.SessionKey };
             }
-
-            return new OpenIDSessionKeyDTO { GooiosSessionKey = dto.GooiosSessionKey, OpenId = dto.OpenId };
+            else
+                return null;
         }
 
         public async Task<RequestPaymentResponseDTO> RequestPayment(RequestPaymentRequestDTO model)
