@@ -4,7 +4,7 @@ namespace Gooios.AuthorizationService.Services
 {
     public interface IAppletUserService
     {
-        bool Authenticate(string openId, string sessionKey, out AppUser appUser);
+        bool Authenticate(string openId, string sessionKey, out AppUser appUser, string appKey = "", string authorizationCode = "");
 
         void AddOrUpdateAppletUser(AppletUser model);
 

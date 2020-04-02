@@ -52,6 +52,9 @@ namespace Gooios.FancyService.Applications.Services
                 model.Address.Latitude = lonLat?.Latitude ?? 0;
             }
 
+            model.ApplicationId = string.IsNullOrEmpty(model.ApplicationId) ? "GOOIOS001" : model.ApplicationId;
+            model.JobNumber = string.IsNullOrEmpty(model.JobNumber) ? Guid.NewGuid().ToString() : model.JobNumber;
+
             var obj = ServicerFactory.CreateInstance(
                 model.JobNumber,
                 model.Name,

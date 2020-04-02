@@ -21,6 +21,10 @@ namespace Gooios.AuthorizationService.Configurations
         string AppInternalHeaderKey { get; }
 
         string AppInternalHeaderValue { get; }
+
+        string WeChatAppId { get; }
+
+        string WeChatAppSecret { get; }
     }
 
     public class ServiceConfigurationProxy : IServiceConfigurationProxy
@@ -89,6 +93,10 @@ namespace Gooios.AuthorizationService.Configurations
                 return _appSettingsOptions.Value.AppInternalHeaderValue;
             }
         }
+
+        public string WeChatAppId => _appSettingsOptions.Value.WeChatAppId;
+
+        public string WeChatAppSecret => _appSettingsOptions.Value.WeChatAppSecret;
     }
 
     public class ConnectionStrings
@@ -109,5 +117,9 @@ namespace Gooios.AuthorizationService.Configurations
         public string AppInternalHeaderKey { get; set; }
 
         public string AppInternalHeaderValue { get; set; }
+
+        public string WeChatAppId { get; set; }
+
+        public string WeChatAppSecret { get; set; }
     }
 }

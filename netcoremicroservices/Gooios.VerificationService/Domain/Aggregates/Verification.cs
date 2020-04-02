@@ -56,6 +56,7 @@ namespace Gooios.VerificationService.Domain.Aggregates
     public enum BizCode
     {
         Register = 1,
-        ForgetPassword = 2
+        ForgetPassword = 2,
+        Login = 3
     }
 }

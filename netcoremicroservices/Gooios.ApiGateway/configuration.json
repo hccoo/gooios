@@ -835,6 +835,60 @@
       }*/
     },
     {
+      "DownstreamPathTemplate": "/api/servicer/v1",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "fancyservice.gooios.com",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/fancyservice/servicer/v1",
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 768960bff18111e79916016898e9f885"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      },
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/servicer/v1",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "fancyservice.gooios.com",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/fancyservice/servicer/v1",
+      "UpstreamHttpMethod": [ "Put" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 768960bff18111e79916016898e9f885"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      },
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/comment/v1",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

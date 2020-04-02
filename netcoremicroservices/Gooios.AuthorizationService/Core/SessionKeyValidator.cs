@@ -23,7 +23,43 @@ namespace Gooios.AuthorizationService.Core
         public Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
             AppUser loginUser = null;
+            
             bool isAuthenticated = loginUserService.Authenticate(context.UserName, context.Password, out loginUser);
+            if (!isAuthenticated)
+            {
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "Invalid client credential");
+            }
+            else
+            {
+                context.Result = new GrantValidationResult(
+                    subject: context.UserName,
+                    authenticationMethod: "custom",
+                    claims: new Claim[] {
+                        new Claim("UserId", loginUser?.UserId??""),
+                        new Claim("Name", context.UserName),
+                        new Claim("NickName", loginUser?.NickName??"")
+                    }
+                );
+            }
+
+            return Task.CompletedTask;
+        }
+    }
+
+    public class CookAppSessionKeyValidator : IResourceOwnerPasswordValidator
+    {
+        private IAppletUserService loginUserService;
+
+        public CookAppSessionKeyValidator(IAppletUserService _loginUserService)
+        {
+            this.loginUserService = _loginUserService;
+        }
+
+        public Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
+        {
+            AppUser loginUser = null;
+            var key = (context.Password == ""|| context.Password == "-") ? "cookwechat" : "cook";
+            bool isAuthenticated = loginUserService.Authenticate(context.UserName, context.Password, out loginUser,key,context.UserName);
             if (!isAuthenticated)
             {
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "Invalid client credential");

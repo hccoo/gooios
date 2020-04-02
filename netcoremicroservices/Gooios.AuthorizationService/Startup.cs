@@ -88,7 +88,8 @@ namespace Gooios.AuthorizationService
                     options.TokenCleanupInterval = 3600 * 24 * 7;
                 })
                 .AddAspNetIdentity<ApplicationUser>()
-                .AddResourceOwnerValidator<SessionKeyValidator>()
+                //.AddResourceOwnerValidator<SessionKeyValidator>()
+                .AddResourceOwnerValidator<CookAppSessionKeyValidator>()
                 .AddProfileService<ProfileService>();
 
 

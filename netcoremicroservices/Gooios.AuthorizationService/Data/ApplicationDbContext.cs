@@ -15,6 +15,7 @@ namespace Gooios.AuthorizationService.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<AppletUser> AppletUsers { get; set; }
         public DbSet<AppletUserSession> AppletUserSessions { get; set; }
+        public DbSet<PartnerLogin> PartnerLogins { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -31,6 +32,7 @@ namespace Gooios.AuthorizationService.Data
             builder.ApplyConfiguration(new IdentityRoleClaimConfiguration());
             builder.ApplyConfiguration(new AppletUserConfiguration());
             builder.ApplyConfiguration(new AppletUserSessionConfiguration());
+            builder.ApplyConfiguration(new PartnerLoginConfiguration());
         }
     }
 
@@ -171,6 +173,30 @@ namespace Gooios.AuthorizationService.Data
             builder.Property(c => c.OpenId).HasColumnName("open_id").HasMaxLength(500);
             builder.Property(c => c.SessionKey).HasColumnName("session_key").IsRequired().HasMaxLength(1000);
             builder.Property(c => c.UserId).HasColumnName("user_id").HasMaxLength(80).IsRequired();
+        }
+    }
+    public class PartnerLoginConfiguration : IEntityTypeConfiguration<PartnerLogin>
+    {
+        public void Configure(EntityTypeBuilder<PartnerLogin> builder)
+        {
+            builder.ToTable("partner_logins");
+            builder.HasKey(c => new { c.Id });
+
+            builder.Property(c => c.Id).HasColumnName("id");
+            builder.Property(c => c.CreatedBy).HasColumnName("created_by").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.CreatedOn).HasColumnName("created_on").IsRequired();
+            builder.Property(c => c.UpdatedOn).HasColumnName("updated_on");
+            builder.Property(c => c.UpdatedBy).HasColumnName("updated_by").HasMaxLength(80);
+
+            builder.Property(c => c.OpenId).HasColumnName("open_id").HasMaxLength(500).IsRequired();
+            builder.Property(c => c.AuthorizationCode).HasColumnName("authorization_code").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.AccessToken).HasColumnName("access_token").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.ExpiredIn).HasColumnName("expired_in").IsRequired();
+            builder.Property(c => c.RefreshToken).HasColumnName("refresh_token").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.Scope).HasColumnName("scope").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.UnionId).HasColumnName("union_id").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.LoginChannel).HasColumnName("login_channel").IsRequired();
+
         }
     }
 
