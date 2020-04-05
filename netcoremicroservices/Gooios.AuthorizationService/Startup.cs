@@ -93,6 +93,7 @@ namespace Gooios.AuthorizationService
                 .AddProfileService<ProfileService>();
 
 
+
             services.AddMvc();
         }
 

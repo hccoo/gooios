@@ -18,12 +18,11 @@
     },
     "Gooios.VerificationService": {
       "commandName": "Project",
-      "launchBrowser": true,
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:5002/"
+      "applicationUrl": "http://localhost:5203/"
     }
   }
 }

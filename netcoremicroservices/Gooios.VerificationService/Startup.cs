@@ -92,7 +92,7 @@ namespace Gooios.VerificationService
 
             InitializeDatabase(app);
             
-            app.UseDiscoveryClient();
+            //app.UseDiscoveryClient();
             app.UseMvc();
         }
 

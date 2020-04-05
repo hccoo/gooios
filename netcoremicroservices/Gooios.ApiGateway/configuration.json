@@ -52,6 +52,33 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/qiniu/config",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "imageservice.gooios.com",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/imageservice/qiniu/config",
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 63e960bff18111e799160126c7e9f004"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      },
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/image/v1/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [

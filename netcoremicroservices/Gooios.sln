@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gooios.AuthorizationService", "Gooios.AuthorizationService\Gooios.AuthorizationService.csproj", "{8076AFD7-D078-4635-8A6C-EA4AC6F972CF}"
 EndProject
@@ -31,7 +31,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gooios.FancyService", "Gooi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gooios.EnterprisePortal", "Gooios.EnterprisePortal\Gooios.EnterprisePortal.csproj", "{1EA052F2-1FBA-43AD-A843-844D3A89A5BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gooios.AppletUserService", "Gooios.AppletUserService\Gooios.AppletUserService.csproj", "{6B0FE366-F988-4177-A766-B7F2034AF0E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gooios.AppletUserService", "Gooios.AppletUserService\Gooios.AppletUserService.csproj", "{6B0FE366-F988-4177-A766-B7F2034AF0E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gooios.AuthService", "Gooios.AuthService\Gooios.AuthService.csproj", "{35D422A7-304A-419A-B0A0-C010812F1054}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserService", "UserService", "{DB90657F-8C9E-4640-A8B7-1A8FDE82F78C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gooios.UserService", "Gooios.UserService\Gooios.UserService.csproj", "{EF799426-5870-406D-B2A2-678289794AAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gooios.Infrastructures", "Gooios.Infrastructures\Gooios.Infrastructures.csproj", "{54647CE5-D324-4ECF-915C-9A765215C5F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gooios.UserServiceHost", "Gooios.UserServiceHost\Gooios.UserServiceHost.csproj", "{93FA23DC-8827-4915-B79F-31CCC9E527F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,9 +109,29 @@ Global
 		{6B0FE366-F988-4177-A766-B7F2034AF0E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B0FE366-F988-4177-A766-B7F2034AF0E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B0FE366-F988-4177-A766-B7F2034AF0E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35D422A7-304A-419A-B0A0-C010812F1054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35D422A7-304A-419A-B0A0-C010812F1054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35D422A7-304A-419A-B0A0-C010812F1054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35D422A7-304A-419A-B0A0-C010812F1054}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF799426-5870-406D-B2A2-678289794AAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF799426-5870-406D-B2A2-678289794AAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF799426-5870-406D-B2A2-678289794AAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF799426-5870-406D-B2A2-678289794AAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54647CE5-D324-4ECF-915C-9A765215C5F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54647CE5-D324-4ECF-915C-9A765215C5F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54647CE5-D324-4ECF-915C-9A765215C5F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54647CE5-D324-4ECF-915C-9A765215C5F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93FA23DC-8827-4915-B79F-31CCC9E527F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93FA23DC-8827-4915-B79F-31CCC9E527F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93FA23DC-8827-4915-B79F-31CCC9E527F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93FA23DC-8827-4915-B79F-31CCC9E527F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EF799426-5870-406D-B2A2-678289794AAD} = {DB90657F-8C9E-4640-A8B7-1A8FDE82F78C}
+		{93FA23DC-8827-4915-B79F-31CCC9E527F7} = {DB90657F-8C9E-4640-A8B7-1A8FDE82F78C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D363B5F-B9D8-4B9D-87E1-A5D495820B01}
