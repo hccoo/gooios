@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Qiniu.Storage;
+using Qiniu.Util;
 
 namespace Gooios.ImageService.Controllers
 {
@@ -13,28 +15,53 @@ namespace Gooios.ImageService.Controllers
     public class QiniuController : Controller
     {
         [Route("config")]
-        public QiniuConfig Get()
+        public QiniuConfig Get(string fileName)
         {
             Request.Headers.TryGetValue("qiniukey", out StringValues vals);
-            var key = vals.FirstOrDefault();
-            if (string.IsNullOrEmpty(key)) return null;
-            if (key != "cookBcd2020") return null;
+            var qiniuKey = vals.FirstOrDefault();
+            if (string.IsNullOrEmpty(qiniuKey)) return null;
+            if (qiniuKey != "cookBcd2020") return null;
+
+            var accessKey = "72vGWO8zK9EqGIK_-qUFRjG1JIogApCV13ls57Dv";
+            var secretKey = "iuxEsdQovi7ltkYpBIMcF8-Q7arXS8S0zUP8-Wzx";
+            var bucket = "gooioscook";
+
+            var mac = new Mac(accessKey, secretKey);
+
+            //var rand = new Random();
+            //string key = string.Format("UploadFileCookApp_{0}.dat", rand.Next());
+            //string filePath = LocalFile;
+            string suffix = fileName.Split('.')[fileName.Split('.').Length - 1];
+            string name = Guid.NewGuid().ToString().Replace("-", "");
+            string key = $"cookapp_{name}.{suffix}";
+
+            PutPolicy putPolicy = new PutPolicy();
+            putPolicy.Scope = bucket + ":" + key;
+            //putPolicy.SetExpires(3600);
+            //putPolicy.DeleteAfterDays = 100000;
+            var uploadToken = Auth.CreateUploadToken(mac, putPolicy.ToJsonString());
 
             return new QiniuConfig
             {
-                AccessToken = "72vGWO8zK9EqGIK_-qUFRjG1JIogApCV13ls57Dv",
-                SecretToken = "iuxEsdQovi7ltkYpBIMcF8-Q7arXS8S0zUP8-Wzx",
-                Bucket = "gooioscook"
+                Key = key,
+                UploadToken = uploadToken,
+                FileUrl = $"http://q85ws0856.bkt.clouddn.com/{key}"
             };
         }
     }
 
     public class QiniuConfig
     {
-        public string AccessToken { get; set; }
+        //public string AccessToken { get; set; }
 
-        public string SecretToken { get; set; }
+        //public string SecretToken { get; set; }
 
-        public string Bucket { get; set; }
+        //public string Bucket { get; set; }
+
+        public string UploadToken { get; set; }
+
+        public string FileUrl { get; set; }
+
+        public string Key { get; set; }
     }
 }
