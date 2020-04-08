@@ -10,6 +10,7 @@ using Gooios.PaymentService.Applications.Services;
 using Gooios.Infrastructure.Logs;
 using Newtonsoft.Json;
 using Gooios.PaymentService.Proxies.DTOs;
+using NLog;
 
 namespace Gooios.PaymentService.Controllers
 {
@@ -17,6 +18,8 @@ namespace Gooios.PaymentService.Controllers
     [Route("api/wechatpayment/v1")]
     public class WeChatPaymentController : BaseApiController
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         readonly IWeChatPaymentAppService _wechatPaymentAppService;
         readonly IWeChatPaymentNotifyMessageAppService _notifyMessageAppService;
 
@@ -51,18 +54,21 @@ namespace Gooios.PaymentService.Controllers
         [Route("paymentnotify")]
         public void Post([FromBody]WeChatPaymentNotifyMessageDTO model)
         {
-            var logTask = LogProvider.Trace(new Log
+            var log = new Log
             {
                 ApplicationKey = "968960bff18111e799160126c7e9f008",
                 AppServiceName = "PartnerGateway",
                 BizData = JsonConvert.SerializeObject(model),
                 CallerApplicationKey = "wechat",
                 Exception = "",
-                Level = LogLevel.INFO,
+                Level = Infrastructure.Logs.LogLevel.INFO,
                 LogTime = DateTime.Now,
                 Operation = "paymentnotify",
                 ReturnValue = ""
-            });
+            };
+
+            _logger.Info(JsonConvert.SerializeObject(log));
+
             _notifyMessageAppService.AddWeChatPaymentNotifyMessage(model);
         }
 

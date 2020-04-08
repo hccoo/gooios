@@ -98,7 +98,15 @@ namespace Gooios.OrderService.Controllers
         [Route("byuserid")]
         public IEnumerable<OrderDTO> Get(string userId, int pageIndex, int pageSize)
         {
+            userId = UserId;
             return _orderAppService.Get(userId, pageIndex, pageSize);
+        }
+
+        [HttpGet]
+        [Route("userid")]
+        public IEnumerable<OrderDTO> Get(int pageIndex, int pageSize)
+        {
+            return _orderAppService.Get(UserId, pageIndex, pageSize);
         }
 
         [HttpGet]

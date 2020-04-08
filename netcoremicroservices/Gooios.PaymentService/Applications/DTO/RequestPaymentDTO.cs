@@ -27,6 +27,8 @@ namespace Gooios.PaymentService.Applications.DTO
         public string FeeType { get; set; } = "CNY";
 
         public string OpenId { get; set; }
+
+        public PayChannel PayChannel { get; set; } = PayChannel.AppletPay;
     }
 
     public class RequestPaymentResponseDTO
@@ -47,5 +49,11 @@ namespace Gooios.PaymentService.Applications.DTO
         public string SessionKey { get; set; }
 
         public string GooiosSessionKey { get; set; }
+    }
+    
+    public enum PayChannel
+    {
+        AppletPay = 1,
+        AppPay = 2
     }
 }

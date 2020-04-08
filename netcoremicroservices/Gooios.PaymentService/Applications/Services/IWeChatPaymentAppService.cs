@@ -168,6 +168,19 @@ namespace Gooios.PaymentService.Applications.Services
 
         public async Task<RequestPaymentResponseDTO> RequestPayment(RequestPaymentRequestDTO model)
         {
+            if (model.PayChannel == PayChannel.AppletPay)
+                return await AppletPay(model);
+
+            if (model.PayChannel == PayChannel.AppPay)
+                return await AppPay(model);
+
+            return null;
+        }
+
+        #region request pay logic
+
+        async Task<RequestPaymentResponseDTO> AppletPay(RequestPaymentRequestDTO model)
+        {
             var orderDTO = await _orderServiceProxy.GetById(model.OrderId);
 
             if (orderDTO == null) return null;
@@ -237,6 +250,79 @@ namespace Gooios.PaymentService.Applications.Services
 
             return result;
         }
+
+        async Task<RequestPaymentResponseDTO> AppPay(RequestPaymentRequestDTO model)
+        {
+            var orderDTO = await _orderServiceProxy.GetById(model.OrderId);
+
+            if (orderDTO == null) return null;
+
+            var request = new AppPayRequest();
+
+            var body = "";
+            var orgStr = (orderDTO.OrderItems.FirstOrDefault()?.Title ?? "-");
+            if (orgStr.Length > 20)
+                body = orgStr.Substring(0, 20);
+            else
+                body = orgStr;
+
+            request.AddGatewayData(new AppPayModel()
+            {
+                Body = body,
+                OutTradeNo = orderDTO.OrderNo,
+                TotalAmount = (int)(orderDTO.PayAmount * 100)
+            });
+
+            IGateway gateway = null;
+
+            var organizationId = "";
+
+            organizationId = orderDTO.OrganizationId ?? "";
+            WeChatAppConfiguration appConfig = null;
+            if (!string.IsNullOrEmpty(organizationId))
+            {
+                appConfig = _wechatAppConfigurationRepository.GetFiltered(o => o.OrganizationId == organizationId).FirstOrDefault();
+            }
+
+            if (appConfig != null)
+            {
+                var wechatpayMerchant = new PaySharp.Wechatpay.Merchant
+                {
+                    AppId = appConfig.AppId,
+                    MchId = appConfig.MchId,
+                    Key = appConfig.Key,
+                    AppSecret = appConfig.AppSecret,
+                    SslCertPath = appConfig.SslCertPath,
+                    SslCertPassword = appConfig.SslCertPassword,
+                    NotifyUrl = appConfig.NotifyUrl
+                };
+
+                gateway = new WechatpayGateway(wechatpayMerchant);
+            }
+            else
+            {
+                gateway = _gateways.Get<WechatpayGateway>();
+            }
+
+            var response = gateway.Execute(request);
+
+            var ns = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
+            var ts = GetTimeStamp();
+            var pkg = $"prepay_id={response?.PrepayId}";
+            var sign = GetSign(((WechatpayGateway)gateway).Merchant.AppId, ns, response?.PrepayId, ts.ToString(), ((WechatpayGateway)gateway).Merchant.Key);
+
+            var result = new RequestPaymentResponseDTO
+            {
+                NonceStr = ns,
+                Package = pkg,
+                PaySign = sign,
+                TimeStamp = ts.ToString()
+            };
+
+            return result;
+        }
+
+        #endregion
 
         public async Task SetPaidSuccessed(string orderId)
         {
@@ -345,4 +431,5 @@ namespace Gooios.PaymentService.Applications.Services
         USERPAYING,     //--用户支付中
         PAYERROR,       //--支付失败(其他原因，如银行返回失败)
     }
+
 }
