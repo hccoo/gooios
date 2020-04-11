@@ -37,15 +37,19 @@ namespace Gooios.FancyService.Applications.Services
         readonly IOrganizationServiceProxy _organizationServiceProxy;
         readonly IAmapProxy _amapProxy;
         readonly TmpInstanceGenerate _tmp;
+        readonly IUserServiceProxy _userServiceProxy;
+        readonly IServicerRepository _servicerRepository;
+        readonly IGoodsServiceProxy _goodsServiceProxy;
 
         public ServiceAppService(
-            IServiceRepository serviceRepository, 
-            IServiceImageRepository serviceImageRepository, 
-            IDbUnitOfWork unitOfWork, 
-            IImageServiceProxy imageServiceProxy, 
-            IOrganizationServiceProxy organizationServiceProxy, 
+            IServiceRepository serviceRepository,
+            IServiceImageRepository serviceImageRepository,
+            IDbUnitOfWork unitOfWork,
+            IImageServiceProxy imageServiceProxy,
+            IOrganizationServiceProxy organizationServiceProxy,
             IAmapProxy amapProxy,
-            TmpInstanceGenerate tmp)
+            TmpInstanceGenerate tmp,
+            IUserServiceProxy userServiceProxy, IServicerRepository servicerRepository, IGoodsServiceProxy goodsServiceProxy)
         {
             _tmp = tmp;
             _serviceRepository = serviceRepository;
@@ -54,6 +58,9 @@ namespace Gooios.FancyService.Applications.Services
             _imageServiceProxy = imageServiceProxy;
             _organizationServiceProxy = organizationServiceProxy;
             _amapProxy = amapProxy;
+            _userServiceProxy = userServiceProxy;
+            _servicerRepository = servicerRepository;
+            _goodsServiceProxy = goodsServiceProxy;
         }
 
         public async Task AddService(ServiceDTO service, string operatorId)
@@ -65,6 +72,17 @@ namespace Gooios.FancyService.Applications.Services
                 service.Station.Latitude = lonLat?.Latitude ?? 0;
             }
 
+            var user = await _userServiceProxy.GetCookAppUser(operatorId);
+            var orgId = "";
+            if (user != null)
+            {
+                var servicer = _servicerRepository.GetFiltered(o => o.UserName == user.UserName).FirstOrDefault();
+                if (servicer != null)
+                {
+                    orgId = servicer.OrganizationId;
+                }
+            }
+
             var obj = ServiceFactory.CreateInstance(
                 service.Title,
                 service.Introduction,
@@ -73,8 +91,10 @@ namespace Gooios.FancyService.Applications.Services
                 service.Category,
                 service.SubCategory,
                 service.Station,
-                service.OrganizationId,
+                string.IsNullOrEmpty(orgId) ? service.OrganizationId : orgId,
                 operatorId,
+                service.VideoUrl,
+                service.GoodsCategoryName,
                 service.ApplicationId);
 
             _serviceRepository.Add(obj);
@@ -115,7 +135,7 @@ namespace Gooios.FancyService.Applications.Services
                 && (o.SubCategory == subCategory || string.IsNullOrEmpty(subCategory))
                 && (o.Status != ServiceStatus.Deleted)
                 && (string.IsNullOrEmpty(appId) || o.ApplicationId == appId)
-                && (o.ServeScope >= (GetDistance(longitude, latitude, o.Longitude, o.Latitude)/1000) || o.ServeScope == 0),
+                && (o.ServeScope >= (GetDistance(longitude, latitude, o.Longitude, o.Latitude) / 1000) || o.ServeScope == 0),
                 o => GetDistance(longitude, latitude, o.Longitude, o.Latitude), true);
 
             foreach (var o in result)
@@ -133,6 +153,27 @@ namespace Gooios.FancyService.Applications.Services
                     var logoImg = await _imageServiceProxy.GetImageById(organization.LogoImageId);
                     logoImgUrl = logoImg?.HttpPath;
                     servicePhone = organization.CustomServicePhone;
+                }
+
+                var goods = await _goodsServiceProxy.GetGoodsByGoodsCategoryName(o.GoodsCategoryName);
+                var goodslst = new List<SimpleGoods>();
+                if (goods != null)
+                {
+                    foreach (var g in goods)
+                    {
+                        goodslst.Add(new SimpleGoods
+                        {
+                            Category = g.Category,
+                            GoodsCategoryName = g.GoodsCategoryName,
+                            Id = g.Id,
+                            ItemNumber = g.ItemNumber,
+                            Order = g.Order,
+                            RecommendLevel = g.RecommendLevel,
+                            Title = g.Title,
+                            Unit = g.Unit,
+                            UnitPrice = g.UnitPrice
+                        });
+                    }
                 }
 
                 services.Add(new ServiceDTO
@@ -154,7 +195,10 @@ namespace Gooios.FancyService.Applications.Services
                     ServicePhone = servicePhone,
                     IsAdvertisement = o.IsAdvertisement,
                     PersonalizedPageUri = o.PersonalizedPageUri,
-                    ApplicationId = o.ApplicationId
+                    ApplicationId = o.ApplicationId,
+                    VideoUrl = o.VideoUrl,
+                    GoodsCategoryName = o.GoodsCategoryName,
+                    Goods = goodslst
                 });
             }
             return services;
@@ -223,7 +267,9 @@ namespace Gooios.FancyService.Applications.Services
                 ServicePhone = servicePhone,
                 IsAdvertisement = service.IsAdvertisement,
                 PersonalizedPageUri = service.PersonalizedPageUri,
-                ApplicationId = service.ApplicationId
+                ApplicationId = service.ApplicationId,
+                VideoUrl = service.VideoUrl,
+                GoodsCategoryName = service.GoodsCategoryName
             };
         }
 
@@ -268,7 +314,9 @@ namespace Gooios.FancyService.Applications.Services
                     ServicePhone = servicePhone,
                     IsAdvertisement = o.IsAdvertisement,
                     PersonalizedPageUri = o.PersonalizedPageUri,
-                    ApplicationId = o.ApplicationId
+                    ApplicationId = o.ApplicationId,
+                    VideoUrl = o.VideoUrl,
+                    GoodsCategoryName = o.GoodsCategoryName
                 });
             }
             return services;
@@ -307,6 +355,8 @@ namespace Gooios.FancyService.Applications.Services
             obj.SincerityGold = service.SincerityGold;
             obj.SubCategory = service.SubCategory;
             obj.Title = service.Title;
+            obj.VideoUrl = string.IsNullOrEmpty(service.VideoUrl) ? obj.VideoUrl : service.VideoUrl;
+            obj.GoodsCategoryName = string.IsNullOrEmpty(service.GoodsCategoryName) ? obj.GoodsCategoryName : service.GoodsCategoryName;
 
             _serviceRepository.Update(obj);
 

@@ -45,6 +45,10 @@ else
         <td><input id="title" type="text" placeholder="服务名称" value='@(Model?.Title??"")' style="width:300px;" /></td>
     </tr>
     <tr>
+        <td style="width:180px;">服务商品品类名称：</td>
+        <td><input id="goodscategoryname" type="text" placeholder="商品品类名称" value='@(Model?.GoodsCategoryName??"")' style="width:300px;" /></td>
+    </tr>
+    <tr>
         <td>服务分类：</td>
         <td>
             <select id="firstLayerCategories" onchange="onFirstLayerCategoriesChange(this)">
@@ -160,7 +164,8 @@ else
         ServeScope:@(Model?.ServeScope??3),
         Category: "@Model?.Category",
         SubCategory: "@Model?.SubCategory",
-        Introduction:"@Model?.Introduction",
+        Introduction: "@Model?.Introduction",
+        GoodsCategoryName:"@Model?.GoodsCategoryName",
         Station: {
             Province: "@Model?.Station?.Province",
             City: "@Model?.Station?.City",
@@ -310,6 +315,7 @@ else
         service.Introduction = editor.$textElem.html();
         service.Category = $("#firstLayerCategories option:selected").text();
         service.SubCategory = $("#secondLayerCategories option:selected").text() == "请选择" ? "" : $("#secondLayerCategories option:selected").text();
+        service.GoodsCategoryName = $("#goodscategoryname").val();
         //service.SincerityGold = $("#sinceritygold").val();
         //service.ServeScope = $("#servicescope").val();
         service.Station = {
@@ -371,6 +377,10 @@ else
         }
         if ($("#servicescope").val().trim() == "") {
             alert("服务范围不能为空!");
+            return;
+        }
+        if($("#goodscategoryname").val().trim() == ""){
+            alert("服务商品品类名称不能为空!");
             return;
         }
         //if (service.Station.Area.trim() == "" || service.Station.Area.trim() == "请选择") {

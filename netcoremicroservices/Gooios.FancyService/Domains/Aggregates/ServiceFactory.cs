@@ -17,6 +17,8 @@ namespace Gooios.FancyService.Domains.Aggregates
             Address station,
             string organizationId,
             string operatorId,
+            string videoUrl,
+            string goodsCategoryName,
             string applicationId = "GOOIOS001")
         {
             var result = new Service
@@ -33,7 +35,9 @@ namespace Gooios.FancyService.Domains.Aggregates
                 Station = station,
                 SubCategory = subCategory,
                 Title = title,
-                ApplicationId = applicationId
+                ApplicationId = applicationId,
+                VideoUrl = videoUrl,
+                GoodsCategoryName = goodsCategoryName
             };
 
             result.GenerateId();

@@ -17,6 +17,8 @@ namespace Gooios.UserService.Domain.Aggregates
 
         public string Email { get; set; }
 
+        public string ServicerId { get; set; }
+
         public string CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }

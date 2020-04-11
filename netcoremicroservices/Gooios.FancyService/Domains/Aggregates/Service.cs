@@ -14,6 +14,13 @@ namespace Gooios.FancyService.Domains.Aggregates
         public string Introduction { get; set; }
 
         /// <summary>
+        /// 商品品类名称
+        /// </summary>
+        public string GoodsCategoryName { get; set; }
+
+        public string VideoUrl { get; set; }
+
+        /// <summary>
         /// 诚意金
         /// </summary>
         public decimal SincerityGold { get; set; }

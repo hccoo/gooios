@@ -29,6 +29,11 @@ namespace Gooios.GoodsService.Domains.Aggregates
 
         public string Title { get; set; }
 
+        /// <summary>
+        /// 商品品类名称
+        /// </summary>
+        public string GoodsCategoryName { get; set; }
+
         public string VideoPath { get; set; }
 
         public string Description { get; set; }

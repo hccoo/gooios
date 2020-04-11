@@ -22,7 +22,8 @@ namespace Gooios.GoodsService.Domains.Aggregates
                 Unit = goods.Unit,
                 UnitPrice = goods.UnitPrice,
                 StoreId = goods.StoreId,
-                VideoPath = goods.VideoPath
+                VideoPath = goods.VideoPath,
+                GoodsCategoryName = goods.GoodsCategoryName
             };
 
             result.GrouponConditions = goods.GrouponConditions.Select(item =>

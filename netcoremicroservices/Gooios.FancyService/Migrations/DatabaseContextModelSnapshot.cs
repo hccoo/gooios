@@ -271,6 +271,8 @@ namespace Gooios.FancyService.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnName("created_on");
 
+                    b.Property<string>("GoodsCategoryName");
+
                     b.Property<string>("Introduction")
                         .IsRequired()
                         .HasColumnName("introduction");
@@ -333,6 +335,10 @@ namespace Gooios.FancyService.Migrations
                         .IsRequired()
                         .HasColumnName("title")
                         .HasMaxLength(80);
+
+                    b.Property<string>("VideoUrl")
+                        .HasColumnName("video_url")
+                        .HasMaxLength(1000);
 
                     b.HasKey("Id");
 
@@ -478,6 +484,10 @@ namespace Gooios.FancyService.Migrations
                     b.Property<string>("TechnicalTitle")
                         .IsRequired()
                         .HasColumnName("technical_title")
+                        .HasMaxLength(80);
+
+                    b.Property<string>("UserName")
+                        .HasColumnName("user_name")
                         .HasMaxLength(80);
 
                     b.HasKey("Id");

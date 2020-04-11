@@ -45,6 +45,10 @@ namespace Gooios.GoodsService.Applications.Services
         Task<IEnumerable<GoodsDTO>> GetNearbyGoods(double longitude, double latitude, string category, string subCategory, int pageIndex, int pageSize, string appId = "GOOIOS001");
 
         Task<string> ConfirmBuyGoods(ConfirmBuyGoodsDTO model, string operatorId);
+
+        Task<IEnumerable<string>> GetGoodsCategoryNames(string userId);
+
+        Task<IEnumerable<GoodsDTO>> GetOnlineGoodsByGoodsCategoryName(string goodsCategoryName);
     }
 
     public class GoodsAppService : ApplicationServiceContract, IGoodsAppService
@@ -64,6 +68,8 @@ namespace Gooios.GoodsService.Applications.Services
         readonly IOrderServiceProxy _orderServiceProxy;
         readonly IAuthServiceProxy _authServiceProxy;
         readonly TmpInstanceGenerate _tmp;
+        readonly IUserServiceProxy _userServiceProxy;
+        readonly IFancyServiceProxy _fancyServiceProxy;
 
         public GoodsAppService(
             IDbUnitOfWork dbUnitOfWork,
@@ -80,6 +86,8 @@ namespace Gooios.GoodsService.Applications.Services
             IActivityServiceProxy activityServiceProxy,
             IOrderServiceProxy orderServiceProxy,
             IAuthServiceProxy authServiceProxy,
+            IUserServiceProxy userServiceProxy,
+            IFancyServiceProxy fancyServiceProxy,
             TmpInstanceGenerate tmp)
         {
             _tmp = tmp;
@@ -97,6 +105,56 @@ namespace Gooios.GoodsService.Applications.Services
             _activityServiceProxy = activityServiceProxy;
             _orderServiceProxy = orderServiceProxy;
             _authServiceProxy = authServiceProxy;
+            _userServiceProxy = userServiceProxy;
+            _fancyServiceProxy = fancyServiceProxy;
+        }
+
+        public async Task<IEnumerable<GoodsDTO>> GetOnlineGoodsByGoodsCategoryName(string goodsCategoryName)
+        {
+            var goodsList = _onlineGoodsRepository.GetFiltered(o => o.GoodsCategoryName == goodsCategoryName).ToList();
+            var result = new List<GoodsDTO>();
+            foreach (var item in goodsList)
+            {
+                item.ResolveAddress();
+                result.Add(new GoodsDTO
+                {
+                    Address = item.Address,
+                    ApplicationId = item.ApplicationId,
+                    Category = item.Category,
+                    Description = item.Description,
+                    Detail = item.Detail,
+                    Distance = "",
+                    DistributionScope = item.DistributionScope,
+                    GoodsCategoryName = item.GoodsCategoryName,
+                    Id = item.Id,
+                    MarketPrice = item.MarketPrice,
+                    UnitPrice = item.UnitPrice,
+                    OrganizationId = item.StoreId,
+                    Unit = item.Unit,
+                    SubCategory = item.SubCategory,
+                    Title = item.Title,
+                    VideoPath = item.VideoPath,
+                    StoreId = item.StoreId,
+                    Order = item.Order,
+                    ItemNumber = item.ItemNumber,
+                    OptionalPropertyJsonObject = item.OptionalPropertyJsonObject,
+                    OrganizationLogoUrl = "",
+                    Stock = item.Stock,
+                    Status = item.Status
+
+                });
+
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<string>> GetGoodsCategoryNames(string userId)
+        {
+            var user = await _userServiceProxy.GetCookAppUser(userId);
+            if (user == null || string.IsNullOrEmpty(user.ServicerId)) return new List<string>();
+            var servicer = await _fancyServiceProxy.GetServicer(user.ServicerId);
+            if (servicer == null) return new List<string>();
+            return _onlineGoodsRepository.GetFiltered(o => o.StoreId == servicer.OrganizationId).Select(g => g.GoodsCategoryName).Distinct().ToList();
         }
 
         public void AddGoods(GoodsDTO goodsDTO, string creatorId)
@@ -122,6 +180,7 @@ namespace Gooios.GoodsService.Applications.Services
                 goodsImages,
                 goodsDTO.Address,
                 goodsDTO.DistributionScope,
+                goodsDTO.GoodsCategoryName,
                 goodsDTO.VideoPath);
 
             _goodsRepository.Add(obj);
@@ -172,6 +231,7 @@ namespace Gooios.GoodsService.Applications.Services
             goods.Address = goodsDTO.Address;
             goods.DistributionScope = goodsDTO.DistributionScope;
             goods.VideoPath = goodsDTO.VideoPath;
+            goods.GoodsCategoryName = goodsDTO.GoodsCategoryName;
 
             goods.InitAddress();
             goods.InitStatus();
@@ -251,7 +311,8 @@ namespace Gooios.GoodsService.Applications.Services
                     GoodsImages = goodsImages,
                     GrouponConditions = grouponCondition,
                     DistributionScope = obj.DistributionScope,
-                    VideoPath = obj.VideoPath
+                    VideoPath = obj.VideoPath,
+                    GoodsCategoryName = obj.GoodsCategoryName
                 };
             }
             return null;
@@ -297,7 +358,8 @@ namespace Gooios.GoodsService.Applications.Services
                     GoodsImages = goodsImages,
                     GrouponConditions = grouponCondition,
                     DistributionScope = obj.DistributionScope,
-                    VideoPath = obj.VideoPath
+                    VideoPath = obj.VideoPath,
+                    GoodsCategoryName = obj.GoodsCategoryName
                 };
             }
             return null;
@@ -333,7 +395,8 @@ namespace Gooios.GoodsService.Applications.Services
                     Unit = item.Unit,
                     UnitPrice = item.UnitPrice,
                     DistributionScope = item.DistributionScope,
-                    VideoPath = item.VideoPath
+                    VideoPath = item.VideoPath,
+                    GoodsCategoryName = item.GoodsCategoryName
                 }).ToList();
 
             if (goods != null && goods.Count() > 0)
@@ -394,6 +457,7 @@ namespace Gooios.GoodsService.Applications.Services
                         VideoPath = item.VideoPath,
                         Order = item.Order,
                         RecommendLevel = item.RecommendLevel,
+                        GoodsCategoryName = item.GoodsCategoryName,
                         GrouponConditions = conditions?.Select(obj => new GrouponConditionDTO
                         {
                             GoodsId = obj.GoodsId,
@@ -475,6 +539,7 @@ namespace Gooios.GoodsService.Applications.Services
                     OrganizationName = organization?.ShortName,
                     Order = item.Order,
                     RecommendLevel = item.RecommendLevel,
+                    GoodsCategoryName = item.GoodsCategoryName,
                     GrouponConditions = conditions?.Select(obj => new GrouponConditionDTO
                     {
                         GoodsId = obj.GoodsId,
@@ -548,6 +613,7 @@ namespace Gooios.GoodsService.Applications.Services
                     OrganizationName = organization?.ShortName,
                     Order = item.Order,
                     RecommendLevel = item.RecommendLevel,
+                    GoodsCategoryName = item.GoodsCategoryName,
                     GrouponConditions = conditions?.Select(obj => new GrouponConditionDTO
                     {
                         GoodsId = obj.GoodsId,

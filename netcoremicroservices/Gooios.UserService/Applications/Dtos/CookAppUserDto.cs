@@ -23,5 +23,7 @@ namespace Gooios.UserService.Applications.Dtos
         public string UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+
+        public string ServicerId { get; set; }
     }
 }

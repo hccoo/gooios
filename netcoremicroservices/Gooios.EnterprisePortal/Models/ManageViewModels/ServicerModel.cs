@@ -14,6 +14,8 @@ namespace Gooios.EnterprisePortal.Models.ManageViewModels
         /// </summary>
         public string JobNumber { get; set; }
 
+        public string UserName { get; set; }
+
         public string Name { get; set; }
 
         /// <summary>

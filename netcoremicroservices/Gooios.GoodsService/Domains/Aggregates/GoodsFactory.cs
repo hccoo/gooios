@@ -24,6 +24,7 @@ namespace Gooios.GoodsService.Domains.Aggregates
             IEnumerable<GoodsImage> goodsImages, //, GoodsNumber goodsNumber
             Address address,
             int distributionScope,
+            string goodsCategoryName,
             string videoPath=""
             )
         {
@@ -49,7 +50,8 @@ namespace Gooios.GoodsService.Domains.Aggregates
                 LastUpdOn = DateTime.Now,
                 Address = address,
                 DistributionScope = distributionScope,
-                VideoPath= videoPath
+                VideoPath= videoPath,
+                GoodsCategoryName = goodsCategoryName
             };
 
             result.GenerateId();

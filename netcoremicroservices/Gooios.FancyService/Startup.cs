@@ -77,6 +77,7 @@ namespace Gooios.FancyService
             services.AddTransient<IServiceAppService, ServiceAppService>();
             services.AddTransient<IServicerAppService, ServicerAppService>();
 
+            services.AddTransient<IUserServiceProxy, UserServiceProxy>();
             services.AddTransient<IImageServiceProxy, ImageServiceProxy>();
             services.AddTransient<IOrderServiceProxy, OrderServiceProxy>();
             services.AddTransient<IOrganizationServiceProxy, OrganizationServiceProxy>();
@@ -84,6 +85,7 @@ namespace Gooios.FancyService
             services.AddTransient<IAmapProxy, AmapProxy>();
             services.AddTransient<ITagStatisticsAppService, TagStatisticsAppService>();
             services.AddTransient<ITagAppService, TagAppService>();
+            services.AddTransient<IGoodsServiceProxy, GoodsServiceProxy>();
 
             services.AddTransient<TmpInstanceGenerate>();
 

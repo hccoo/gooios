@@ -11,6 +11,8 @@ namespace Gooios.EnterprisePortal.Models.ManageViewModels
 
         public string Title { get; set; }
 
+        public string GoodsCategoryName { get; set; }
+
         public string Introduction { get; set; }
 
         /// <summary>

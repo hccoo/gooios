@@ -376,6 +376,33 @@
       }*/
     },
     {
+      "DownstreamPathTemplate": "/api/service/v1",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "fancyservice.gooios.com",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/fancyservice/service/v1",
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 768960bff18111e79916016898e9f885"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      },
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/category/v1/getbyparentid",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -1049,6 +1076,60 @@
         "AuthenticationProviderKey": "ID4",
         "AllowedScopes": []
       }*/
+    },
+    {
+      "DownstreamPathTemplate": "/api/goods/v1/getgoodscategorynames",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "goodsservice.gooios.com",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/goodsservice/goods/v1/getgoodscategorynames",
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 63e960bff18111e79916012cc8e9f005"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      },
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/goods/v1/getgoodsbygoodscategorynames",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "goodsservice.gooios.com",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/goodsservice/goods/v1/getgoodsbygoodscategorynames",
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 63e960bff18111e79916012cc8e9f005"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      },
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }
     },
     {
       "DownstreamPathTemplate": "/api/goods/v1/getgoods",

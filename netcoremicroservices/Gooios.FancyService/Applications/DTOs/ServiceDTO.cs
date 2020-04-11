@@ -10,6 +10,10 @@ namespace Gooios.FancyService.Applications.DTOs
     {
         public string Id { get; set; }
 
+        public string VideoUrl { get; set; }
+
+        public string GoodsCategoryName { get; set; }
+
         public string Title { get; set; }
 
         public string Introduction { get; set; }
@@ -55,5 +59,42 @@ namespace Gooios.FancyService.Applications.DTOs
         public IEnumerable<ServiceImageDTO> Images { get; set; }
 
         public string ApplicationId { get; set; } = "GOOIOS001";
+
+        public IEnumerable<SimpleGoods> Goods { get; set; }
+    }
+
+    public class SimpleGoods
+    {
+        public string Id { get; set; }
+
+        public string Title { get; set; }
+
+        public decimal UnitPrice { get; set; }
+        
+        public string GoodsCategoryName { get; set; }
+
+        public string Category { get; set; }
+
+        /// <summary>
+        /// 购买单位，比如：件,块,平方米，米等等
+        /// </summary>
+        public string Unit { get; set; }
+
+        /// <summary>
+        /// 推荐商品排序 6，5，4，3，2，1
+        /// </summary>
+        public int RecommendLevel { get; set; } = 0;
+
+        /// <summary>
+        /// 热门排序 
+        /// </summary>
+        public int Order { get; set; } = 0;
+        /// <summary>
+        /// 货号
+        /// </summary>
+        public string ItemNumber { get; set; }
+
+
+
     }
 }

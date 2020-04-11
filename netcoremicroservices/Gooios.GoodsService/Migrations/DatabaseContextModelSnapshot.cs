@@ -152,6 +152,8 @@ namespace Gooios.GoodsService.Migrations
                         .HasColumnName("distribution_scope")
                         .HasMaxLength(80);
 
+                    b.Property<string>("GoodsCategoryName");
+
                     b.Property<string>("ItemNumber")
                         .IsRequired()
                         .HasColumnName("item_number")
@@ -348,6 +350,8 @@ namespace Gooios.GoodsService.Migrations
                     b.Property<int>("DistributionScope")
                         .HasColumnName("distribution_scope")
                         .HasMaxLength(80);
+
+                    b.Property<string>("GoodsCategoryName");
 
                     b.Property<string>("ItemNumber")
                         .IsRequired()

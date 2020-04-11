@@ -62,7 +62,9 @@ namespace Gooios.ImageService.Controllers
             var protocol = Request.IsHttps ? "https://" : "http://";
             var userId = Request.Headers["userId"].FirstOrDefault();
 
-            model.HttpPath = $"{protocol}{host}/uploadimages/";
+            if(!string.IsNullOrEmpty(model.ImageBase64Content))
+                model.HttpPath = $"{protocol}{host}/uploadimages/";
+
             model.CreatedBy = userId;
             var result = _imageAppService.AddImage(model);
 

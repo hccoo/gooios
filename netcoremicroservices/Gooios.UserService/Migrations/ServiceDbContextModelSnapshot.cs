@@ -120,6 +120,11 @@ namespace Gooios.UserService.Migrations
                         .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
                         .HasMaxLength(200);
 
+                    b.Property<string>("ServicerId")
+                        .HasColumnName("servicer_id")
+                        .HasColumnType("varchar(80) CHARACTER SET utf8mb4")
+                        .HasMaxLength(80);
+
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
                         .HasColumnName("updated_by")

@@ -43,5 +43,19 @@ namespace Gooios.UserServiceHost.Controllers
             var ret = _userAppService.AddCookAppUser(model.UserName, model.Password, model.Mobile, model.Email);
             return ret?.Id ?? "";
         }
+
+        [HttpPost]
+        [Route("setservicerid/v1")]
+        public bool SetServicerIdForUser(SetServicerIdForUserModel model)
+        {
+            return _userAppService.SetServicerIdForUser(model.UserName, model.ServicerId);
+        }
+
+        [HttpGet]
+        [Route("v1")]
+        public CookAppUserDto GetUser(string idOrUserName)
+        {
+            return _userAppService.GetUser(idOrUserName);
+        }
     }
 }

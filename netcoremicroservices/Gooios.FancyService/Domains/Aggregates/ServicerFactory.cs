@@ -25,6 +25,7 @@ namespace Gooios.FancyService.Domains.Aggregates
             string portraitImageId,
             DateTime startRelevantWorkTime,
             decimal sincerityGold,
+            string userName,
             string applicationId = "GOOIOS001"
             )
         {
@@ -50,7 +51,8 @@ namespace Gooios.FancyService.Domains.Aggregates
                 PortraitImageId = portraitImageId,
                 StartRelevantWorkTime = startRelevantWorkTime,
                 SincerityGold = sincerityGold,
-                ApplicationId = applicationId
+                ApplicationId = applicationId,
+                UserName = userName
             };
 
             result.GenerateId();

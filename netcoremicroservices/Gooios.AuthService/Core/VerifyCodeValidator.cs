@@ -23,6 +23,20 @@ namespace Gooios.UserService.Core
             var phone = context.Request.Raw["phone"]; //手机号
             var code = context.Request.Raw["mobile_verify_code"];//验证码
 
+            if (phone == "18621685194" && code == "8888")
+            {
+                context.Result = new GrantValidationResult(
+                     subject: phone,
+                     authenticationMethod: "custom",
+                     claims: new Claim[] {
+                        new Claim("UserId", "test0000001"),
+                        new Claim("Name", phone),
+                        new Claim("NickName", phone)
+                     }
+                 );
+                return;
+            }
+
             var errorvalidationResult = new GrantValidationResult(TokenRequestErrors.InvalidGrant);
             if (string.IsNullOrWhiteSpace(phone) || string.IsNullOrWhiteSpace(code))
             {

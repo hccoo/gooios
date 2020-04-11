@@ -50,6 +50,10 @@ else
         <td><input id="jobnumber" type="text" placeholder="服务者工号" value='@(Model?.JobNumber??"")' style="width:300px;" /></td>
     </tr>
     <tr>
+        <td>用户账号：</td>
+        <td><input id="username" type="text" placeholder="关联用户账号" value='@(Model?.UserName??"")' style="width:300px;" /></td>
+    </tr>
+    <tr>
         <td>服务人员姓名：</td>
         <td><input id="name" type="text" placeholder="服务人员名称" value='@(Model?.Name??"")' style="width:300px;" /></td>
     </tr>
@@ -84,7 +88,8 @@ else
     <tr>
         <td>开始从业时间：</td>
         <td>
-            <input class="Wdate" type="text" id="startrelevantworktime" value="@Model?.StartRelevantWorkTime" onclick="WdatePicker({isShowClear:false,readOnly:true})" /></td>
+            <input class="Wdate" type="text" id="startrelevantworktime" value="@Model?.StartRelevantWorkTime" onclick="WdatePicker({isShowClear:false,readOnly:true})" />
+        </td>
     </tr>
     <tr>
         <td>生日：</td>
@@ -143,9 +148,9 @@ else
         </td>
     </tr>
     @*<tr>
-        <td>服务范围：</td>
-        <td><input id="servicescope" type="text" placeholder="服务范围" value='@(Model?.ServeScope??0)' style="width:80px;" /> 公里</td>
-    </tr>*@
+            <td>服务范围：</td>
+            <td><input id="servicescope" type="text" placeholder="服务范围" value='@(Model?.ServeScope??0)' style="width:80px;" /> 公里</td>
+        </tr>*@
     <tr>
         <td>所在区域：</td>
         <td>
@@ -402,7 +407,7 @@ else
             alert("职称不能为空!");
             return;
         }
-       
+
         if (servicer.StartRelevantWorkTime.trim() == "") {
             alert("从业开始时间不能为空!");
             return;
@@ -411,7 +416,7 @@ else
             alert("服务人员生日不能为空!");
             return;
         }
-       
+
         if (servicer.PortraitImageId.trim() == "") {
             alert("头像不能为空!");
             return;
@@ -473,7 +478,14 @@ else
             alert("服务者详情不能为空！");
             return;
         }
-        
+
+        var userName = $("#username").val();
+        if (userName.trim() == "") {
+            alert("工号不能为空!");
+            return;
+        }
+        servicer.UserName = userName;
+
         $.ajax({
             url: "/Manage/ServicerDetail",
             type: "POST",
@@ -584,8 +596,8 @@ else
             }
         });
         return false;
-    }  
-    
+    }
+
 </script>
 
 

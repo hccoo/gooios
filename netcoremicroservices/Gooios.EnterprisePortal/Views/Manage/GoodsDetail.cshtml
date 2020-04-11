@@ -49,6 +49,10 @@ else
         <td><input id="title" type="text" placeholder="商品名称" value='@(Model?.Title??"")' style="width:300px;" /></td>
     </tr>
     <tr>
+        <td>品类名称：</td>
+        <td><input id="goodscategoryname" type="text" placeholder="品类名称" value='@(Model?.GoodsCategoryName??"")' style="width:300px;" /></td>
+    </tr>
+    <tr>
         <td>商品分类：</td>
         <td>
             <select id="firstLayerCategories" onchange="onFirstLayerCategoriesChange(this)">
@@ -183,7 +187,7 @@ else
             <div id="detaileditor"></div>
         </td>
     </tr>
-    <tr><td></td><td><input onclick="onSubmit()" type="button" value="保 存" /> <input type="button" value="上 架" onclick="onShelve()" /> <input type="button" value="下 架" onclick="onUnShelve()"/></td></tr>
+    <tr><td></td><td><input onclick="onSubmit()" type="button" value="保 存" /> <input type="button" value="上 架" onclick="onShelve()" /> <input type="button" value="下 架" onclick="onUnShelve()" /></td></tr>
 </table>
 <script>
     var imgArr = new Array();
@@ -206,7 +210,8 @@ else
         GrouponConditions: [],
         GoodsImages: [],
         OptionalPropertyJsonObject: "",
-        DistributionScope:0
+        DistributionScope: 0,
+        GoodsCategoryName:""
     };
 
     function initEditor() {
@@ -451,6 +456,11 @@ else
         goods.SubCategory = $("#secondLayerCategories option:selected").text();
         goods.Description = $("#description").val();
         goods.Detail = editor.$textElem.html();
+        goods.GoodsCategoryName = $("#goodscategoryname").val();
+        if (goods.GoodsCategoryName == "") {
+            alert("请填写商品品类名称！");
+            return;
+        }
         try
         {
 

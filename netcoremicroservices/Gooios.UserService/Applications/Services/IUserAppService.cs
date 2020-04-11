@@ -22,6 +22,10 @@ namespace Gooios.UserService.Application.Services
         Task<CookAppPartnerLoginUserDto> VerifyCookAppPartnerLoginUserByAuthCode(string authCode);
 
         CookAppUserDto AddCookAppUser(string userName, string password, string mobile, string email);
+
+        bool SetServicerIdForUser(string userName, string servicerId);
+
+        CookAppUserDto GetUser(string userName);
     }
 
     public class UserAppService : ApplicationServiceContract, IUserAppService
@@ -34,12 +38,12 @@ namespace Gooios.UserService.Application.Services
         private readonly IWechatProxy _wechatProxy;
         private readonly IServiceConfigurationAgent _config;
 
-        public UserAppService(ICookAppUserRepository cookappUserRepo, 
+        public UserAppService(ICookAppUserRepository cookappUserRepo,
             ICookAppPartnerLoginUserRepository cookappPartnerLoginUserRepo,
             IVerificationProxy verificationProxy,
             IWechatProxy wechatProxy,
             IServiceConfigurationAgent config,
-            IDbUnitOfWork unitOfWork):base(unitOfWork)
+            IDbUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _cookappUserRepo = cookappUserRepo;
             _cookappPartnerLoginUserRepo = cookappPartnerLoginUserRepo;
@@ -79,10 +83,10 @@ namespace Gooios.UserService.Application.Services
                 if (verification.Code != code) return null;
 
                 await _verificationProxy.SetVerificationUsed(verification);
-;
+                ;
                 return MapperProvider.Mapper.Map<CookAppUserDto>(obj);
             }
-            else 
+            else
             {
                 var verification = await _verificationProxy.GetVerification(BizCode.Login, userName);
                 if (verification == null) return null;
@@ -99,13 +103,45 @@ namespace Gooios.UserService.Application.Services
 
         }
 
-        public CookAppUserDto AddCookAppUser(string userName, string password,string mobile, string email)
+        public CookAppUserDto AddCookAppUser(string userName, string password, string mobile, string email)
         {
             //TODO:verify the input data
             var user = CookAppUserFactory.CreateInstance(userName, password, mobile, email);
             _cookappUserRepo.Add(user);
             _dbUnitOfWork.Commit();
             return MapperProvider.Mapper.Map<CookAppUserDto>(user);
+        }
+
+        public bool SetServicerIdForUser(string userName, string servicerId)
+        {
+            var user = _cookappUserRepo.GetFiltered(o => o.UserName == userName).FirstOrDefault();
+            user.ServicerId = servicerId;
+            _cookappUserRepo.Update(user);
+            _dbUnitOfWork.Commit();
+            return true;
+        }
+
+        public CookAppUserDto GetUser(string idOrUserName)
+        {
+            var user = _cookappUserRepo.GetFiltered(o => o.Id == idOrUserName).FirstOrDefault();
+            if (user == null)
+            {
+                user = _cookappUserRepo.GetFiltered(o => o.UserName == idOrUserName).FirstOrDefault();
+            }
+            if (user == null) return null;
+
+            return new CookAppUserDto
+            {
+                CreatedBy = user.CreatedBy,
+                CreatedOn = user.CreatedOn,
+                Email = user.Email,
+                Id = user.Id,
+                Mobile = user.Mobile,
+                UserName = user.UserName,
+                ServicerId = user.ServicerId,
+                UpdatedBy = user.UpdatedBy,
+                UpdatedOn = user.UpdatedOn
+            };
         }
     }
 }

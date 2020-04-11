@@ -125,6 +125,8 @@ namespace Gooios.GoodsService
             builder.RegisterType<OrderServiceProxy>().As<IOrderServiceProxy>().InstancePerDependency();
             builder.RegisterType<OrganizationServiceProxy>().As<IOrganizationServiceProxy>().InstancePerDependency();
             builder.RegisterType<ActivityServiceProxy>().As<IActivityServiceProxy>().InstancePerDependency();
+            builder.RegisterType<FancyServiceProxy>().As<IFancyServiceProxy>().InstancePerDependency();
+            builder.RegisterType<UserServiceProxy>().As<IUserServiceProxy>().InstancePerDependency();
 
             builder.RegisterType<GoodsShelvedEventHandler>().As<IDomainEventHandler<GoodsShelvedEvent>>().InstancePerDependency();
             builder.RegisterType<GoodsSoldOutEventHandler>().As<IDomainEventHandler<GoodsSoldOutEvent>>().InstancePerDependency();

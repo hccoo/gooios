@@ -47,6 +47,7 @@ namespace Gooios.UserService.Repositories
             builder.Property(c => c.UpdatedOn).HasColumnName("updated_on").IsRequired();
             builder.Property(c => c.Email).HasColumnName("email").HasMaxLength(200);
             builder.Property(c => c.Mobile).HasColumnName("mobile").HasMaxLength(20);
+            builder.Property(c => c.ServicerId).HasColumnName("servicer_id").HasMaxLength(80);
         }
     }
 

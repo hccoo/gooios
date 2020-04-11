@@ -64,5 +64,8 @@ namespace Gooios.FancyService.Applications.DTOs
         public decimal SincerityGold { get; set; }
 
         public string ApplicationId { get; set; } = "GOOIOS001";
+
+        public string UserName { get; set; }
     }
+
 }

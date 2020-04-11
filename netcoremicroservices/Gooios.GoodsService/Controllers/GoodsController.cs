@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Gooios.GoodsService.Applications.Services;
 using Gooios.GoodsService.Applications.DTOs;
+using Gooios.GoodsService.Proxies;
+using Gooios.GoodsService.Domains.Aggregates;
 
 namespace Gooios.GoodsService.Controllers
 {
@@ -109,6 +111,20 @@ namespace Gooios.GoodsService.Controllers
         public async Task<string> ConfirmBuyGoods([FromBody]ConfirmBuyGoodsDTO model)
         {
             return await _goodsAppService.ConfirmBuyGoods(model, UserId);
+        }
+
+        [HttpGet]
+        [Route("getgoodscategorynames")]
+        public async Task<IEnumerable<string>> GetGoodsCategoryNames()
+        {
+            return await _goodsAppService.GetGoodsCategoryNames(UserId);
+        }
+
+        [HttpGet]
+        [Route("getgoodsbygoodscategorynames")]
+        public async Task<IEnumerable<GoodsDTO>> GetGoodsByGoodsCategoryName(string goodsCategoryName)
+        {
+            return await _goodsAppService.GetOnlineGoodsByGoodsCategoryName(goodsCategoryName);
         }
     }
 }

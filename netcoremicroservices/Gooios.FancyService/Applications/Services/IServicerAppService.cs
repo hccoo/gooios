@@ -32,8 +32,9 @@ namespace Gooios.FancyService.Applications.Services
         readonly IImageServiceProxy _imageServiceProxy;
         readonly IOrganizationServiceProxy _organizationServiceProxy;
         readonly IAmapProxy _amapProxy;
+        readonly IUserServiceProxy _userProxy;
 
-        public ServicerAppService(IServicerRepository servicerRepository, IServicerImageRepository servicerImageRepository, IDbUnitOfWork dbUnitOfWork, IImageServiceProxy imageServiceProxy, IOrganizationServiceProxy organizationServiceProxy, IAmapProxy amapProxy)
+        public ServicerAppService(IServicerRepository servicerRepository, IUserServiceProxy userProxy, IServicerImageRepository servicerImageRepository, IDbUnitOfWork dbUnitOfWork, IImageServiceProxy imageServiceProxy, IOrganizationServiceProxy organizationServiceProxy, IAmapProxy amapProxy)
         {
             _servicerRepository = servicerRepository;
             _servicerImageRepository = servicerImageRepository;
@@ -41,6 +42,7 @@ namespace Gooios.FancyService.Applications.Services
             _imageServiceProxy = imageServiceProxy;
             _organizationServiceProxy = organizationServiceProxy;
             _amapProxy = amapProxy;
+            _userProxy = userProxy;
         }
 
         public async Task AddServicer(ServicerDTO model, string operatorId)
@@ -67,23 +69,28 @@ namespace Gooios.FancyService.Applications.Services
                 model.SincerityGoldRate,
                 operatorId,
                 model.IsSuspend,
-                model.OrganizationId, model.Category, model.SubCategory, model.PortraitImageId, model.StartRelevantWorkTime, model.SincerityGold, model.ApplicationId);
+                model.OrganizationId, model.Category, model.SubCategory, model.PortraitImageId, model.StartRelevantWorkTime, model.SincerityGold,model.UserName, model.ApplicationId);
 
             _servicerRepository.Add(obj);
 
-            if (model.Images != null)
+            var ret = await _userProxy.SetServicerIdForUser(model.UserName, obj.Id);
+
+            if (ret)
             {
-                foreach (var img in model.Images)
+                if (model.Images != null)
                 {
-                    _servicerImageRepository.Add(new ServicerImage
+                    foreach (var img in model.Images)
                     {
-                        CreatedOn = DateTime.Now,
-                        ImageId = img.ImageId,
-                        ServicerId = obj.Id
-                    });
+                        _servicerImageRepository.Add(new ServicerImage
+                        {
+                            CreatedOn = DateTime.Now,
+                            ImageId = img.ImageId,
+                            ServicerId = obj.Id
+                        });
+                    }
                 }
+                _dbUnitOfWork.Commit();
             }
-            _dbUnitOfWork.Commit();
         }
 
         public async Task<IEnumerable<ServicerDTO>> GetNearbyServicers(double longitude, double latitude, int pageIndex, int pageSize, string key, string category, string subCategory, string appId = "GOOIOS001")
@@ -141,7 +148,8 @@ namespace Gooios.FancyService.Applications.Services
                     TechnicalGrade = o.TechnicalGrade,
                     TechnicalTitle = o.TechnicalTitle,
                     SincerityGold = o.SincerityGold,
-                    ApplicationId = o.ApplicationId
+                    ApplicationId = o.ApplicationId,
+                    UserName = o.UserName
                 });
             }
             return services;
@@ -213,7 +221,8 @@ namespace Gooios.FancyService.Applications.Services
                 TechnicalGrade = servicer.TechnicalGrade,
                 TechnicalTitle = servicer.TechnicalTitle,
                 SincerityGold = servicer.SincerityGold,
-                ApplicationId = servicer.ApplicationId
+                ApplicationId = servicer.ApplicationId,
+                UserName = servicer.UserName
             };
         }
 
@@ -268,7 +277,8 @@ namespace Gooios.FancyService.Applications.Services
                     TechnicalGrade = o.TechnicalGrade,
                     TechnicalTitle = o.TechnicalTitle,
                     SincerityGold = o.SincerityGold,
-                    ApplicationId = o.ApplicationId
+                    ApplicationId = o.ApplicationId,
+                    UserName = o.UserName
                 });
             }
             return servicers;
@@ -314,6 +324,7 @@ namespace Gooios.FancyService.Applications.Services
             obj.TechnicalTitle = model.TechnicalTitle;
             obj.StartRelevantWorkTime = model.StartRelevantWorkTime;
             obj.SincerityGold = model.SincerityGold;
+            obj.UserName = model.UserName;
 
             var imgs = _servicerImageRepository.GetFiltered(o => o.ServicerId == model.Id)?.ToList();
 
@@ -328,7 +339,11 @@ namespace Gooios.FancyService.Applications.Services
             });
 
             _servicerRepository.Update(obj);
-            _dbUnitOfWork.Commit();
+
+            var ret = await _userProxy.SetServicerIdForUser(model.UserName, obj.Id);
+
+            if(ret)
+                _dbUnitOfWork.Commit();
         }
     }
 }

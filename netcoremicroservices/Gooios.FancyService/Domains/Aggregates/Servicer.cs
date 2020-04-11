@@ -14,6 +14,11 @@ namespace Gooios.FancyService.Domains.Aggregates
         /// </summary>
         public string JobNumber { get; set; }
 
+        /// <summary>
+        /// 服务者关联用户账号
+        /// </summary>
+        public string UserName { get; set; }
+
         public string Name { get; set; }
 
         /// <summary>

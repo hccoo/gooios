@@ -170,6 +170,7 @@ namespace Gooios.FancyService.Repositories
             builder.Property(c => c.IsAdvertisement).HasColumnName("is_advertisement").IsRequired();
             builder.Property(c => c.PersonalizedPageUri).HasColumnName("personalized_page_uri").HasMaxLength(500);
             builder.Property(c => c.ApplicationId).HasColumnName("application_id").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.VideoUrl).HasColumnName("video_url").HasMaxLength(1000);
         }
     }
 
@@ -236,6 +237,7 @@ namespace Gooios.FancyService.Repositories
             builder.Property(c => c.TechnicalGrade).HasColumnName("technical_grade").IsRequired();
             builder.Property(c => c.TechnicalTitle).HasColumnName("technical_title").HasMaxLength(80).IsRequired();
             builder.Property(c => c.ApplicationId).HasColumnName("application_id").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.UserName).HasColumnName("user_name").HasMaxLength(80);
         }
     }
 

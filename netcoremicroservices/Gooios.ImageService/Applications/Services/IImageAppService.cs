@@ -34,11 +34,14 @@ namespace Gooios.ImageService.Applications.Services
 
         public ImageDTO AddImage(ImageDTO imageDTO)
         {
-            byte[] imageBytes = Convert.FromBase64String(imageDTO.ImageBase64Content);
+            if (!string.IsNullOrEmpty(imageDTO.ImageBase64Content))
+            {
+                byte[] imageBytes = Convert.FromBase64String(imageDTO.ImageBase64Content);
 
-            if (imageBytes.Length / 1024 > 2048) throw new ArgumentInvalidException("图片大小不能超过2MB.");
+                if (imageBytes.Length / 1024 > 2048) throw new ArgumentInvalidException("图片大小不能超过2MB.");
 
-            imageDTO.HttpPath = Base64StringToImage(imageBytes, imageDTO.HttpPath);
+                imageDTO.HttpPath = Base64StringToImage(imageBytes, imageDTO.HttpPath);
+            }
 
             var image = Aggregates.ImageFactory.CreateImage(imageDTO.Title, imageDTO.Description, imageDTO.HttpPath, imageDTO.CreatedBy);
             _imageRepository.Add(image);
