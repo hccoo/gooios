@@ -11,6 +11,10 @@ namespace Gooios.EnterprisePortal.Models.ManageViewModels
 
         public string Title { get; set; }
 
+        public string VideoUrl { get; set; }
+
+        public string IOSVideoUrl { get; set; }
+
         public string GoodsCategoryName { get; set; }
 
         public string Introduction { get; set; }

@@ -92,6 +92,14 @@ else
         </td>
     </tr>
     <tr>
+        <td>android视频url：</td>
+        <td><input id="videourl" type="text" placeholder="android视频url" value='@(Model?.VideoUrl??"")' style="width:500px;" /></td>
+    </tr>
+    <tr>
+        <td>ios视频url：</td>
+        <td><input id="iosvideourl" type="text" placeholder="ios视频url" value='@(Model?.IOSVideoUrl??"")' style="width:500px;" /></td>
+    </tr>
+    <tr>
         <td>诚意金：</td>
         <td><input id="sinceritygold" type="text" placeholder="诚意金" value="@(Model?.SincerityGold??0)" /> 元</td>
     </tr>
@@ -160,6 +168,8 @@ else
     var service = {
         Id: "@(string.IsNullOrEmpty(Model?.Id)?"" : Model.Id)",
         Title: "@Model?.Title",
+        IOSVideoUrl: "@Model?.IOSVideoUrl",
+        VideoUrl:"@Model?.VideoUrl",
         SincerityGold: @(Model?.SincerityGold??0),
         ServeScope:@(Model?.ServeScope??3),
         Category: "@Model?.Category",
@@ -316,6 +326,14 @@ else
         service.Category = $("#firstLayerCategories option:selected").text();
         service.SubCategory = $("#secondLayerCategories option:selected").text() == "请选择" ? "" : $("#secondLayerCategories option:selected").text();
         service.GoodsCategoryName = $("#goodscategoryname").val();
+        service.VideoUrl = $("#videourl").val();
+        service.IOSVideoUrl = $("#iosvideourl").val();
+
+        if (service.VideoUrl.trim() == "" && service.IOSVideoUrl.trim() == "") {
+            alert("android视频和IOS视频不能都为空！");
+            return;
+        }
+
         //service.SincerityGold = $("#sinceritygold").val();
         //service.ServeScope = $("#servicescope").val();
         service.Station = {
