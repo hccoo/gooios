@@ -171,6 +171,8 @@ namespace Gooios.FancyService.Repositories
             builder.Property(c => c.PersonalizedPageUri).HasColumnName("personalized_page_uri").HasMaxLength(500);
             builder.Property(c => c.ApplicationId).HasColumnName("application_id").HasMaxLength(80).IsRequired();
             builder.Property(c => c.VideoUrl).HasColumnName("video_url").HasMaxLength(1000);
+            builder.Property(c => c.IOSVideoUrl).HasColumnName("ios_video_url").HasMaxLength(1000);
+            builder.Property(c => c.GoodsCategoryName).HasColumnName("goods_category_name").HasMaxLength(200);
         }
     }
 

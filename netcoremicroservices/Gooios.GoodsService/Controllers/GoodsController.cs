@@ -8,6 +8,7 @@ using Gooios.GoodsService.Applications.Services;
 using Gooios.GoodsService.Applications.DTOs;
 using Gooios.GoodsService.Proxies;
 using Gooios.GoodsService.Domains.Aggregates;
+using NLog;
 
 namespace Gooios.GoodsService.Controllers
 {
@@ -15,6 +16,8 @@ namespace Gooios.GoodsService.Controllers
     [Route("api/[controller]/v1")]
     public class GoodsController : BaseApiController
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         readonly IGoodsAppService _goodsAppService;
 
         public GoodsController(IGoodsAppService goodsAppService)
@@ -117,6 +120,7 @@ namespace Gooios.GoodsService.Controllers
         [Route("getgoodscategorynames")]
         public async Task<IEnumerable<string>> GetGoodsCategoryNames()
         {
+            _logger.Info($"userId:{UserId}");
             return await _goodsAppService.GetGoodsCategoryNames(UserId);
         }
 

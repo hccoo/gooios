@@ -12,6 +12,9 @@ namespace Gooios.FancyService.Applications.DTOs
 
         public string VideoUrl { get; set; }
 
+        public string IOSVideoUrl { get; set; }
+
+
         public string GoodsCategoryName { get; set; }
 
         public string Title { get; set; }

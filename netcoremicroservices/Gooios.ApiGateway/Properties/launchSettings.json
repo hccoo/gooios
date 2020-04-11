@@ -9,7 +9,7 @@
   },
   "profiles": {
     "IIS Express": {
-      "commandName": "IISExpress",
+      "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",
       "environmentVariables": {
@@ -18,11 +18,12 @@
     },
     "Gooios.ApiGateway": {
       "commandName": "Project",
+      "launchBrowser": true,
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:5000/"
+      "applicationUrl": "http://localhost:5209/"
     }
   }
 }

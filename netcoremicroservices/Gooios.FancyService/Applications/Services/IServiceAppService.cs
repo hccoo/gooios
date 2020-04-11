@@ -3,6 +3,7 @@ using Gooios.FancyService.Domains.Aggregates;
 using Gooios.FancyService.Domains.Repositories;
 using Gooios.FancyService.Proxies;
 using Gooios.Infrastructure;
+using Gooios.Infrastructure.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,9 @@ namespace Gooios.FancyService.Applications.Services
 
         public async Task AddService(ServiceDTO service, string operatorId)
         {
+            if (string.IsNullOrWhiteSpace(service.IOSVideoUrl) || string.IsNullOrWhiteSpace(service.VideoUrl))
+                throw new ArgumentInvalidException("IOSVideoUrl和VideoUrl不能都为空！");
+
             if (!string.IsNullOrEmpty(service?.Station?.StreetAddress))
             {
                 var lonLat = await _amapProxy.Geo(service.Station.StreetAddress);
@@ -94,6 +98,7 @@ namespace Gooios.FancyService.Applications.Services
                 string.IsNullOrEmpty(orgId) ? service.OrganizationId : orgId,
                 operatorId,
                 service.VideoUrl,
+                service.IOSVideoUrl,
                 service.GoodsCategoryName,
                 service.ApplicationId);
 
@@ -197,6 +202,7 @@ namespace Gooios.FancyService.Applications.Services
                     PersonalizedPageUri = o.PersonalizedPageUri,
                     ApplicationId = o.ApplicationId,
                     VideoUrl = o.VideoUrl,
+                    IOSVideoUrl = o.IOSVideoUrl,
                     GoodsCategoryName = o.GoodsCategoryName,
                     Goods = goodslst
                 });
@@ -269,6 +275,7 @@ namespace Gooios.FancyService.Applications.Services
                 PersonalizedPageUri = service.PersonalizedPageUri,
                 ApplicationId = service.ApplicationId,
                 VideoUrl = service.VideoUrl,
+                IOSVideoUrl = service.IOSVideoUrl,
                 GoodsCategoryName = service.GoodsCategoryName
             };
         }
@@ -316,6 +323,7 @@ namespace Gooios.FancyService.Applications.Services
                     PersonalizedPageUri = o.PersonalizedPageUri,
                     ApplicationId = o.ApplicationId,
                     VideoUrl = o.VideoUrl,
+                    IOSVideoUrl = o.IOSVideoUrl,
                     GoodsCategoryName = o.GoodsCategoryName
                 });
             }
@@ -356,6 +364,7 @@ namespace Gooios.FancyService.Applications.Services
             obj.SubCategory = service.SubCategory;
             obj.Title = service.Title;
             obj.VideoUrl = string.IsNullOrEmpty(service.VideoUrl) ? obj.VideoUrl : service.VideoUrl;
+            obj.IOSVideoUrl = string.IsNullOrEmpty(service.IOSVideoUrl) ? obj.IOSVideoUrl : service.IOSVideoUrl;
             obj.GoodsCategoryName = string.IsNullOrEmpty(service.GoodsCategoryName) ? obj.GoodsCategoryName : service.GoodsCategoryName;
 
             _serviceRepository.Update(obj);

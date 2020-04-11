@@ -18,6 +18,7 @@ namespace Gooios.FancyService.Domains.Aggregates
             string organizationId,
             string operatorId,
             string videoUrl,
+            string iosVideoUrl,
             string goodsCategoryName,
             string applicationId = "GOOIOS001")
         {
@@ -37,6 +38,7 @@ namespace Gooios.FancyService.Domains.Aggregates
                 Title = title,
                 ApplicationId = applicationId,
                 VideoUrl = videoUrl,
+                IOSVideoUrl = iosVideoUrl,
                 GoodsCategoryName = goodsCategoryName
             };
 

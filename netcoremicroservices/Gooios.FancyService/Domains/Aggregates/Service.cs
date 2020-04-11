@@ -20,6 +20,8 @@ namespace Gooios.FancyService.Domains.Aggregates
 
         public string VideoUrl { get; set; }
 
+        public string IOSVideoUrl { get; set; }
+
         /// <summary>
         /// 诚意金
         /// </summary>

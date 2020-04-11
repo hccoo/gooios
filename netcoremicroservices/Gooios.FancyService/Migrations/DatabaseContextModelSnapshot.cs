@@ -271,7 +271,13 @@ namespace Gooios.FancyService.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnName("created_on");
 
-                    b.Property<string>("GoodsCategoryName");
+                    b.Property<string>("GoodsCategoryName")
+                        .HasColumnName("goods_category_name")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("IOSVideoUrl")
+                        .HasColumnName("ios_video_url")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("Introduction")
                         .IsRequired()

@@ -29,7 +29,7 @@ namespace Gooios.UserService.Core
                      subject: phone,
                      authenticationMethod: "custom",
                      claims: new Claim[] {
-                        new Claim("UserId", "test0000001"),
+                        new Claim("UserId", "1868253c-efc5-4bdc-adfe-3ab7f13a3481"),
                         new Claim("Name", phone),
                         new Claim("NickName", phone)
                      }

@@ -154,7 +154,9 @@ namespace Gooios.GoodsService.Applications.Services
             if (user == null || string.IsNullOrEmpty(user.ServicerId)) return new List<string>();
             var servicer = await _fancyServiceProxy.GetServicer(user.ServicerId);
             if (servicer == null) return new List<string>();
-            return _onlineGoodsRepository.GetFiltered(o => o.StoreId == servicer.OrganizationId).Select(g => g.GoodsCategoryName).Distinct().ToList();
+            var ojs = _onlineGoodsRepository.GetFiltered(o => o.StoreId == servicer.OrganizationId).Select(g => g.GoodsCategoryName).Distinct();
+            if (ojs == null) return new List<string>();
+            return ojs.ToList();
         }
 
         public void AddGoods(GoodsDTO goodsDTO, string creatorId)
