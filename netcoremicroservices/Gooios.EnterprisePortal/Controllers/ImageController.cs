@@ -227,7 +227,7 @@ namespace Gooios.EnterprisePortal.Controllers
                 var target = new FormUploader(config);
                 var upload_token = uploadToken;
                 HttpResult updresult = target.UploadFile(filePath, key, upload_token, null).ConfigureAwait(false).GetAwaiter().GetResult();
-                img.HttpPath = $"http://q85ws0856.bkt.clouddn.com/{key}";
+                img.HttpPath = $"https://resources.arcanestars.com/{key}";
 
 
                 var imgApiUrl = "https://imageservice.gooios.com/api/image/v1";

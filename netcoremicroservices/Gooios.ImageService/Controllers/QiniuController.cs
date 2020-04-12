@@ -45,7 +45,7 @@ namespace Gooios.ImageService.Controllers
             {
                 Key = key,
                 UploadToken = uploadToken,
-                FileUrl = $"http://q85ws0856.bkt.clouddn.com/{key}"
+                FileUrl = $"https://resources.arcanestars.com/{key}"
             };
         }
     }

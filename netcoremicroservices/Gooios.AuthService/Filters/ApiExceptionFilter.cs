@@ -10,31 +10,31 @@ namespace Gooios.UserService.Filters
     {
         public void OnException(ExceptionContext context)
         {
-            if (context.Exception is ValidationException)
+            if (context.Exception?.InnerException is ValidationException)
             {
-                context.Result = new ObjectResult(new { Message = context.Exception.Message });
+                context.Result = new ObjectResult(new { Message = context.Exception?.InnerException?.Message });
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotAcceptable;
 
                 context.ExceptionHandled = true;
                 return;
             }
-            if (context.Exception is AppServiceException)
+            if (context.Exception?.InnerException is AppServiceException)
             {
-                context.Result = new ObjectResult(new { Message = context.Exception.Message });
+                context.Result = new ObjectResult(new { Message = context.Exception?.InnerException?.Message });
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotAcceptable;
                 context.ExceptionHandled = true;
                 return;
             }
-            if (context.Exception is ArgumentInvalidException)
+            if (context.Exception?.InnerException is ArgumentInvalidException)
             {
-                context.Result = new ObjectResult(new { Message = context.Exception.Message });
+                context.Result = new ObjectResult(new { Message = context.Exception?.InnerException?.Message });
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotAcceptable;
                 context.ExceptionHandled = true;
                 return;
             }
-            if (context.Exception is ApiException)
+            if (context.Exception?.InnerException is ApiException)
             {
-                context.Result = new ObjectResult(new { Message = context.Exception.Message });
+                context.Result = new ObjectResult(new { Message = context.Exception?.InnerException?.Message });
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotAcceptable;
                 context.ExceptionHandled = true;
                 return;
@@ -46,7 +46,7 @@ namespace Gooios.UserService.Filters
                 context.ExceptionHandled = true;
                 return;
             }
-            
+
             //To do save the exception by context.Exception
         }
     }

@@ -66,7 +66,7 @@ namespace Gooios.FancyService.Applications.Services
 
         public async Task AddService(ServiceDTO service, string operatorId)
         {
-            if (string.IsNullOrWhiteSpace(service.IOSVideoUrl) || string.IsNullOrWhiteSpace(service.VideoUrl))
+            if (string.IsNullOrWhiteSpace(service.IOSVideoUrl) && string.IsNullOrWhiteSpace(service.VideoUrl))
                 throw new ArgumentInvalidException("IOSVideoUrl和VideoUrl不能都为空！");
 
             if (!string.IsNullOrEmpty(service?.Station?.StreetAddress))
@@ -86,6 +86,16 @@ namespace Gooios.FancyService.Applications.Services
                     orgId = servicer.OrganizationId;
                 }
             }
+
+            if (!string.IsNullOrEmpty(orgId))
+            {
+                var c = _serviceRepository.GetFiltered(o => o.OrganizationId == orgId && o.Title == service.Title).Count();
+                if (c > 0)
+                {
+                    throw new ArgumentInvalidException("您所在的商户下已经存在您所发布的标题，请更改标题！");
+                }
+            }
+
 
             var obj = ServiceFactory.CreateInstance(
                 service.Title,
