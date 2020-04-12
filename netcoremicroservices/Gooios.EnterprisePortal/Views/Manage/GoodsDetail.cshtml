@@ -225,7 +225,7 @@ else
     function initDiyUpload() {
         jQuery('#goodsUpload').diyUpload({
             auto: true,
-            url: '/image/diyupload',
+            url: "/image/diyupload",//"/image/QiniuUpload",//'/image/diyupload',
             success: function (res) {
                 console.log(res.data[0]);
 

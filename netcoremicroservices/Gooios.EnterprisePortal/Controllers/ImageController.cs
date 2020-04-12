@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using Qiniu.Storage;
 using Qiniu.Http;
 using Qiniu.Util;
+using System.IO;
 
 namespace Gooios.EnterprisePortal.Controllers
 {
@@ -202,6 +203,9 @@ namespace Gooios.EnterprisePortal.Controllers
                     ClientFileName = fileName.Split('.')[0]
                 };
 
+                byte[] imageBytes = Convert.FromBase64String(imgBase64Content);
+
+                var filePath = Base64StringToImage(imageBytes, "");
 
 
                 var accessKey = "72vGWO8zK9EqGIK_-qUFRjG1JIogApCV13ls57Dv";
@@ -222,7 +226,7 @@ namespace Gooios.EnterprisePortal.Controllers
                 config.ChunkSize = ChunkUnit.U512K;
                 var target = new FormUploader(config);
                 var upload_token = uploadToken;
-                HttpResult updresult = target.UploadFile(file.FileName, key, upload_token, null).ConfigureAwait(false).GetAwaiter().GetResult();
+                HttpResult updresult = target.UploadFile(filePath, key, upload_token, null).ConfigureAwait(false).GetAwaiter().GetResult();
                 img.HttpPath = $"http://q85ws0856.bkt.clouddn.com/{key}";
 
 
@@ -230,10 +234,26 @@ namespace Gooios.EnterprisePortal.Controllers
                 var jsonObj = JsonConvert.SerializeObject(img);
                 var res = await HttpRequestHelper.PostAsync<ImageModel>(imgApiUrl, jsonObj, "63e960bff18111e799160126c7e9f004", applicationUser.Id);
                 res.ClientFileName = img.ClientFileName;
+                res.HttpPath = img.HttpPath;
                 result.Add(res);
             }
 
             return Json(new { errno = 0, data = result.ToArray() });
+        }
+
+        string Base64StringToImage(byte[] imageBytes, string filePath)
+        {
+            MemoryStream ms = new MemoryStream(imageBytes);
+            var imageName = $"{Guid.NewGuid().ToString()}.jpg";
+            var path = $"./tmpimages/{imageName}";
+            var webPath = $"{filePath}{imageName}";
+            using (FileStream fs = System.IO.File.Create(path))
+            {
+                ms.CopyTo(fs);
+                fs.Flush();
+            }
+            ms.Close();
+            return path;
         }
 
     }

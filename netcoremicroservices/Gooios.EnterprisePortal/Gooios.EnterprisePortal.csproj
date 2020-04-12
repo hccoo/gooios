@@ -193,4 +193,8 @@
     <ProjectReference Include="..\Gooios.Infrastructure\Gooios.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="tmpimages\" />
+  </ItemGroup>
+
 </Project>

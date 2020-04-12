@@ -9,6 +9,7 @@
     <Folder Include="Proxies\" />
     <Folder Include="Events\" />
     <Folder Include="wwwroot\" />
+    <Folder Include="tmpimages\" />
   </ItemGroup>
 
   <ItemGroup>

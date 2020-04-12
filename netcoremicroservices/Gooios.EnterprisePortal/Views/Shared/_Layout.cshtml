@@ -26,14 +26,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ArcaneStars 暗辰科技</a>
+                <a href="https://www.arcanestars.com" class="navbar-brand">ArcaneStars 暗辰科技</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">首 页</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Products">产品案列</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">关于我们</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">联系我们</a></li>
+                    <li><a href="https://www.arcanestars.com">公司主页</a></li>
+                    <li><a href="https://www.arcanestars.com/product.html">产品案列</a></li>
+                    <li><a href="https://www.arcanestars.com/about.html">关于我们</a></li>
+                    @*<li><a asp-area="" asp-controller="Home" asp-action="Contact">联系我们</a></li>*@
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
