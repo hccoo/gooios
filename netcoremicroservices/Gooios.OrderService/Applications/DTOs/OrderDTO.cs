@@ -44,6 +44,8 @@ namespace Gooios.OrderService.Applications.DTOs
 
         public string CustomerName { get; set; }
 
+        public string DeliveryAddressId { get; set; }
+
         public string CustomerMobile { get; set; }
 
         public OrderStatus Status { get; set; }

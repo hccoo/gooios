@@ -1348,6 +1348,33 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/deliveryaddress/v1",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "orderservice.gooios.com",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/orderservice/deliveryaddress/v1",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 77e960be918111e709189226c7e9f002"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      },
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/order/v1",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

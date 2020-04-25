@@ -61,11 +61,13 @@ namespace Gooios.OrderService
 
             services.AddTransient<IOrderAppService, OrderAppService>();
             services.AddTransient<IDeliveryNoteAppService, DeliveryNoteAppService>();
+            services.AddTransient<IDeliveryAddressAppService, DeliveryAddressAppService>();
 
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IDeliveryNoteRepository, DeliveryNoteRepository>();
             services.AddTransient<IOrderItemRepository, OrderItemRepository>();
             services.AddTransient<IOrderTraceRepository, OrderTraceRepository>();
+            services.AddTransient<IDeliveryAddressRepository, DeliveryAddressRepository>();
 
             services.AddTransient<IGoodsServiceProxy, GoodsServiceProxy>();
             services.AddTransient<IFancyServiceProxy, FancyServiceProxy>();

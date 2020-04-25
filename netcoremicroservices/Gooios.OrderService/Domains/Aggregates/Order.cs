@@ -57,6 +57,8 @@ namespace Gooios.OrderService.Domains.Aggregates
         public string StreetAddress { get; set; }
         public string Postcode { get; set; }
 
+        public string DeliveryAddressId { get; set; }
+
         public string CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }

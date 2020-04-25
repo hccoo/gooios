@@ -21,6 +21,68 @@ namespace Gooios.OrderService.Migrations
                 .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
+            modelBuilder.Entity("Gooios.OrderService.Domains.Aggregates.DeliveryAddress", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id");
+
+                    b.Property<string>("Area")
+                        .IsRequired()
+                        .HasColumnName("area")
+                        .HasMaxLength(80);
+
+                    b.Property<string>("City");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnName("created_by")
+                        .HasMaxLength(80);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnName("created_on");
+
+                    b.Property<int>("Gender")
+                        .HasColumnName("gender");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnName("is_default");
+
+                    b.Property<string>("LinkMan")
+                        .IsRequired()
+                        .HasColumnName("link_man")
+                        .HasMaxLength(80);
+
+                    b.Property<string>("Mark")
+                        .HasColumnName("mark")
+                        .HasMaxLength(80);
+
+                    b.Property<string>("Mobile")
+                        .IsRequired()
+                        .HasColumnName("mobile")
+                        .HasMaxLength(80);
+
+                    b.Property<string>("Postcode")
+                        .HasColumnName("postcode")
+                        .HasMaxLength(80);
+
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasColumnName("province");
+
+                    b.Property<string>("StreetAddress")
+                        .IsRequired()
+                        .HasColumnName("street_address");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("delivery_addresses");
+                });
+
             modelBuilder.Entity("Gooios.OrderService.Domains.Aggregates.DeliveryNote", b =>
                 {
                     b.Property<string>("Id")
@@ -117,6 +179,10 @@ namespace Gooios.OrderService.Migrations
                     b.Property<string>("CustomerName")
                         .IsRequired()
                         .HasColumnName("customer_name")
+                        .HasMaxLength(80);
+
+                    b.Property<string>("DeliveryAddressId")
+                        .HasColumnName("delivery_address_id")
                         .HasMaxLength(80);
 
                     b.Property<string>("InvoiceRemark")

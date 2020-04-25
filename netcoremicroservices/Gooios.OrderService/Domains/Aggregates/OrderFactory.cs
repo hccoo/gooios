@@ -24,6 +24,7 @@ namespace Gooios.OrderService.Domains.Aggregates
             string invoiceRemark,
             string remark,
             string activityId,
+            string deliveryAddressId,
             string title = ""
             )
         {
@@ -48,7 +49,8 @@ namespace Gooios.OrderService.Domains.Aggregates
                 InvoiceRemark = invoiceRemark,
                 Remark = remark,
                 ActivityId = activityId,
-                Title = title
+                Title = title,
+                DeliveryAddressId = deliveryAddressId
             };
             result.GenerateId();
             result.InitAddress();

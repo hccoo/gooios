@@ -16,6 +16,8 @@ namespace Gooios.OrderService.Repositories
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<OrderTrace> OrderTraces { get; set; }
 
+        public DbSet<DeliveryAddress> DeliveryAddresses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -24,6 +26,7 @@ namespace Gooios.OrderService.Repositories
             builder.ApplyConfiguration(new OrderConfiguration());
             builder.ApplyConfiguration(new OrderItemConfiguration());
             builder.ApplyConfiguration(new OrderTraceConfiguration());
+            builder.ApplyConfiguration(new DeliveryAddressConfiguration());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -35,6 +38,28 @@ namespace Gooios.OrderService.Repositories
         }
     }
 
+    public class DeliveryAddressConfiguration : IEntityTypeConfiguration<DeliveryAddress>
+    {
+        public void Configure(EntityTypeBuilder<DeliveryAddress> builder)
+        {
+            builder.ToTable("delivery_addresses");
+            builder.HasKey(c => new { c.Id });
+
+            builder.Property(c => c.Id).HasColumnName("id");
+            builder.Property(c => c.Area).HasColumnName("area").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.CreatedBy).HasColumnName("created_by").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.CreatedOn).HasColumnName("created_on").IsRequired();
+            builder.Property(c => c.Gender).HasColumnName("gender").IsRequired();
+            builder.Property(c => c.IsDefault).HasColumnName("is_default").IsRequired();
+            builder.Property(c => c.LinkMan).HasColumnName("link_man").IsRequired().HasMaxLength(80);
+            builder.Property(c => c.Mark).HasColumnName("mark").HasMaxLength(80);
+            builder.Property(c => c.Mobile).HasColumnName("mobile").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.Postcode).HasColumnName("postcode").HasMaxLength(80);
+            builder.Property(c => c.Province).HasColumnName("province").IsRequired();
+            builder.Property(c => c.StreetAddress).HasColumnName("street_address").IsRequired();
+            builder.Property(c => c.UserId).HasColumnName("user_id").IsRequired();
+        }
+    }
     public class DeliveryNoteConfiguration : IEntityTypeConfiguration<DeliveryNote>
     {
         public void Configure(EntityTypeBuilder<DeliveryNote> builder)
@@ -66,6 +91,7 @@ namespace Gooios.OrderService.Repositories
 
             builder.Property(c => c.Id).HasColumnName("id");
             builder.Property(c => c.CreatedBy).HasColumnName("created_by").HasMaxLength(80).IsRequired();
+            builder.Property(c => c.DeliveryAddressId).HasColumnName("delivery_address_id").HasMaxLength(80);
             builder.Property(c => c.CreatedOn).HasColumnName("created_on").IsRequired();
             builder.Property(c => c.CustomerMobile).HasColumnName("customer_mobile").HasMaxLength(80).IsRequired();
             builder.Property(c => c.CustomerName).HasColumnName("customer_name").IsRequired().HasMaxLength(80);
