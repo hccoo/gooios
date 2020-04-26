@@ -25,6 +25,33 @@
       }*/
     },
     {
+      "DownstreamPathTemplate": "/api/cookappuser/currentuser/v1",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "us.cooios.com", //"localhost:5201",//
+          "Port": 5201 //80
+        }
+      ],
+      "UpstreamPathTemplate": "/userservice/cookappuser/currentuser/v1",
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 63e960be918689e799162326c7e9f189"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      },
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/image/v1",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -1392,7 +1419,7 @@
         "ExceptionsAllowedBeforeBreaking": 3,
         "DurationOfBreak": 10,
         "TimeoutValue": 30000
-      }/*,
+      } /*,
       "AddHeadersToRequest": {
         "userid": "Claims[UserId] > value[0] > |"
       },
