@@ -21,6 +21,8 @@ namespace Gooios.UserService.Application.Services
 
         Task<CookAppPartnerLoginUserDto> VerifyCookAppPartnerLoginUserByAuthCode(string authCode);
 
+        Task<CookAppPartnerLoginUserDto> VerifyWechatAppletLoginUserByCode(string code);
+
         CookAppUserDto AddCookAppUser(string userName, string password, string mobile, string email);
 
         bool SetServicerIdForUser(string userName, string servicerId);
@@ -55,9 +57,23 @@ namespace Gooios.UserService.Application.Services
         public async Task<CookAppPartnerLoginUserDto> VerifyCookAppPartnerLoginUserByAuthCode(string authCode)
         {
             var ret = await _wechatProxy.GetAccessToken(_config.WeChatAppId, _config.WeChatAppSecret, authCode, "authorization_code");
-            if (ret == null) return null;
+            if (ret == null || ret.AccessToken == null) return null;
 
             var partnerUser = CookAppPartnerLoginUserFactory.CreateInstance(authCode, ret.AccessToken, ret.ExpiresIn, ret.RefreshToken, ret.Scope, ret.UnionId, LoginChannel.Wechat, ret.OpenId);
+            _cookappPartnerLoginUserRepo.Add(partnerUser);
+            _dbUnitOfWork.Commit();
+
+            return MapperProvider.Mapper.Map<CookAppPartnerLoginUserDto>(partnerUser);
+        }
+
+        public async Task<CookAppPartnerLoginUserDto> VerifyWechatAppletLoginUserByCode(string code)
+        {
+            var reqModel = new WeChatOpenIdRequestDto { AppId = _config.WeChatAppId, Code = code, Secret = _config.WeChatAppSecret };
+
+            var result = await _wechatProxy.CheckAuthCode(reqModel);
+            if (result == null || result.OpenId == null) return null;
+
+            var partnerUser = CookAppPartnerLoginUserFactory.CreateInstance(code, result.SessionKey, 3600 * 24 * 30, "", "", result.UnionId, LoginChannel.Wechat, result.OpenId);
             _cookappPartnerLoginUserRepo.Add(partnerUser);
             _dbUnitOfWork.Commit();
 

@@ -8,7 +8,7 @@ namespace Gooios.UserServiceHost.Models
 {
     public class VerifyCookAppPartnerLoginUserByAuthCodeModel
     {
-        [JsonProperty("authCode")]
+        //[JsonProperty("authCode")]
         public string AuthorizationCode { get; set; }
     }
 }

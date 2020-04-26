@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Gooios.AuthService.Proxies.Dtos;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace Gooios.UserService.Proxies
     public interface IWechatProxy
     {
         Task<GetAccessTokenResponseModel> GetAccessToken(string appId, string secret, string code, string grantType);
+
+        Task<WeChatOpenIdRequestDto> CheckAuthCode(WeChatOpenIdRequestDto model);
     }
 
     public class WechatProxy : IWechatProxy
@@ -30,6 +33,31 @@ namespace Gooios.UserService.Proxies
             var result = await GetAsync<GetAccessTokenResponseModel>(url, parameters, "");
             return result;
         }
+
+        public async Task<WeChatOpenIdRequestDto> CheckAuthCode(WeChatOpenIdRequestDto model)
+        {
+            WeChatOpenIdRequestDto result = null;
+
+            var api = $"https://api.weixin.qq.com/sns/jscode2session?appid={model.AppId}&secret={model.Secret}&js_code={model.Code}&grant_type={model.GrantType}";
+
+            using (var client = new HttpClient())
+            {
+                var res = await client.GetAsync(api);
+
+                if (res.IsSuccessStatusCode)
+                {
+                    var resultStr = await res.Content.ReadAsStringAsync();
+
+                    result = JsonConvert.DeserializeObject<WeChatOpenIdRequestDto>(resultStr);
+                }
+            }
+
+            //TODO:验签
+
+            return result;
+        }
+
+
         async Task<T> GetAsync<T>(string url, Dictionary<string, string> param, string apiKey)
             where T : class
         {

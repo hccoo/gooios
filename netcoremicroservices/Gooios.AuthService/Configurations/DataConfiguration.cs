@@ -50,7 +50,7 @@ namespace Gooios.UserService.Configurations
                 {
                     ClientId = "cookapp",
                     ClientSecrets = { new Secret("secret".Sha256()) },
-                    AllowedGrantTypes = new List<string>(){GrantTypes.ResourceOwnerPasswordAndClientCredentials.FirstOrDefault(), "verify_code","partner_auth_code" },//GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                    AllowedGrantTypes = new List<string>(){GrantTypes.ResourceOwnerPasswordAndClientCredentials.FirstOrDefault(), "verify_code","partner_auth_code","wechat_applet" },//GrantTypes.ResourceOwnerPasswordAndClientCredentials,
                     AllowedScopes = {   "gooiosapi" ,
                                         StandardScopes.OfflineAccess, //如果要获取refresh_tokens ,必须在scopes中加上OfflineAccess
                                         StandardScopes.OpenId,        //如果要获取id_token,必须在scopes中加上OpenId和Profile，id_token需要通过refresh_tokens获取AccessToken的时候才能拿到（还未找到原因）

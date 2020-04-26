@@ -18,6 +18,8 @@ namespace Gooios.AuthService.Proxies
 
         Task<CookAppPartnerLoginUserDto> VerifyCookAppPartnerLoginUserByAuthCode(string authCode);
 
+        Task<CookAppPartnerLoginUserDto> VerifyWechatAppletLoginUserByCode(string code);
+
         Task<string> AddCookAppUser(string userName, string password, string mobile, string email);
     }
 
@@ -57,7 +59,7 @@ namespace Gooios.AuthService.Proxies
             CookAppPartnerLoginUserDto result = null;
 
             var client = _clientFactory.CreateClient("zk-backend");
-            var jsonStr = JsonConvert.SerializeObject(new { authCode });
+            var jsonStr = JsonConvert.SerializeObject(new VerifyCookAppPartnerLoginUserByAuthCodeModel { AuthorizationCode = authCode });
             var content = new StringContent(jsonStr);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");//x-www-form-urlencoded
             content.Headers.Add("gooiosapikey", _config.UserServiceHeaderValue);
@@ -111,5 +113,32 @@ namespace Gooios.AuthService.Proxies
 
             return result;
         }
+
+        public async Task<CookAppPartnerLoginUserDto> VerifyWechatAppletLoginUserByCode(string code)
+        {
+            CookAppPartnerLoginUserDto result = null;
+
+            var client = _clientFactory.CreateClient("zk-backend");
+            var jsonStr = JsonConvert.SerializeObject(new VerifyCookAppPartnerLoginUserByAuthCodeModel { AuthorizationCode = code });
+            var content = new StringContent(jsonStr);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");//x-www-form-urlencoded
+            content.Headers.Add("gooiosapikey", _config.UserServiceHeaderValue);
+
+            var response = await client.PostAsync($"{_config.UserServiceRootUrl}api/cookappuser/verifybywechatapplet/v1", content);
+            var contentJson = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                result = JsonConvert.DeserializeObject<CookAppPartnerLoginUserDto>(contentJson);
+            else
+                result = null;
+
+            return result;
+        }
+    }
+
+
+    public class VerifyCookAppPartnerLoginUserByAuthCodeModel
+    {
+        //[JsonProperty("authCode")]
+        public string AuthorizationCode { get; set; }
     }
 }

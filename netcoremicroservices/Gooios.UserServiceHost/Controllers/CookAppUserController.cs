@@ -37,6 +37,11 @@ namespace Gooios.UserServiceHost.Controllers
             => await _userAppService.VerifyCookAppPartnerLoginUserByAuthCode(model.AuthorizationCode);
 
         [HttpPost]
+        [Route("verifybywechatapplet/v1")]
+        public async Task<CookAppPartnerLoginUserDto> VerifyWechatAppletLoginUserByCode(VerifyCookAppPartnerLoginUserByAuthCodeModel model)
+            => await _userAppService.VerifyWechatAppletLoginUserByCode(model.AuthorizationCode);
+
+        [HttpPost]
         [Route("v1")]
         public async Task<string> AddCookAppUser(AddCookAppUserModel model)
         {

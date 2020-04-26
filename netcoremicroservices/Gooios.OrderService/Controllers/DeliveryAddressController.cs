@@ -34,6 +34,12 @@ namespace Gooios.OrderService.Controllers
             _deliveryAddressAppService.AddDeliveryAddress(value);
         }
 
+        [HttpDelete]
+        public void Delete(string id)
+        {
+            _deliveryAddressAppService.DeleteDeliveryAddress(id);
+        }
+
         [Route("provinces")]
         public IEnumerable<Province> GetProvinces()
         {

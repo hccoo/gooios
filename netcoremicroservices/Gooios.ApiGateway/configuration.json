@@ -1357,7 +1357,7 @@
         }
       ],
       "UpstreamPathTemplate": "/orderservice/deliveryaddress/v1",
-      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "UpstreamHttpMethod": [ "Post", "Get", "Delete" ],
       "UpstreamHeaderTransform": {
         "gooiosapikey": "63e960be918111e799163326c7e9f898, 77e960be918111e709189226c7e9f002"
       },

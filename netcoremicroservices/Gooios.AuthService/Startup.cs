@@ -26,6 +26,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Gooios.AuthService.Proxies;
 using Gooios.AuthService.Data;
+using Gooios.AuthService.Core;
 
 namespace Gooios.UserService
 {
@@ -60,6 +61,7 @@ namespace Gooios.UserService
             services.AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
             services.AddTransient<PartnerAuthCodeValidator>();
             services.AddTransient<VerifyCodeValidator>();
+            services.AddTransient<WechatAppletValidator>();
 
             services.AddScoped<IDbUnitOfWork, DbUnitOfWork>();
             services.AddScoped<IDbContextProvider, DbContextProvider>();
@@ -83,6 +85,7 @@ namespace Gooios.UserService
                     .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
                     .AddExtensionGrantValidator<VerifyCodeValidator>()
                     .AddExtensionGrantValidator<PartnerAuthCodeValidator>()
+                    .AddExtensionGrantValidator<WechatAppletValidator>()
                     .AddProfileService<ProfileService>();
 
             services.ConfigureDynamicProxy(config =>

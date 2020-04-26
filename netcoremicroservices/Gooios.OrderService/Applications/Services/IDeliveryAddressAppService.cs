@@ -14,6 +14,8 @@ namespace Gooios.OrderService.Applications.Services
         void AddDeliveryAddress(DeliveryAddressDTO model);
 
         IEnumerable<DeliveryAddressDTO> GetMyDeliveryAddresses(string userId);
+
+        void DeleteDeliveryAddress(string id);
     }
 
     public class DeliveryAddressAppService : ApplicationServiceContract, IDeliveryAddressAppService
@@ -53,6 +55,16 @@ namespace Gooios.OrderService.Applications.Services
                 StreetAddress = item.StreetAddress
             }).ToList();
             return objs;
+        }
+
+        public void DeleteDeliveryAddress(string id)
+        {
+            var obj = _deliveryAddressRepository.Get(id);
+            if (obj != null)
+            {
+                _deliveryAddressRepository.Remove(obj);
+                _dbUnitOfWork.Commit();
+            }
         }
     }
 }
