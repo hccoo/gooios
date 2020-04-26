@@ -34,5 +34,52 @@ namespace Gooios.OrderService.Controllers
             _deliveryAddressAppService.AddDeliveryAddress(value);
         }
 
+        [Route("provinces")]
+        public IEnumerable<Province> GetProvinces()
+        {
+            return new List<Province> { 
+                new Province{ 
+                    ProvinceName="上海",
+                     Cities = new List<City>{ 
+                        new City{ 
+                            CityName="上海市",
+                            Areas = new List<string>{
+                                "黄浦",
+                                "徐汇",
+                                "长宁",
+                                "静安",
+                                "普陀",
+                                "虹口",
+                                "杨浦",
+                                "闵行",
+                                "宝山",
+                                "嘉定",
+                                "浦东新区",
+                                "金山",
+                                "松江",
+                                "青浦",
+                                "奉贤",
+                                "崇明"
+                            }
+                        }
+                     }
+                }
+            };
+        }
+
+    }
+
+    public class Province
+    {
+        public string ProvinceName { get; set; }
+
+        public IEnumerable<City> Cities { get; set; }
+    }
+
+    public class City
+    {
+        public string CityName { get; set; }
+
+        public IEnumerable<string> Areas { get; set; }
     }
 }
