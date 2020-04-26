@@ -30,7 +30,7 @@ namespace Gooios.PaymentService.Controllers
         }
 
         [HttpGet]
-        [Route("getopenid/{code}/{organizationId}")]
+        [Route("getopenid")]
         public async Task<string> GetOpenId(string code, string organizationId = null)
         {
             return await _wechatPaymentAppService.GetOpenId(code, organizationId);

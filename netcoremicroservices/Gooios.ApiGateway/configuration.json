@@ -52,6 +52,33 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/cookappuser/partnerloginuser/v1",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservice.gooios.com", //"localhost:5201",//
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/userservice/cookappuser/partnerloginuser/v1",
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHeaderTransform": {
+        "gooiosapikey": "63e960be918111e799163326c7e9f898, 63e960be918689e799162326c7e9f189"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 30000
+      },
+      "AddHeadersToRequest": {
+        "userid": "Claims[UserId] > value[0] > |"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/image/v1",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -1672,7 +1699,7 @@
       }*/
     },
     {
-      "DownstreamPathTemplate": "/api/wechatpayment/v1/getopenid/{code}/{organizationId}",
+      "DownstreamPathTemplate": "/api/wechatpayment/v1/getopenid",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -1680,7 +1707,7 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/paymentservice/wechatpayment/v1/getopenid/{code}/{organizationId}",
+      "UpstreamPathTemplate": "/paymentservice/wechatpayment/v1/getopenid",
       "UpstreamHttpMethod": [ "Get" ],
       "UpstreamHeaderTransform": {
         "gooiosapikey": "63e960be918111e799163326c7e9f898, 896960bff18111e799160126c7e9f007"
@@ -1689,14 +1716,14 @@
         "ExceptionsAllowedBeforeBreaking": 3,
         "DurationOfBreak": 10,
         "TimeoutValue": 30000
-      },
+      } /*,
       "AddHeadersToRequest": {
         "userid": "Claims[UserId] > value[0] > |"
       },
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ID4",
         "AllowedScopes": []
-      }
+      }*/
     },
     {
       "DownstreamPathTemplate": "/api/wechatpayment/v1/session",

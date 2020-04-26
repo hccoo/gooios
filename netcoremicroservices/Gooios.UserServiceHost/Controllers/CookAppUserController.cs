@@ -64,6 +64,13 @@ namespace Gooios.UserServiceHost.Controllers
         }
 
         [HttpGet]
+        [Route("partnerloginuser/v1")]
+        public CookAppPartnerLoginUserDto GetPartnerLoginUser()
+        {
+            return _userAppService.GetPartnerLoginUser(UserId);
+        }
+
+        [HttpGet]
         [Route("currentuser/v1")]
         public CookAppUserDto GetCurrentUser()
         {

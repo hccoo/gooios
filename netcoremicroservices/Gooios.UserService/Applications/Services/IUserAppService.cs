@@ -28,6 +28,8 @@ namespace Gooios.UserService.Application.Services
         bool SetServicerIdForUser(string userName, string servicerId);
 
         CookAppUserDto GetUser(string userName);
+
+        CookAppPartnerLoginUserDto GetPartnerLoginUser(string id);
     }
 
     public class UserAppService : ApplicationServiceContract, IUserAppService
@@ -59,9 +61,14 @@ namespace Gooios.UserService.Application.Services
             var ret = await _wechatProxy.GetAccessToken(_config.WeChatAppId, _config.WeChatAppSecret, authCode, "authorization_code");
             if (ret == null || ret.AccessToken == null) return null;
 
-            var partnerUser = CookAppPartnerLoginUserFactory.CreateInstance(authCode, ret.AccessToken, ret.ExpiresIn, ret.RefreshToken, ret.Scope, ret.UnionId, LoginChannel.Wechat, ret.OpenId);
-            _cookappPartnerLoginUserRepo.Add(partnerUser);
-            _dbUnitOfWork.Commit();
+            var partnerUser = _cookappPartnerLoginUserRepo.GetFiltered(o => o.PartnerKey == ret.OpenId).FirstOrDefault();
+
+            if (partnerUser == null)
+            {
+                partnerUser = CookAppPartnerLoginUserFactory.CreateInstance(authCode, ret.AccessToken, ret.ExpiresIn, ret.RefreshToken, ret.Scope, ret.UnionId, LoginChannel.Wechat, ret.OpenId);
+                _cookappPartnerLoginUserRepo.Add(partnerUser);
+                _dbUnitOfWork.Commit();
+            }
 
             return MapperProvider.Mapper.Map<CookAppPartnerLoginUserDto>(partnerUser);
         }
@@ -73,9 +80,14 @@ namespace Gooios.UserService.Application.Services
             var result = await _wechatProxy.CheckAuthCode(reqModel);
             if (result == null || result.OpenId == null) return null;
 
-            var partnerUser = CookAppPartnerLoginUserFactory.CreateInstance(code, result.SessionKey, 3600 * 24 * 30, "", "", result.UnionId, LoginChannel.Wechat, result.OpenId);
-            _cookappPartnerLoginUserRepo.Add(partnerUser);
-            _dbUnitOfWork.Commit();
+            var partnerUser = _cookappPartnerLoginUserRepo.GetFiltered(o => o.PartnerKey == result.OpenId).FirstOrDefault();
+
+            if (partnerUser == null)
+            {
+                partnerUser = CookAppPartnerLoginUserFactory.CreateInstance(code, result.SessionKey, 3600 * 24 * 30, "", "", result.UnionId, LoginChannel.Wechat, result.OpenId);
+                _cookappPartnerLoginUserRepo.Add(partnerUser);
+                _dbUnitOfWork.Commit();
+            }
 
             return MapperProvider.Mapper.Map<CookAppPartnerLoginUserDto>(partnerUser);
         }
@@ -158,6 +170,30 @@ namespace Gooios.UserService.Application.Services
                 UpdatedBy = user.UpdatedBy,
                 UpdatedOn = user.UpdatedOn
             };
+        }
+
+        public CookAppPartnerLoginUserDto GetPartnerLoginUser(string id)
+        {
+            var usr = _cookappPartnerLoginUserRepo.Get(id);
+            if (usr == null) return null;
+
+            return new CookAppPartnerLoginUserDto
+            {
+                UpdatedOn = usr.UpdatedOn,
+                CreatedBy = usr.CreatedBy,
+                CreatedOn = usr.CreatedOn,
+                ExpiredIn = usr.ExpiredIn,
+                Id = usr.Id,
+                LoginChannel = usr.LoginChannel,
+                PartnerAccessToken = usr.PartnerAccessToken,
+                PartnerAuthCode = usr.PartnerAuthCode,
+                PartnerKey = usr.PartnerKey,
+                RefreshToken = usr.RefreshToken,
+                Scope = usr.Scope,
+                UnionId = usr.UnionId,
+                UpdatedBy = usr.UpdatedBy
+            };
+
         }
     }
 }
