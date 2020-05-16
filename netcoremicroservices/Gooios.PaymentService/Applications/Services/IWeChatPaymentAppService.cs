@@ -245,7 +245,10 @@ namespace Gooios.PaymentService.Applications.Services
                 NonceStr = ns,
                 Package = pkg,
                 PaySign = sign,
-                TimeStamp = ts.ToString()
+                TimeStamp = ts.ToString(),
+                AppId = response.AppId,
+                PartnerId = "1504096781",//response.MchId,
+                PrepayId = response.PrepayId
             };
 
             return result;
@@ -314,9 +317,12 @@ namespace Gooios.PaymentService.Applications.Services
             var result = new RequestPaymentResponseDTO
             {
                 NonceStr = ns,
-                Package = pkg,
+                Package = "Sign=WXPay",//pkg,
                 PaySign = sign,
-                TimeStamp = ts.ToString()
+                TimeStamp = ts.ToString(),
+                AppId = response?.AppId,
+                PartnerId = response?.MchId,
+                PrepayId = response?.PrepayId
             };
 
             return result;

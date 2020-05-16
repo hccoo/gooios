@@ -22,7 +22,7 @@ namespace Gooios.VerificationService.Proxies
     {
         const string apiUrl = "https://feginesms.market.alicloudapi.com/codeNotice";
         const string appCode = "0dc41b203b32448d886495b08f8090ef";
-        const string signContent = "38358";
+        const string signContent = "500467";//"38358";
         //const string templateId = "";
 
         public FegineSmsProxy()

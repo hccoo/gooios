@@ -186,7 +186,8 @@ namespace Gooios.FancyService.Applications.Services
                             RecommendLevel = g.RecommendLevel,
                             Title = g.Title,
                             Unit = g.Unit,
-                            UnitPrice = g.UnitPrice
+                            UnitPrice = g.UnitPrice,
+                            OrganizationId = g.OrganizationId
                         });
                     }
                 }

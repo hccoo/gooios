@@ -23,14 +23,16 @@ namespace Gooios.GoodsService.Applications.Services
         readonly ICommentImageRepository _commentImageRepository;
         readonly IDbUnitOfWork _dbUnitOfWork;
         readonly IAuthServiceProxy _authServiceProxy;
+        readonly IUserServiceProxy _userServiceProxy;
 
-        public CommentAppService(IDbUnitOfWork dbUnitOfWork, ICommentRepository commentRepository, ICommentTagRepository commentTagRepository, ICommentImageRepository commentImageRepository, IAuthServiceProxy authServiceProxy)
+        public CommentAppService(IDbUnitOfWork dbUnitOfWork,IUserServiceProxy userServiceProxy, ICommentRepository commentRepository, ICommentTagRepository commentTagRepository, ICommentImageRepository commentImageRepository, IAuthServiceProxy authServiceProxy)
         {
             _commentRepository = commentRepository;
             _commentTagRepository = commentTagRepository;
             _dbUnitOfWork = dbUnitOfWork;
             _commentImageRepository = commentImageRepository;
             _authServiceProxy = authServiceProxy;
+            _userServiceProxy = userServiceProxy;
         }
 
         public void AddComment(CommentDTO comment, string operatorId)
@@ -67,7 +69,7 @@ namespace Gooios.GoodsService.Applications.Services
 
             foreach (var item in res)
             {
-                var user = await _authServiceProxy.GetUser(item.CreatedBy);
+                var user = await _userServiceProxy.GetCookAppUser(item.CreatedBy); //await _authServiceProxy.GetUser(item.CreatedBy);
                 results.Add(new CommentDTO
                 {
                     Content = item.Content,
@@ -76,12 +78,27 @@ namespace Gooios.GoodsService.Applications.Services
                     ImageIds = _commentImageRepository.GetFiltered(o => o.CommentId == item.Id).Select(o => o.ImageId).ToList(),
                     TagIds = _commentTagRepository.GetFiltered(o => o.CommentId == item.Id).Select(g => g.TagId).ToList(),
                     CreateTime = item.CreatedOn.ToString("yyyy-MM-dd"),
-                    NickName = user?.NickName,
-                    PortraitUrl = user?.PortraitUrl
+                    NickName = string.IsNullOrEmpty(user?.UserName)?"匿名用户": ProcessUserName(user?.UserName),
+                    PortraitUrl = "https://resources.arcanestars.com/portrait.png"
                 });
             }
 
             return results;
+        }
+
+        string ProcessUserName(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                userName = "匿名用户";
+                return userName;
+            }
+
+            var lastTwoChar = userName.Substring(userName.Length - 2);
+
+            userName = userName.Replace(lastTwoChar,"**");
+
+            return userName;
         }
     }
 }

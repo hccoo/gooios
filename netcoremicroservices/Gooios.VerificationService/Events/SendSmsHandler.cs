@@ -27,6 +27,8 @@ namespace Gooios.VerificationService.Events
 
             if (verification.BizCode == BizCode.ForgetPassword) templateId = "33593";
 
+            if (verification.BizCode == BizCode.Login) templateId = "900677";
+
             if(!string.IsNullOrEmpty(templateId))
                 _smsProxy.SendVerificationCode(verification.Code, verification.To, templateId);
         }

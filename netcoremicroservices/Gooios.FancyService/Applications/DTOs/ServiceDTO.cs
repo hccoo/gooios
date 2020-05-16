@@ -97,7 +97,7 @@ namespace Gooios.FancyService.Applications.DTOs
         /// </summary>
         public string ItemNumber { get; set; }
 
-
+        public string OrganizationId { get; set; }
 
     }
 }

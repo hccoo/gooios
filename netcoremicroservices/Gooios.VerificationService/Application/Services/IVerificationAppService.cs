@@ -47,6 +47,16 @@ namespace Gooios.VerificationService.Application.Services
             using (ITransactionCoordinator coordinator = new TransactionCoordinator(_dbUnitOfWork, _eventBus))
             {
                 var verifications = _verificationRepository.GetFiltered(o => o.IsSuspend == false && o.To == verificationDTO.To && o.BizCode == verificationDTO.BizCode).ToList();
+
+                var lastRecord = verifications.OrderByDescending(o => o.CreatedOn).FirstOrDefault();
+                if (lastRecord != null)
+                {
+                    if (lastRecord.CreatedOn.AddSeconds(60) > DateTime.Now)
+                    {
+                        return;
+                    }
+                }
+
                 _verificationService.SetVerificationsSuspend(verifications);
 
                 var verification = VerificationFactory.CreateVerification(verificationDTO.BizCode, verificationDTO.To);

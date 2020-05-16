@@ -21,6 +21,8 @@ namespace Gooios.AuthService.Proxies
         Task<CookAppPartnerLoginUserDto> VerifyWechatAppletLoginUserByCode(string code);
 
         Task<string> AddCookAppUser(string userName, string password, string mobile, string email);
+
+        Task<CookAppUserDto> GetUser(string idOrUserName);
     }
 
     public class UserServiceProxy : IUserServiceProxy
@@ -50,6 +52,25 @@ namespace Gooios.AuthService.Proxies
                 result = JsonConvert.DeserializeObject<string>(contentJson);
             else
                 result = "";
+
+            return result;
+        }
+
+        public async Task<CookAppUserDto> GetUser(string idOrUserName)
+        {
+            CookAppUserDto result = null;
+
+            var client = _clientFactory.CreateClient("zk-backend");
+            //content.Headers.ContentType = new MediaTypeHeaderValue("application/json");//x-www-form-urlencoded
+            //content.Headers.Add("gooiosapikey", _config.UserServiceHeaderValue);
+            client.DefaultRequestHeaders.Add("gooiosapikey", _config.UserServiceHeaderValue);
+            var response = await client.GetAsync($"{_config.UserServiceRootUrl}api/cookappuser/v1?idOrUserName="+idOrUserName);
+
+            var contentJson = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                result = JsonConvert.DeserializeObject<CookAppUserDto>(contentJson);
+            else
+                result = null;
 
             return result;
         }

@@ -25,7 +25,7 @@ namespace Gooios.VerificationService.Repositories
 
             if (!optionsBuilder.IsConfigured)
                 optionsBuilder.UseMySql(conn);
-                //optionsBuilder.UseMySql("Database=gooios_auth_db;Data Source=localhost;Port=3306;User Id=root;Password=111111;charset=utf8;pooling=true");
+            //optionsBuilder.UseMySql("Database=gooios_auth_db;Data Source=localhost;Port=3306;User Id=root;Password=111111;charset=utf8;pooling=true");
         }
     }
 
